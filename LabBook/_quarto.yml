@@ -1,0 +1,46 @@
+project:
+  type: book
+
+book:
+  title: "Lab Book"
+  author: "Brad Day"
+  date: "2025/05/19"
+  chapters:
+    - index.qmd
+    - IronKalphaReviewSummary.qmd
+    - InitialGradus.qmd
+    - references.qmd
+
+bibliography: references.bib
+csl: american-physical-society-et-al.csl
+lightbox: true
+
+format:
+  html:
+    code-fold: true
+    html-math-method: mathjax
+    include-in-header:
+      - text: |
+          <script>
+          window.MathJax = {
+            loader: {
+              load: ['[tex]/boldsymbol', '[tex]/physics']
+            },
+            tex: {
+              packages: {
+                '[+]': ['boldsymbol', 'physics']
+              }
+            }
+          };
+          </script>
+  pdf:
+    include-in-header:
+      - text: |
+          \usepackage{amsmath, gensymb, physics}
+          \usepackage[margin=15mm]{geometry}
+
+jupyter: python3
+
+theme:
+    light: flatly
+    dark: darkly

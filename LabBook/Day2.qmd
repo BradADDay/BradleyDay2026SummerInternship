@@ -1,0 +1,48 @@
+# 2026-06-16
+___
+Code was set up to easily run several variations to the model which will allow for the investigation of the parameter space. A thin disk accretion model and a lamppost corona were used. It was set up such that for a given configuration of $h$, $a$, $i$, $\epsilon_3$, and $\alpha_{13}$ the line profile would be calculated and an image of the accretion disk produced and plotted together.
+
+## Ruling out $\alpha_{22}$ and $\alpha_{52}$
+
+Before exploring the 5D parameter space, tests were ran on both $\alpha_{22}$ and $\alpha_{52}$ such that their effects could be noted, should they be useful in the future.
+
+![The resultant line profile from varying $\alpha_{52}$ between 0 and 40. A value of 50 did not successfully compute suggesting an upper limit on this parameter.](images/alpha52.png){fig-align="center" width=70% #fig-alpha52}
+
+Varying $\alpha_{52}$ showed near random, and near zero effect on the line and will thus be disregarded for this investigation. Varying $\alpha_{22}$ often failed to compute and will thus similarly be disregarded for this investigation.
+
+## Exploring the 5-dimensional parameter space
+### Line profiles
+
+::: {layout-ncol=2}
+
+![The line profiles resultant from varying $\alpha_{13}$ between 0 and 50.](images/alpha13.png){fig-align="center" #fig-alpha13}
+
+![The line profiles resultant from varying $\epsilon_{3}$ between 0 and 30. Values of 40 and 50 were tested however caused an error, there must be an upper bound on the allowed values of this parameter.](images/epsilon3.png){fig-align="center" #fig-epsilon3}
+
+![The line profiles resultant from varying the inclination between 5 and 85 degrees.](images/inclination.png){fig-align="center" #fig-inclination}
+
+![The line profiles resultant from varying $h$ between 5 and 30 gravitational radii.](images/coronaHeight.png){fig-align="center" #fig-coronaHeight}
+
+:::
+
+![The line profiles resultant from varying $a$ between 5 and 95% of $M(=1)$.](images/spin.png){width=50% fig-align="center" #fig-spin}
+
+- @fig-alpha13 shows that increasing the free parameter $\alpha_{13}$ sharpens the two peaks of the line, increases the maximum flux, and makes it more narrow. 
+- @fig-epsilon3 shows that increasing the free parameter $\epsilon_{3}$ similarly increases the maximum flux, however the resultant profile is much more noisy. While $\alpha_{13}$ provided sharp peaks, $\epsilon_{3}$ provided broader peaks, particularly in the shorter one. 
+- @fig-inclination shows that increasing the inclination smoothes out the line profile and shifts the peak to higher energies. The line is broadened significantly.
+- @fig-coronaHeight shows that increasing the corona height makes the line profile sharper, increases the maximum flux, and shifts the maximum to slightly lower energies.
+- @fig-spin shows that the spin had the least prominent impact on the profile of the line, seeming to only slightly decrease the height of the peaks with increasing spin. This may be an effect of the small range of spins available. It may therefore be informative to investigate this further by increasing the mass, using different corona heights, or varying the inclination.
+
+### Renders
+
+Alongside the line profiles, images of the accretion disk were rendered with a colourmap denoting the redshift of light from a given part of the disk.
+
+![](images/alpha13Render.png){fig-align="center" #fig-alpha13 width=80%}
+
+![](images/epsilon3Render.png){fig-align="center" #fig-epsilon3Render width=80%}
+
+![](images/inclRender.png){fig-align="center" #fig-inclRender width=80%}
+
+![](images/coronaHeightRender.png){fig-align="center" #fig-coronaHeightRender width=80%}
+
+![](images/spinRender.png){fig-align="center" #fig-spinRender width=80%}

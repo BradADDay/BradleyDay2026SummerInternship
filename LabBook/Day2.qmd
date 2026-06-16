@@ -37,7 +37,7 @@ Varying $\alpha_{52}$ showed near random, and near zero effect on the line and w
 
 Alongside the line profiles, images of the accretion disk were rendered with a colourmap denoting the redshift of light from a given part of the disk.
 
-![](images/alpha13Render.png){fig-align="center" #fig-alpha13 width=80%}
+![The effect of $\alpha_{13}$ on the accretion disk render. The event horizon seems to grow with $\alpha_{13}$](images/alpha13Render.png){fig-align="center" #fig-alpha13 width=80%}
 
 ![](images/epsilon3Render.png){fig-align="center" #fig-epsilon3Render width=80%}
 

@@ -22,7 +22,7 @@ function generateConfig(variables, setupDict)
 
     # Looping through the variables
     for i in variables
-        config *= "$i = $(setupDict[i])"
+        config *= "$i = $(round(setupDict[i]; digits= 2))"
         if i != variables[end]
             config *= ", "
         end
@@ -184,11 +184,12 @@ end
 # =======================================================================
 
 # Variables to be investigated and the ranges to do so within
-#= variables = ["incl", "α13", "ϵ3", "a", "h"]
-ranges = [5:10:85, 0:10:50, 0:10:50, 0.05:0.1:0.95, 5:5:30] =#
+variables = ["incl", "α13", "ϵ3", "a", "h"]
+# ranges = [5:10:85, 0:10:50, 0:10:50, 0.05:0.1:0.95, 5:5:30]
+ranges = [range(5, 85, 4), range(0, 50, 4), range(0, 30, 4), range(0.05, 0.95, 4), range(5, 30, 4)]
 
-variables = ["α52"]
-ranges = [0:10:50]
+#= variables = ["α22"]
+ranges = [0:10:50] =#
 
 # Looping through the variables
 for i in 1:length(ranges)
@@ -199,14 +200,15 @@ for i in 1:length(ranges)
     variable = variables[i]
 
     # Looping through the values for each variable and computing the line profile
-    configs, binVars, fluxes = paramLoop(variable, range, setupDict, render=false)
+    # configs, binVars, fluxes = paramLoop(variable, range, setupDict; line=false)
+    configs, αs, βs, images = paramLoop(variable, range, setupDict; line=false)
 
-    # display(heatmap(αs, βs, images, aspect_ratio = 1; layout = length(αs), title=["($i)" for j in 1:1, i in 1:length(αs)], titleloc=:right))
+    display(heatmap(αs, βs, images, aspect_ratio = 1; layout = length(αs), title=[i for j in 1:1, i in configs], titleloc=:center))
 
-    plot(xlabel="g", ylabel="Flux (Arbitrary)", title="Variations of $variable")
+    #= plot(xlabel="g", ylabel="Flux (Arbitrary)", title="Variations of $variable")
 
     for i in 1:length(binVars)
         display(plot!(binVars[i], fluxes[i]; label=configs[i], palette=:tab10, lw=3))
         println("($i) $(configs[i])")
-    end
+    end =#
 end

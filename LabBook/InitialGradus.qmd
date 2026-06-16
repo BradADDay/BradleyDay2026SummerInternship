@@ -102,4 +102,14 @@ function computeLineProfile(m, i, height, bins = range(0.0, 1.5, 180))
 end
 ```
 
-This will allow for the investigation of the free parameters for the Johannsen metric, namely $\alpha 13$, $\alpha 22$, $\alpha 52$, and $\epsilon 3$
+This will allow for the investigation of the free parameters for the Johannsen metric; $\alpha_{13}$, $\alpha_{22}$, $\alpha_{52}$, and $\epsilon_3$. A lamppost corona model is used with variable height `h`. An example of the effect of varying the height of this corona is shown below.
+
+![Initial variations of the height of the lamppost corona.](images/InitialHVariation.png)
+
+Following initial experimentation the two functions above were integrated together for efficient investigation. The two free parameters that will be the focus of this investigation are $\alpha_{13}$ and $\epsilon_3$. Examples of the effects of these parameters on the emission lines are shown below
+
+![](images/epsilon3vars.png)
+
+![Initial variations of $\alpha_{13}$ and $\epsilon_3$](images/alpha13vars.png)
+
+It can be seen that $\alpha_{13}$ has a very smooth, almost linear effect on the shape of the line, while $\epsilon_3$ is much more chaotic, particularly for $\epsilon_3>25$.

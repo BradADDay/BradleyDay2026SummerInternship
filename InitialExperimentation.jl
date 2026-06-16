@@ -34,27 +34,12 @@ x = SVector(0.0, 1000.0, inclination, 0.0)
 # λ_max ~ 2*x[2]
 λ_max = 2000.0
 
-# Setting up impact parameters
-α = range(-10.0, 10.0, 100)
-β = range(-10.0, 10.0, 100)
-
-# Getting an array of velocities from the impact parameters
-vs = vec([map_impact_parameters(m, x, a, b) for a in α, b in β])
-xs = fill(x, size(vs))
-
-# Generating solutions
-sols = tracegeodesics(m, xs, vs, λ_max, save_on = false)
-
-# Generating points and reshaping to be the same shape as the image
-points = unpack_solution.(sols.u)
-points = reshape(points, (100, 100))
-
 # Redshift point function
 redshift = ConstPointFunctions.redshift(m, x)
 redshiftGeometry = redshift ∘ ConstPointFunctions.filter_intersected()
 
 # Disc
-d = ThickDisc(r -> discCrossSection(r))
+d = ThinDisc(0.0, 10.0)
 
 # this function returns the impact parameter axes
 α, β, image = rendergeodesics(
@@ -65,6 +50,4 @@ d = ThickDisc(r -> discCrossSection(r))
     αlims = (-20, 20), βlims = (-15, 15), verbose = true
 )
 
-heatmap(α, β, image, aspect_ratio = 1)
-
-savefig("LabBook/images/render.png")
+heatmap(α, β, image, aspect_ratio = 1, c = :seismic)

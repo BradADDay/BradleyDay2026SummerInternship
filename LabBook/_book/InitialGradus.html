@@ -514,7 +514,22 @@ window.Quarto = {
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> bins, flux</span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>This will allow for the investigation of the free parameters for the Johannsen metric, namely <span class="math inline">\(\alpha 13\)</span>, <span class="math inline">\(\alpha 22\)</span>, <span class="math inline">\(\alpha 52\)</span>, and <span class="math inline">\(\epsilon 3\)</span></p>
+<p>This will allow for the investigation of the free parameters for the Johannsen metric; <span class="math inline">\(\alpha_{13}\)</span>, <span class="math inline">\(\alpha_{22}\)</span>, <span class="math inline">\(\alpha_{52}\)</span>, and <span class="math inline">\(\epsilon_3\)</span>. A lamppost corona model is used with variable height <code>h</code>. An example of the effect of varying the height of this corona is shown below.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/InitialHVariation.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Initial variations of the height of the lamppost corona."><img src="images/InitialHVariation.png" class="img-fluid figure-img" alt="Initial variations of the height of the lamppost corona."></a></p>
+<figcaption>Initial variations of the height of the lamppost corona.</figcaption>
+</figure>
+</div>
+<p>Following initial experimentation the two functions above were integrated together for efficient investigation. The two free parameters that will be the focus of this investigation are <span class="math inline">\(\alpha_{13}\)</span> and <span class="math inline">\(\epsilon_3\)</span>. Examples of the effects of these parameters on the emission lines are shown below</p>
+<p><a href="images/epsilon3vars.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="images/epsilon3vars.png" class="img-fluid"></a></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/alpha13vars.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Initial variations of \alpha_{13} and \epsilon_3"><img src="images/alpha13vars.png" class="img-fluid figure-img" alt="Initial variations of \alpha_{13} and \epsilon_3"></a></p>
+<figcaption>Initial variations of <span class="math inline">\(\alpha_{13}\)</span> and <span class="math inline">\(\epsilon_3\)</span></figcaption>
+</figure>
+</div>
+<p>It can be seen that <span class="math inline">\(\alpha_{13}\)</span> has a very smooth, almost linear effect on the shape of the line, while <span class="math inline">\(\epsilon_3\)</span> is much more chaotic, particularly for <span class="math inline">\(\epsilon_3&gt;25\)</span>.</p>
 
 
 

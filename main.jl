@@ -1,9 +1,10 @@
 using Gradus
 using Plots
 using ColorSchemes
-using StatsBase
+using SpectralFitting
+using XSPECModels
 
-gr()
+include("LampPostModelFit.jl")
 
 # =======================================================================
 # Functions
@@ -28,7 +29,7 @@ end
 function computeLineProfile(m, x, height, bins = range(0.0, 1.5, 180))
 
     # Disk
-    d = ThinDisc(0.0, Inf)
+    d = ThinDisc(10., Inf)
 
     # Setting up the model and emissivity profile
     model = LampPostModel(h = height)
@@ -36,12 +37,17 @@ function computeLineProfile(m, x, height, bins = range(0.0, 1.5, 180))
 
     # Computing the line profile
     _, flux = lineprofile(m, x, d, profile; verbose=true, bins=bins, 
-            method=TransferFunctionMethod())
+            method=TransferFunctionMethod(), minrₑ=10.)
 
-    return flux
+    #= profile(r) = r^-2
+
+    _, flux = lineprofile(bins, profile, m, x, d; verbose=true,
+            method=TransferFunctionMethod(), minrₑ=10.) =#
+
+    return flux, Gradus.isco(m), profile
 end
 
-function renderImage(m, x, λ_max, imageSize=[40,30])
+function renderImage(m, x, λ_max, imageSize=(40,30))
 
     # Disk
     d = ThinDisc(0.0, 15.0)
@@ -59,6 +65,8 @@ function renderImage(m, x, λ_max, imageSize=[40,30])
             # image parameters
             image_width = imageSize[1], image_height = imageSize[2],
             αlims = (-20, 20), βlims = (-15, 15), verbose = true)
+    
+    display(heatmap(α, β, image, aspect_ratio = :equal; clims=(0., 1.5), cmap=:redsblues, ))
 
     return α, β, image
 end
@@ -68,7 +76,7 @@ function paramVar(setup, bins, config; line=true, render=true)
     returns = Dict()
 
     # Position of the observer
-    x = SVector(0.0, 10000.0, deg2rad(setup["incl"]), 0.0)
+    x = SVector(0.0, 10000.0, deg2rad(setup["θ"]), 0.0)
     λ_max = 2x[2]  # Max affine time ~2x[2]
 
     # Instantiating the metric
@@ -77,7 +85,7 @@ function paramVar(setup, bins, config; line=true, render=true)
     # Rendering the image
     if render
         println("+ Rendering for $config")
-        α, β, image = renderImage(m, x, λ_max, [400, 300])
+        α, β, image = renderImage(m, x, λ_max, (400, 300))
         returns["α"] = α
         returns["β"] = β
         returns["image"] = image
@@ -86,7 +94,9 @@ function paramVar(setup, bins, config; line=true, render=true)
     # Computing the line profile
     if line
         println("+ Computing line profile for $config")
-        returns["flux"] = computeLineProfile(m, x, setup["h"], bins)
+        flux, isco, profile = computeLineProfile(m, x, setup["h"], bins)
+        returns["flux"] = flux
+        returns["profile"] = profile
     end
 
     return returns
@@ -126,7 +136,6 @@ function paramLoop(parameter, values, setupDict, bins;
         catch err
             println("Value of $i failed to compute")
             println(err)
-            # Base.show_backtrace(stdout, backtrace())
         end
     end
 
@@ -139,7 +148,7 @@ function plotting(parameter, results, bins; line, render)
     if render
         # Plotting the heatmaps as subplots
         display(heatmap(results["α"], results["β"], results["image"], aspect_ratio = 1; 
-                layout = length(configs), title=[i for j in 1:1, i in configs], titleloc=:center))
+                layout = length(configs), title=[i for j in 1:1, i in configs], titleloc=:center, cmap=:redsblues))
 
         # Plotting the heatmaps individually
         for i in eachindex(configs)
@@ -160,44 +169,34 @@ function plotting(parameter, results, bins; line, render)
     end
 end
 
-function getSetupDict(M, a, α13, α22, α52, ϵ3, incl, h)
-    # Dictionary for easy access and modification of the model parameters
-    setupDict = Dict("incl" => incl, 
-                    "α13"  => α13, 
-                    "M"    => M, 
-                    "α22"  => α22, 
-                    "ϵ3"   => ϵ3, 
-                    "a"    => a, 
-                    "h"    => h, 
-                    "α52"  => α52)
-
-    return setupDict
-end
-
 # =======================================================================
 # Setup
 # =======================================================================
 
-# Metric Parameters
+# Metric Defaults
 const M = 1.0     # Mass
 const a = 0.998   # Spin
 
-# Perturbation Parameters
-const α13 = 0.0
-const α22 = 0.0
-const α52 = 0.0
-const ϵ3  = 0.0
+# Perturbation Defaults
+const α13 = 0.
+const α22 = 0.
+const α52 = 0.
+const ϵ3  = 0.
 
-# BH parameters
-const incl = 60.0 # Inclination, degrees
-const h    = 10.0 # Corona height
+# BH Defaults
+const θ = 60. # Inclination, degrees
+const h    = 50. # Corona height
+
+# Dictionary for easy access and modification of the model parameters
+defaultSetupDict = Dict((["θ", θ], ["α13", α13], ["M", M], ["α22", α22], ["ϵ3", ϵ3], ["a", a], ["h", h], ["α52", α52]))
+
+# Parameter Variations
+variables = ["ϵ3"]
+values = [32.2:0.1:34.8]
 
 # =======================================================================
 # Function calls
 # =======================================================================
-
-variables = ["ϵ3"]
-values = [32.2:0.1:34.8]
 
 bins = collect(range(0.1, 1.5, 180))
 
@@ -205,7 +204,7 @@ bins = collect(range(0.1, 1.5, 180))
 for i in eachindex(values)
     println()
 
-    setupDict = getSetupDict(M, a, α13, α22, α52, ϵ3, incl, h)
+    setupDict = copy(defaultSetupDict)
 
     value = values[i]
     variable = variables[i]
@@ -214,8 +213,17 @@ for i in eachindex(values)
     paramLoop(variable, value, setupDict, bins; line=true, render=true)
 end =#
 
-setupDict = getSetupDict(M, a, α13, α22, α52, ϵ3, incl, h)
+bins = collect(range(0.6, 1.2, 180))
+result = paramVar(defaultSetupDict, bins, "Default Parameters"; render=false)
+flux = result["flux"]
+profile = result["profile"]
 
-returns = paramVar(setupDict, bins, ""; render=false)
+data = InjectiveData(bins, flux, name="Data")
 
-plot(bins, returns["flux"])
+model = LampPost()
+
+prob = FittingProblem(model => data)
+result = SpectralFitting.fit(prob, LevenbergMarquadt())
+
+plot(data, markersize=2)
+plot!(result)

@@ -11,6 +11,17 @@ Before exploring the 5D parameter space, tests were ran on both $\alpha_{22}$ an
 Varying $\alpha_{52}$ showed near random, and near zero effect on the line and will thus be disregarded for this investigation. Varying $\alpha_{22}$ often failed to compute and will thus similarly be disregarded for this investigation.
 
 ## Exploring the 5-dimensional parameter space
+
+Each of the 5 parameters were varied individual, with the remaining four being held at default values of
+
+| Parameter      | Value |
+|----------------|-------|
+| $\alpha_{13}$  | 0.0   |
+| $\epsilon_{3}$ | 0.0   |
+| $a$            | 0.998 |
+| $h$            | 10 $R_G$   |
+| $i$            | 60$\degree$|
+
 ### Line profiles
 
 ::: {layout-ncol=2}
@@ -33,16 +44,14 @@ Varying $\alpha_{52}$ showed near random, and near zero effect on the line and w
 - @fig-coronaHeight shows that increasing the corona height makes the line profile sharper, increases the maximum flux, and shifts the maximum to slightly lower energies.
 - @fig-spin shows that the spin had the least prominent impact on the profile of the line, seeming to only slightly decrease the height of the peaks with increasing spin. This may be an effect of the small range of spins available. It may therefore be informative to investigate this further by increasing the mass, using different corona heights, or varying the inclination.
 
-### Renders
+### Redshift Image Renders
 
-Alongside the line profiles, images of the accretion disk were rendered with a colourmap denoting the redshift of light from a given part of the disk.
+Alongside the line profiles, images of the accretion disk were rendered with a colourmap denoting the redshift of light from a given part of the disk. The corona height was not varied here as it did not impact the render.
 
-![The effect of $\alpha_{13}$ on the accretion disk render. The event horizon seems to grow with $\alpha_{13}$](images/alpha13Render.png){fig-align="center" #fig-alpha13 width=80%}
+![The effect of $\alpha_{13}$ on the accretion disk render. The event horizon appears to grow with $\alpha_{13}$](images/alpha13Render.png){fig-align="center" #fig-alpha13 width=80%}
 
-![](images/epsilon3Render.png){fig-align="center" #fig-epsilon3Render width=80%}
+![The effect of $\epsilon_3$ on the redshift image. The shape of the disk does not change but the redshift profile does, particularly in the inner regions where the redshift tends to increase.](images/epsilon3Render.png){fig-align="center" #fig-epsilon3Render width=80%}
 
-![](images/inclRender.png){fig-align="center" #fig-inclRender width=80%}
+![The effect of inclination on the redshift image. The redshift becomes more apparent as the inclination increases and the disk becomes edge on. This agrees with the observed line profile trend of energy increasing with inclination as the effects of doppler shifting become more apparent with increasing energy.](images/inclRender.png){fig-align="center" #fig-inclRender width=80%}
 
-![](images/coronaHeightRender.png){fig-align="center" #fig-coronaHeightRender width=80%}
-
-![](images/spinRender.png){fig-align="center" #fig-spinRender width=80%}
+![The effect of black hole spin on the redshift image. The event horizon appears to shrink.](images/spinRender.png){fig-align="center" #fig-spinRender width=80%}

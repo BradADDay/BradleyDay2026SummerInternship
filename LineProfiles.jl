@@ -1,10 +1,9 @@
 using Gradus
 using Plots
 using ColorSchemes
+using StatsBase
 
 gr()
-
-println(Threads.nthreads(:default))
 
 # =======================================================================
 # Functions
@@ -54,7 +53,10 @@ function renderImage(m, x, λ_max, imageSize=[40,30])
     # Redshift point function
     redshift = ConstPointFunctions.redshift(m, x)
     redshiftGeometry = redshift ∘ ConstPointFunctions.filter_intersected()
-    
+
+    time_coord = PointFunction((m, gp, λ) -> gp.x[1])
+    pfGeometry = time_coord ∘ ConstPointFunctions.filter_intersected()
+
     # Rendering the image
     α, β, image = rendergeodesics(
             m, x, d, λ_max, pf = redshiftGeometry,
@@ -79,7 +81,7 @@ function paramVar(setup, bins, config, line, render)
     # Rendering the image
     if render
         println("+ Rendering for $config")
-        α, β, image = renderImage(m, x, λ_max, [200, 150])
+        α, β, image = renderImage(m, x, λ_max, [400, 300])
 
         append!(returns, [α, β, image])
     end
@@ -109,7 +111,7 @@ function paramLoop(parameter, values, setupDict; line=true, render=true)
     bins = collect(range(0.1, 1.5, 180))
 
     for i in values
-        try
+        # try
             setupDict[parameter] = i
 
             config = generateConfig([parameter], setupDict)
@@ -134,9 +136,9 @@ function paramLoop(parameter, values, setupDict; line=true, render=true)
             end
 
             append!(configs, [config])
-        catch
-            println("Value of $i failed to compute")
-        end
+        # catch
+        #     println("Value of $i failed to compute")
+        # end
     end
 
     if line & render
@@ -163,7 +165,7 @@ function defaultParameters()
     ϵ3  = 0.0
 
     # BH parameters
-    incl = 60.0 # Inclination, degrees
+    incl = 85.0 # Inclination, degrees
     h    = 10.0 # Corona height
 
     # Dictionary for easy access and modification of the model parameters
@@ -184,31 +186,36 @@ end
 # =======================================================================
 
 # Variables to be investigated and the ranges to do so within
-variables = ["incl", "α13", "ϵ3", "a", "h"]
+# variables = ["incl", "α13", "ϵ3", "a", "h"]
 # ranges = [5:10:85, 0:10:50, 0:10:50, 0.05:0.1:0.95, 5:5:30]
-ranges = [range(5, 85, 4), range(0, 50, 4), range(0, 30, 4), range(0.05, 0.95, 4), range(5, 30, 4)]
+# ranges = [range(5, 85, 4), range(0, 50, 4), range(0, 30, 4), range(0.05, 0.95, 4), range(5, 30, 4)]
 
-#= variables = ["α22"]
-ranges = [0:10:50] =#
+variables = ["ϵ3"]
+ranges = [32.2:0.2:34.8]
 
 # Looping through the variables
 for i in 1:length(ranges)
 
     setupDict = defaultParameters()
 
-    range = ranges[i]
+    value = ranges[i]
     variable = variables[i]
 
     # Looping through the values for each variable and computing the line profile
-    # configs, binVars, fluxes = paramLoop(variable, range, setupDict; line=false)
-    configs, αs, βs, images = paramLoop(variable, range, setupDict; line=false)
+    configs, binVars, fluxes = paramLoop(variable, value, setupDict; render=false)
+    # configs, αs, βs, images = paramLoop(variable, value, setupDict; line=false)
 
-    display(heatmap(αs, βs, images, aspect_ratio = 1; layout = length(αs), title=[i for j in 1:1, i in configs], titleloc=:center))
+    # display(heatmap(αs, βs, images, aspect_ratio = 1; layout = length(αs), title=[i for j in 1:1, i in configs], titleloc=:center))
 
-    #= plot(xlabel="g", ylabel="Flux (Arbitrary)", title="Variations of $variable")
+    #= for i in 1:length(configs)
+        display(heatmap(αs[i], βs[i], images[i], aspect_ratio = :equal, title=configs[i]; clims=(0., 1.5)))
+        savefig("testimages/$(configs[i]).png")
+    end =#
+
+    plot(xlabel="g", ylabel="Flux (Arbitrary)", title="Variations of $variable")
 
     for i in 1:length(binVars)
         display(plot!(binVars[i], fluxes[i]; label=configs[i], palette=:tab10, lw=3))
         println("($i) $(configs[i])")
-    end =#
+    end
 end

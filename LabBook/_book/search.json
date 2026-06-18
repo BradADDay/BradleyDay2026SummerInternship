@@ -10,36 +10,6 @@
     ]
   },
   {
-    "objectID": "intro.html",
-    "href": "intro.html",
-    "title": "1  Reading",
-    "section": "",
-    "text": "1.1 Summary of “Broad Iron Lines in Active Galactic Nuclei”  [1]\nFluorescent iron line, Fe-K\\(\\alpha\\), in the X-ray band at \\(6.4-6.9\\) keV is the strongest narrow line emitted by an accretion disk around a black hole. Inverse Compton scattering of the soft photons (lower energy than the reactant particles) in a hot corona is the most likely candidate for the production of these X-rays. The emitted line is broadened and skewed due to the Doppler effect and gravitational redshift, and is often called the broad iron line due to being broadened to a FWHM of \\(5\\times 10^4\\) km s\\(^{-1}\\).\nSoft Comptonisation (multiple inverse Compton scattering by hot thermal electrons) occurs giving a power law X-ray spectrum. Flares from active or flaring regions irradiate the accretion disk forming a “reflection” component in the spectrum.\nThe iron line is produced when one of the two K-shell electrons is ejected following absorption of an X-ray, the threshold for neutral iron is 7.1 keV. The resultant state can decay through the dropping of an L-shell electron into the K-shell, releasing 6.4 keV as either an emission line photon (34%) or an Auger electron (66%). Ionised iron has a photoelectric threshold and the K\\(\\alpha\\) of higher energy. The strength of the iron line is measured in terms of its equivalent width.\nThe equivalent width is a function of the geometry of the accretion disk, the elemental abundances, the inclination angle, and the ionisation state.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Reading</span>"
-    ]
-  },
-  {
-    "objectID": "intro.html#summary-of-broad-iron-lines-in-active-galactic-nuclei-broadironlines",
-    "href": "intro.html#summary-of-broad-iron-lines-in-active-galactic-nuclei-broadironlines",
-    "title": "1  Reading",
-    "section": "",
-    "text": "The profile of the broad iron line, image credit to Fabian (2000) [1].\n\n\n\n\n\n\nReflection spectrum from a Monte Carlo simulation of an illuminated slab. The dashed line is the incident continuum and the solid line shows the reflected spectrum. Image credit Reynolds (1996) [1]\n\n\n\n\n\n\n\n\n\nNoteEquivalent Width\n\n\n\n\n\nThe equivalent width of a spectral line is the width of the rectangle which has the same area as that between the line and the continuum level.\n\n\n\n\n\n\n\nA diagram indicating the equivalent width. The width of the rectangle is the equivalent width.\n\n\n\n\n\n\n\n\n\n\n\n\nImportantKey Points\n\n\n\n\n\n\nX-ray Continuum: The hard X-ray continuum in AGNs and GBHCs is thought to be from active/flaring regions in the corona. Thermal electrons multiply inverse Compton scatter optical and UV photons from the disk to X-ray energies. A hard X-ray power law results and irradiates the accretion disk to produce a reflection component.\nReflection Component: The reflection component causes the spectrum to flatten above 10 keV as Compton recoil reduces the backscattered flux and results in a strong fluorescent iron line at \\(\\sim 6.4\\) keV. The energy and strength of this line depends on iron abundance, inclination of the disk, and its ionisation state. A strong iron absorption edge may also be present from an ionised disk.\nIron Line Profile: Doppler shifts, relativistic broadening and gravitational redshifting give the broad and skewed line profile. As the line comes from the innermost regions, these effects are very pronounced and may be used to determine the black hole spin and inclination angle of the accretion disk. In most Seyfert 1 galaxies, the disk is inclined at around 30\\(^\\circ\\), consistent with the standard model.\nObservations: The iron line was first clearly detected by Ginga and a line profile subsequently resolved by ASCA confirmed the broad and skewed shape expected from an accretion disk around a Schwarzschild black hole. RXTE has been used to study the line and continuum variability on shorter timescales, with reduced energy resolution.\nBlack Hole Spin: The radius of the ISCO decreases with spin. Since the line profile is sensitive to the innermost radius of fluorescent emission this may be used to estimate the black hole, with some astrophysical assumptions. With present time-averaged observations such measurements may be ambiguous as alternative models with different values for the spin may produce identical line profiles.\nAlternative Models for the Production of the Broad Iron Line: Alternative models that do not require an accretion disk appear to fail, in particular the line width cannot be entirely due to Comptonisation. Hybrid models in which the Comptonisation and Doppler/gravitational effects produce the profile are heavily constrained.\nVariability: Rapid X-ray continuum variability is observed in most AGNs, and the iron line is expected to vary in response to this with short time lag. Whilst these timescales are too short to be probed presently, significant and complex iron line variability has been observed. Often the line flux is seen to remain constant whilst the continuum changes, and there appears to be an anticorrelation between the reflected fraction and the equivalent width. In another study the reflected fraction and the photon index of the power law are correlated for individual objects and between different ones. These need to be explained as they appear contrary to our simple model of reflection. Flux correlated changes in the ionisation state of the disk may explain some of these facts.\nReverberation Mapping: The rapid variability is associated with activation of new flares in the corona above the accretion disk. X-ray reverberation mapping uses observations of the iron line response to sudden changes in the continuum to study the accretion disk and black hole. This may be used to determine the geometry of the X-ray emission and the black hole spin and mass.\nOther Classes of Object Iron lines are observed in quasars, LLAGNs, radio-loud AGNs, and GBHCs. Quasars have the iron line decrease with increasing luminosity which may be due to the more luminous sources accreting closer to the Eddington limit being more highly ionised. Observations in LLAGNs may determine whether the accretion with low rates is an advection‐dominated accretion flow or a thin disk. Weak lines have been observed suggesting that their low accretion rate flows are thin disks rather than optically thick ADAFs. THe broad iron lines and reflection humps are weak or absent perhaps because the reflection signature is swamped by a beamed continuum. GBHCs show smeared absorption and emission features in the reflection spectra, and there is a debate as to the precise nature of the accretion flow within a few tens of Schwarzschild radii.\n\n\n\n\n\n\n\n\n\n[1] A. C. Fabian et al., Publications of the Astronomical Society of the Pacific 112, 1145 (2000).",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Reading</span>"
-    ]
-  },
-  {
-    "objectID": "references.html",
-    "href": "references.html",
-    "title": "References",
-    "section": "",
-    "text": "[1] A. C. Fabian et al.,\nPublications of the Astronomical Society of the Pacific\n112, 1145 (2000).",
-    "crumbs": [
-      "References"
-    ]
-  },
-  {
     "objectID": "IronKalphaReviewSummary.html",
     "href": "IronKalphaReviewSummary.html",
     "title": "1  Reading",
@@ -70,33 +40,53 @@
     ]
   },
   {
-    "objectID": "Day2.html",
-    "href": "Day2.html",
-    "title": "3  2026-06-16",
+    "objectID": "ParamSpace.html",
+    "href": "ParamSpace.html",
+    "title": "3  Parameter Space Investigations",
     "section": "",
     "text": "3.1 Ruling out \\(\\alpha_{22}\\) and \\(\\alpha_{52}\\)\nCode was set up to easily run several variations to the model which will allow for the investigation of the parameter space. A thin disk accretion model and a lamppost corona were used. It was set up such that for a given configuration of \\(h\\), \\(a\\), \\(i\\), \\(\\epsilon_3\\), and \\(\\alpha_{13}\\) the line profile would be calculated and an image of the accretion disk produced and plotted together.\nBefore exploring the 5D parameter space, tests were ran on both \\(\\alpha_{22}\\) and \\(\\alpha_{52}\\) such that their effects could be noted, should they be useful in the future.\nVarying \\(\\alpha_{52}\\) showed near random, and near zero effect on the line and will thus be disregarded for this investigation. Varying \\(\\alpha_{22}\\) often failed to compute and will thus similarly be disregarded for this investigation.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>2026-06-16</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Parameter Space Investigations</span>"
     ]
   },
   {
-    "objectID": "Day2.html#exploring-the-5-dimensional-parameter-space",
-    "href": "Day2.html#exploring-the-5-dimensional-parameter-space",
-    "title": "3  2026-06-16",
-    "section": "3.2 Exploring the 5-dimensional parameter space",
-    "text": "3.2 Exploring the 5-dimensional parameter space\nEach of the 5 parameters were varied individual, with the remaining four being held at default values of\n\n\n\nParameter\nValue\n\n\n\n\n\\(\\alpha_{13}\\)\n0.0\n\n\n\\(\\epsilon_{3}\\)\n0.0\n\n\n\\(a\\)\n0.998\n\n\n\\(h\\)\n10 \\(R_G\\)\n\n\n\\(i\\)\n60\\(\\degree\\)\n\n\n\n\n3.2.1 Line profiles\n\n\n\n\n\n\n\n\n\nFigure 3.2: The line profiles resultant from varying \\(\\alpha_{13}\\) between 0 and 50.\n\n\n\n\n\n\n\n\n\n\n\nFigure 3.3: The line profiles resultant from varying \\(\\epsilon_{3}\\) between 0 and 30. Values of 40 and 50 were tested however caused an error, there must be an upper bound on the allowed values of this parameter.\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 3.4: The line profiles resultant from varying the inclination between 5 and 85 degrees.\n\n\n\n\n\n\n\n\n\n\n\nFigure 3.5: The line profiles resultant from varying \\(h\\) between 5 and 30 gravitational radii.\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 3.6: The line profiles resultant from varying \\(a\\) between 5 and 95% of \\(M(=1)\\).\n\n\n\n\nFigure 3.7 shows that increasing the free parameter \\(\\alpha_{13}\\) sharpens the two peaks of the line, increases the maximum flux, and makes it more narrow.\nFigure 3.3 shows that increasing the free parameter \\(\\epsilon_{3}\\) similarly increases the maximum flux, however the resultant profile is much more noisy. While \\(\\alpha_{13}\\) provided sharp peaks, \\(\\epsilon_{3}\\) provided broader peaks, particularly in the shorter one.\nFigure 3.4 shows that increasing the inclination smoothes out the line profile and shifts the peak to higher energies. The line is broadened significantly.\nFigure 3.5 shows that increasing the corona height makes the line profile sharper, increases the maximum flux, and shifts the maximum to slightly lower energies.\nFigure 3.6 shows that the spin had the least prominent impact on the profile of the line, seeming to only slightly decrease the height of the peaks with increasing spin. This may be an effect of the small range of spins available. It may therefore be informative to investigate this further by increasing the mass, using different corona heights, or varying the inclination.\n\n\n\n3.2.2 Redshift Image Renders\nAlongside the line profiles, images of the accretion disk were rendered with a colourmap denoting the redshift of light from a given part of the disk. The corona height was not varied here as it did not impact the render.\n\n\n\n\n\n\nFigure 3.7: The effect of \\(\\alpha_{13}\\) on the accretion disk render. The event horizon appears to grow with \\(\\alpha_{13}\\)\n\n\n\n\n\n\n\n\n\nFigure 3.8: The effect of \\(\\epsilon_3\\) on the redshift image. The shape of the disk does not change but the redshift profile does, particularly in the inner regions where the redshift tends to increase.\n\n\n\n\n\n\n\n\n\nFigure 3.9: The effect of inclination on the redshift image. The redshift becomes more apparent as the inclination increases and the disk becomes edge on. This agrees with the observed line profile trend of energy increasing with inclination as the effects of doppler shifting become more apparent with increasing energy.\n\n\n\n\n\n\n\n\n\nFigure 3.10: The effect of black hole spin on the redshift image. The event horizon appears to shrink.",
-    "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>2026-06-16</span>"
-    ]
-  },
-  {
-    "objectID": "Day2.html#ruling-out-alpha_22-and-alpha_52",
-    "href": "Day2.html#ruling-out-alpha_22-and-alpha_52",
-    "title": "3  2026-06-16",
+    "objectID": "ParamSpace.html#ruling-out-alpha_22-and-alpha_52",
+    "href": "ParamSpace.html#ruling-out-alpha_22-and-alpha_52",
+    "title": "3  Parameter Space Investigations",
     "section": "",
     "text": "Figure 3.1: The resultant line profile from varying \\(\\alpha_{52}\\) between 0 and 40. A value of 50 did not successfully compute suggesting an upper limit on this parameter.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>2026-06-16</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Parameter Space Investigations</span>"
+    ]
+  },
+  {
+    "objectID": "ParamSpace.html#exploring-the-5-dimensional-parameter-space",
+    "href": "ParamSpace.html#exploring-the-5-dimensional-parameter-space",
+    "title": "3  Parameter Space Investigations",
+    "section": "3.2 Exploring the 5-dimensional parameter space",
+    "text": "3.2 Exploring the 5-dimensional parameter space\nEach of the 5 parameters were varied individual, with the remaining four being held at default values of\n\n\n\nParameter\nValue\n\n\n\n\n\\(\\alpha_{13}\\)\n0.0\n\n\n\\(\\epsilon_{3}\\)\n0.0\n\n\n\\(a\\)\n0.998\n\n\n\\(h\\)\n10 \\(R_G\\)\n\n\n\\(i\\)\n60\\(\\degree\\)\n\n\n\n\n3.2.1 Line profiles\n\n\n\n\n\n\n\n\n\nFigure 3.2: The line profiles resultant from varying \\(\\alpha_{13}\\) between 0 and 50.\n\n\n\n\n\n\n\n\n\n\n\nFigure 3.3: The line profiles resultant from varying \\(\\epsilon_{3}\\) between 0 and 30. Values of 40 and 50 were tested however caused an error, there must be an upper bound on the allowed values of this parameter.\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 3.4: The line profiles resultant from varying the inclination between 5 and 85 degrees.\n\n\n\n\n\n\n\n\n\n\n\nFigure 3.5: The line profiles resultant from varying \\(h\\) between 5 and 30 gravitational radii.\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 3.6: The line profiles resultant from varying \\(a\\) between 5 and 95% of \\(M(=1)\\).\n\n\n\n\nFigure 3.7 shows that increasing the free parameter \\(\\alpha_{13}\\) sharpens the two peaks of the line, increases the maximum flux, and makes it more narrow.\nFigure 3.3 shows that increasing the free parameter \\(\\epsilon_{3}\\) similarly increases the maximum flux, however the resultant profile is much more noisy. While \\(\\alpha_{13}\\) provided sharp peaks, \\(\\epsilon_{3}\\) provided broader peaks, particularly in the shorter one.\nFigure 3.4 shows that increasing the inclination smoothes out the line profile and shifts the peak to higher energies. The line is broadened significantly.\nFigure 3.5 shows that increasing the corona height makes the line profile sharper, increases the maximum flux, and shifts the maximum to slightly lower energies.\nFigure 3.6 shows that the spin had the least prominent impact on the profile of the line, seeming to only slightly decrease the height of the peaks with increasing spin. This may be an effect of the small range of spins available. It may therefore be informative to investigate this further by increasing the mass, using different corona heights, or varying the inclination.\n\n\n\n3.2.2 Redshift Image Renders\nAlongside the line profiles, images of the accretion disk were rendered with a colourmap denoting the redshift of light from a given part of the disk. The corona height was not varied here as it did not impact the render.\n\n\n\n\n\n\nFigure 3.7: The effect of \\(\\alpha_{13}\\) on the accretion disk render. The event horizon appears to grow with \\(\\alpha_{13}\\)\n\n\n\n\n\n\n\n\n\nFigure 3.8: The effect of \\(\\epsilon_3\\) on the redshift image. The shape of the disk does not change but the redshift profile does, particularly in the inner regions where the redshift tends to increase.\n\n\n\n\n\n\n\n\n\nFigure 3.9: The effect of inclination on the redshift image. The redshift becomes more apparent as the inclination increases and the disk becomes edge on. This agrees with the observed line profile trend of energy increasing with inclination as the effects of doppler shifting become more apparent with increasing energy.\n\n\n\n\n\n\n\n\n\nFigure 3.10: The effect of black hole spin on the redshift image. The event horizon appears to shrink.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Parameter Space Investigations</span>"
+    ]
+  },
+  {
+    "objectID": "Fitting.html",
+    "href": "Fitting.html",
+    "title": "4  Fitting Spectral Lines",
+    "section": "",
+    "text": "With the parameter space explored, it was useful to setup the architecture for fitting the model to spectral data. This was done using SpectralFitting.jl and defining a custom model using Gradus which fits the following parameters:\n\n\n\nParameter\nMeaning\n\n\n\n\nK\nNormalisation\n\n\nh\nCorona Height\n\n\nE\nLine Energy\n\n\nR_in\nInner Radius\n\n\nR_out\nOuter Radius\n\n\nθ\nInclination\n\n\na\nSpin\n\n\nα13\n\\(\\alpha_{13}\\) Parameter\n\n\nϵ3\n\\(\\epsilon_{3}\\) Parameter\n\n\n\nThe architecture of this model was heavily based upon previous work on GitHub.\nThe model is instantiated using the LampPostJohannsen utility function. When called, the parameters are used to instantiate a JohannsenMetric, observer position, ThinDisc, and an emissivity profile. These are then used to compute the line profile as previously done which is returned.\nAll fitting is handled by SpectralFitting through the Levenberg Marquadt algorithm.\nTo test the implementation a line profile was computed and random noise added to it. This was then passed through the fitting function. The fitting process currently takes a long time and yields poor results so more work is needed.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Fitting Spectral Lines</span>"
+    ]
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "[1] A. C. Fabian et al.,\nPublications of the Astronomical Society of the Pacific\n112, 1145 (2000).",
+    "crumbs": [
+      "References"
     ]
   }
 ]

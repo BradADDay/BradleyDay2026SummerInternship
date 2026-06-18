@@ -25,7 +25,7 @@ function generateConfig(variables, setupDict)
     return config
 end
 
-function computeLineProfile(m, x, height, bins = range(0.0, 1.5, 180); minrₑ=-1., maxrₑ=400., numrₑ=100, kwargs...)
+function ComputeLineProfile(m, x; height, bins = range(0.0, 1.5, 180), minrₑ=-1., maxrₑ=400., numrₑ=100, kwargs...)
 
     if minrₑ < 0.
         minrₑ = Gradus.isco(m)
@@ -45,7 +45,7 @@ function computeLineProfile(m, x, height, bins = range(0.0, 1.5, 180); minrₑ=-
     return flux
 end
 
-function renderImage(m, x, λ_max; imageSize=(40,30), kwargs...)
+function RenderImage(m, x; λ_max, imageSize=(40,30), kwargs...)
 
     # Disk
     d = ThinDisc(0.0, 15.0)
@@ -54,24 +54,17 @@ function renderImage(m, x, λ_max; imageSize=(40,30), kwargs...)
     redshift = ConstPointFunctions.redshift(m, x)
     redshiftGeometry = redshift ∘ ConstPointFunctions.filter_intersected()
 
-    time_coord = PointFunction((m, gp, λ) -> gp.x[1])
-    pfGeometry = time_coord ∘ ConstPointFunctions.filter_intersected()
-
     # Rendering the image
     α, β, image = rendergeodesics(
             m, x, d, λ_max, pf = redshiftGeometry,
             # image parameters
             image_width = imageSize[1], image_height = imageSize[2],
             αlims = (-20, 20), βlims = (-15, 15), verbose = true)
-    
-    display(heatmap(α, β, image, aspect_ratio = :equal; clims=(0., 1.5), cmap=:redsblues, ))
 
-    return α, β, image
+    return Dict("α" => α, "β" => β, "image" => image)
 end
 
-function paramVar(setup, bins, config; render=true, line=true, kwargs...)
-
-    returns = Dict()
+function paramVar(setup, bins, func; kwargs...)
 
     # Position of the observer
     x = SVector(0.0, 10000.0, deg2rad(setup["θ"]), 0.0)
@@ -80,28 +73,14 @@ function paramVar(setup, bins, config; render=true, line=true, kwargs...)
     # Instantiating the metric
     m = JohannsenMetric(setup["M"], setup["a"], setup["α13"], setup["α22"], setup["α52"], setup["ϵ3"])
 
-    # Rendering the image
-    if render
-        println("+ Rendering for $config")
-        α, β, image = renderImage(m, x, λ_max; kwargs...)
-        returns["α"] = α
-        returns["β"] = β
-        returns["image"] = image
-    end
-    
-    # Computing the line profile
-    if line
-        println("+ Computing line profile for $config")
-        flux = computeLineProfile(m, x, setup["h"], bins; kwargs...)
-        returns["flux"] = flux
-    end
+    output = func(m, x; λ_max=λ_max, height = setup["h"], bins=bins, kwargs...)
 
-    return returns
+    return output
 
 end
 
-function paramLoop(parameter, values, setupDict, bins; 
-                   line=true, render=true)
+function paramLoop(parameter, values, setupDict; bins=collect(range(0.1, 1.5, 180)), 
+                   line=true, render=true, kwargs...)
 
     # Setup arrays for storage
     results = Dict("flux" => [],
@@ -110,26 +89,26 @@ function paramLoop(parameter, values, setupDict, bins;
                    "image" => [],
                    "config" => [])
 
-    keys = []
-    if line
-        append!(keys, ["flux"])
-    end
-    if render
-        append!(keys, ["α", "β", "image"])
-    end
-
     for i in values
         try
             setupDict[parameter] = i
 
             config = generateConfig([parameter], setupDict)
-            result = paramVar(setupDict, bins, config; line, render)
+            if line
+                flux = paramVar(setupDict, bins, ComputeLineProfile; kwargs...)
+                append!(results["flux"], [flux])
+            end
 
-            for key in keys
-                append!(results[key], [result[key]])
+            if render
+                result = paramVar(setupDict, bins, RenderImage; kwargs...)
+
+                for key in ["α", "β", "image"]
+                    append!(results[key], [result[key]])
+                end
             end
 
             append!(results["config"], [config])
+
         catch err
             println("Value of $i failed to compute")
             println(err)
@@ -140,6 +119,7 @@ function paramLoop(parameter, values, setupDict, bins;
 end
 
 function plotting(parameter, results, bins; line, render)
+
     configs = results["config"]
 
     if render
@@ -149,7 +129,7 @@ function plotting(parameter, results, bins; line, render)
 
         # Plotting the heatmaps individually
         for i in eachindex(configs)
-            display(heatmap(results["α"][i], results["β"][i], results["image"][i], aspect_ratio = :equal, title=configs[i]; clims=(0., 1.5)))
+            display(heatmap(results["α"][i], results["β"][i], results["image"][i], aspect_ratio = :equal, title=configs[i]; clims=(0., 1.5), cmap=:redsblues))
             savefig("testimages/$(configs[i]).png")
         end
     end
@@ -182,43 +162,30 @@ const ϵ3  = 0.
 
 # BH Defaults
 const θ = 60. # Inclination, degrees
-const h = 9. # Corona height
+const h = 10. # Corona height
 
 # Dictionary for easy access and modification of the model parameters
 defaultSetupDict = Dict((["θ", θ], ["α13", α13], ["M", M], ["α22", α22], ["ϵ3", ϵ3], ["a", a], ["h", h], ["α52", α52]))
-
-# Parameter Variations
-variables = ["ϵ3"]
-values = [32.2:0.1:34.8]
 
 # =======================================================================
 # Function calls
 # =======================================================================
 
-bins = collect(range(0.1, 1.5, 180))
-
-#= # Looping through the variables
-for i in eachindex(values)
-    println()
-
-    setupDict = copy(defaultSetupDict)
-
-    value = values[i]
-    variable = variables[i]
-
-    # Looping through the values for each variable and computing the line profile
-    paramLoop(variable, value, setupDict, bins; line=true, render=true)
-end =#
+# Looping through the values for each variable and computing the line profile
+# paramLoop("ϵ3", 8:1:10, copy(defaultSetupDict); line=true, render=true)
 
 bins = collect(range(0.2, 1.5, 100))
-flux = paramVar(defaultSetupDict, bins, "Default Parameters"; 
+flux = paramVar(defaultSetupDict, bins, ComputeLineProfile; 
                 render = false, minrₑ = -1., maxrₑ = 400., 
-                numrₑ = 10)["flux"]
+                numrₑ = 100)
+
+plot(data, markersize=3)
+display(plot!(xlabel="Energy", ylabel="Flux (arb. units)"))
+
+data = InjectiveData(bins, flux, name="Data")
 
 flux += rand(-0.001:1e-7:0.001, length(flux))
 flux[flux.<0] .= 0
-
-data = InjectiveData(bins, flux, name="Data")
 
 model = LampPostJohannsen()
 
@@ -227,10 +194,4 @@ prob = FittingProblem(model => data)
 println("+ Fitting...")
 result = SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, maxIter = 15, verbose=true)
 
-plot(data, markersize=3)
 plot!(result)
-plot!(xlabel="Energy", ylabel="Flux (arb. units)")
-
-flux = paramVar(defaultSetupDict, bins, "Default Parameters"; 
-                render = false, minrₑ = -1., maxrₑ = 400., 
-                numrₑ = 10)["flux"]

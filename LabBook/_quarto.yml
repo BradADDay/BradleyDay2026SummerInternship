@@ -9,7 +9,8 @@ book:
     - index.qmd
     - IronKalphaReviewSummary.qmd
     - InitialGradus.qmd
-    - Day2.qmd
+    - ParamSpace.qmd
+    - Fitting.qmd
     - references.qmd
 
 bibliography: references.bib

@@ -2,14 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Brad Day">
-<meta name="dcterms.date" content="2025-05-19">
 
-<title>Lab Book</title>
+<title>3&nbsp; Parameter Space Investigations – Lab Book</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -35,21 +33,25 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./intro.html" rel="next">
+<link href="./Fitting.html" rel="next">
+<link href="./InitialGradus.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-68eb06f5a2aa08a495b990487cf56393.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-9b136919a31f203a140fd6b200c9092b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-68eb06f5a2aa08a495b990487cf56393.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-382dad073c37032be9e988f92f56c479.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-bd29a33bb155b7791116d1c9ba40c699.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-382dad073c37032be9e988f92f56c479.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -80,16 +82,45 @@ ul.task-list li input[type="checkbox"] {
 <script>
 window.MathJax = {
   loader: {
-    load: ['[tex]/upgreek', '[tex]/boldsymbol', '[tex]/physics']
+    load: ['[tex]/boldsymbol', '[tex]/physics']
   },
   tex: {
     packages: {
-      '[+]': ['upgreek', 'boldsymbol', 'physics']
+      '[+]': ['boldsymbol', 'physics']
     }
   }
 };
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -264,7 +295,7 @@ window.MathJax = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./ParamSpace.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Parameter Space Investigations</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -294,14 +325,32 @@ window.MathJax = {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+  <a href="./IronKalphaReviewSummary.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Reading</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./InitialGradus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Initial Gradus Testing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ParamSpace.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Parameter Space Investigations</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Fitting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fitting Spectral Lines</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -320,7 +369,12 @@ window.MathJax = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
+  <li><a href="#ruling-out-alpha_22-and-alpha_52" id="toc-ruling-out-alpha_22-and-alpha_52" class="nav-link active" data-scroll-target="#ruling-out-alpha_22-and-alpha_52"><span class="header-section-number">3.1</span> Ruling out <span class="math inline">\(\alpha_{22}\)</span> and <span class="math inline">\(\alpha_{52}\)</span></a></li>
+  <li><a href="#exploring-the-5-dimensional-parameter-space" id="toc-exploring-the-5-dimensional-parameter-space" class="nav-link" data-scroll-target="#exploring-the-5-dimensional-parameter-space"><span class="header-section-number">3.2</span> Exploring the 5-dimensional parameter space</a>
+  <ul class="collapse">
+  <li><a href="#line-profiles" id="toc-line-profiles" class="nav-link" data-scroll-target="#line-profiles"><span class="header-section-number">3.2.1</span> Line profiles</a></li>
+  <li><a href="#redshift-image-renders" id="toc-redshift-image-renders" class="nav-link" data-scroll-target="#redshift-image-renders"><span class="header-section-number">3.2.2</span> Redshift Image Renders</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -330,26 +384,14 @@ window.MathJax = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Lab Book</h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Parameter Space Investigations</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Brad Day </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">May 19, 2025</p>
-    </div>
-  </div>
   
     
   </div>
@@ -359,13 +401,176 @@ window.MathJax = {
 </header>
 
 
-<section id="preface" class="level1 unnumbered">
-<h1 class="unnumbered">Preface</h1>
-<p>This book details my research during Summer 2026. Many thanks to Dr.&nbsp;Andrew Young and Mr Darius Michienzi for supervising this project.</p>
-<p>This is a Quarto book.</p>
-<p>To learn more about Quarto books visit <a href="https://quarto.org/docs/books" class="uri">https://quarto.org/docs/books</a>.</p>
+<hr>
+<p>Code was set up to easily run several variations to the model which will allow for the investigation of the parameter space. A thin disk accretion model and a lamppost corona were used. It was set up such that for a given configuration of <span class="math inline">\(h\)</span>, <span class="math inline">\(a\)</span>, <span class="math inline">\(i\)</span>, <span class="math inline">\(\epsilon_3\)</span>, and <span class="math inline">\(\alpha_{13}\)</span> the line profile would be calculated and an image of the accretion disk produced and plotted together.</p>
+<section id="ruling-out-alpha_22-and-alpha_52" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="ruling-out-alpha_22-and-alpha_52"><span class="header-section-number">3.1</span> Ruling out <span class="math inline">\(\alpha_{22}\)</span> and <span class="math inline">\(\alpha_{52}\)</span></h2>
+<p>Before exploring the 5D parameter space, tests were ran on both <span class="math inline">\(\alpha_{22}\)</span> and <span class="math inline">\(\alpha_{52}\)</span> such that their effects could be noted, should they be useful in the future.</p>
+<div id="fig-alpha52" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-alpha52-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/alpha52.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;3.1: The resultant line profile from varying \alpha_{52} between 0 and 40. A value of 50 did not successfully compute suggesting an upper limit on this parameter."><img src="images/alpha52.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-alpha52-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.1: The resultant line profile from varying <span class="math inline">\(\alpha_{52}\)</span> between 0 and 40. A value of 50 did not successfully compute suggesting an upper limit on this parameter.
+</figcaption>
+</figure>
+</div>
+<p>Varying <span class="math inline">\(\alpha_{52}\)</span> showed near random, and near zero effect on the line and will thus be disregarded for this investigation. Varying <span class="math inline">\(\alpha_{22}\)</span> often failed to compute and will thus similarly be disregarded for this investigation.</p>
+</section>
+<section id="exploring-the-5-dimensional-parameter-space" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="exploring-the-5-dimensional-parameter-space"><span class="header-section-number">3.2</span> Exploring the 5-dimensional parameter space</h2>
+<p>Each of the 5 parameters were varied individual, with the remaining four being held at default values of</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\alpha_{13}\)</span></td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\epsilon_{3}\)</span></td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(a\)</span></td>
+<td>0.998</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(h\)</span></td>
+<td>10 <span class="math inline">\(R_G\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(i\)</span></td>
+<td>60<span class="math inline">\(\degree\)</span></td>
+</tr>
+</tbody>
+</table>
+<section id="line-profiles" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="line-profiles"><span class="header-section-number">3.2.1</span> Line profiles</h3>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-alpha13" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-alpha13-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/alpha13.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;3.2: The line profiles resultant from varying \alpha_{13} between 0 and 50."><img src="images/alpha13.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-alpha13-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.2: The line profiles resultant from varying <span class="math inline">\(\alpha_{13}\)</span> between 0 and 50.
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-epsilon3" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-epsilon3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/epsilon3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3.3: The line profiles resultant from varying \epsilon_{3} between 0 and 30. Values of 40 and 50 were tested however caused an error, there must be an upper bound on the allowed values of this parameter."><img src="images/epsilon3.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-epsilon3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.3: The line profiles resultant from varying <span class="math inline">\(\epsilon_{3}\)</span> between 0 and 30. Values of 40 and 50 were tested however caused an error, there must be an upper bound on the allowed values of this parameter.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-inclination" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-inclination-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/inclination.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;3.4: The line profiles resultant from varying the inclination between 5 and 85 degrees."><img src="images/inclination.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inclination-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.4: The line profiles resultant from varying the inclination between 5 and 85 degrees.
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-coronaHeight" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-coronaHeight-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/coronaHeight.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;3.5: The line profiles resultant from varying h between 5 and 30 gravitational radii."><img src="images/coronaHeight.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-coronaHeight-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.5: The line profiles resultant from varying <span class="math inline">\(h\)</span> between 5 and 30 gravitational radii.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="fig-spin" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-spin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/spin.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;3.6: The line profiles resultant from varying a between 5 and 95% of M(=1)."><img src="images/spin.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-spin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.6: The line profiles resultant from varying <span class="math inline">\(a\)</span> between 5 and 95% of <span class="math inline">\(M(=1)\)</span>.
+</figcaption>
+</figure>
+</div>
+<ul>
+<li><a href="#fig-alpha13" class="quarto-xref">Figure&nbsp;<span>3.7</span></a> shows that increasing the free parameter <span class="math inline">\(\alpha_{13}\)</span> sharpens the two peaks of the line, increases the maximum flux, and makes it more narrow.</li>
+<li><a href="#fig-epsilon3" class="quarto-xref">Figure&nbsp;<span>3.3</span></a> shows that increasing the free parameter <span class="math inline">\(\epsilon_{3}\)</span> similarly increases the maximum flux, however the resultant profile is much more noisy. While <span class="math inline">\(\alpha_{13}\)</span> provided sharp peaks, <span class="math inline">\(\epsilon_{3}\)</span> provided broader peaks, particularly in the shorter one.</li>
+<li><a href="#fig-inclination" class="quarto-xref">Figure&nbsp;<span>3.4</span></a> shows that increasing the inclination smoothes out the line profile and shifts the peak to higher energies. The line is broadened significantly.</li>
+<li><a href="#fig-coronaHeight" class="quarto-xref">Figure&nbsp;<span>3.5</span></a> shows that increasing the corona height makes the line profile sharper, increases the maximum flux, and shifts the maximum to slightly lower energies.</li>
+<li><a href="#fig-spin" class="quarto-xref">Figure&nbsp;<span>3.6</span></a> shows that the spin had the least prominent impact on the profile of the line, seeming to only slightly decrease the height of the peaks with increasing spin. This may be an effect of the small range of spins available. It may therefore be informative to investigate this further by increasing the mass, using different corona heights, or varying the inclination.</li>
+</ul>
+</section>
+<section id="redshift-image-renders" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="redshift-image-renders"><span class="header-section-number">3.2.2</span> Redshift Image Renders</h3>
+<p>Alongside the line profiles, images of the accretion disk were rendered with a colourmap denoting the redshift of light from a given part of the disk. The corona height was not varied here as it did not impact the render.</p>
+<div id="fig-alpha13" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-alpha13-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/alpha13Render.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;3.7: The effect of \alpha_{13} on the accretion disk render. The event horizon appears to grow with \alpha_{13}"><img src="images/alpha13Render.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-alpha13-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.7: The effect of <span class="math inline">\(\alpha_{13}\)</span> on the accretion disk render. The event horizon appears to grow with <span class="math inline">\(\alpha_{13}\)</span>
+</figcaption>
+</figure>
+</div>
+<div id="fig-epsilon3Render" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-epsilon3Render-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/epsilon3Render.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;3.8: The effect of \epsilon_3 on the redshift image. The shape of the disk does not change but the redshift profile does, particularly in the inner regions where the redshift tends to increase."><img src="images/epsilon3Render.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-epsilon3Render-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.8: The effect of <span class="math inline">\(\epsilon_3\)</span> on the redshift image. The shape of the disk does not change but the redshift profile does, particularly in the inner regions where the redshift tends to increase.
+</figcaption>
+</figure>
+</div>
+<div id="fig-inclRender" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-inclRender-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/inclRender.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;3.9: The effect of inclination on the redshift image. The redshift becomes more apparent as the inclination increases and the disk becomes edge on. This agrees with the observed line profile trend of energy increasing with inclination as the effects of doppler shifting become more apparent with increasing energy."><img src="images/inclRender.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-inclRender-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.9: The effect of inclination on the redshift image. The redshift becomes more apparent as the inclination increases and the disk becomes edge on. This agrees with the observed line profile trend of energy increasing with inclination as the effects of doppler shifting become more apparent with increasing energy.
+</figcaption>
+</figure>
+</div>
+<div id="fig-spinRender" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-spinRender-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/spinRender.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;3.10: The effect of black hole spin on the redshift image. The event horizon appears to shrink."><img src="images/spinRender.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-spinRender-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.10: The effect of black hole spin on the redshift image. The event horizon appears to shrink.
+</figcaption>
+</figure>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -784,14 +989,49 @@ window.MathJax = {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./InitialGradus.html" class="pagination-link" aria-label="Initial Gradus Testing">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Initial Gradus Testing</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./intro.html" class="pagination-link" aria-label="Reading">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Reading</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./Fitting.html" class="pagination-link" aria-label="Fitting Spectral Lines">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fitting Spectral Lines</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

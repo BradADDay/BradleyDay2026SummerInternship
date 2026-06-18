@@ -1,4 +1,4 @@
-# 2026-06-16
+# Parameter Space Investigations
 ___
 Code was set up to easily run several variations to the model which will allow for the investigation of the parameter space. A thin disk accretion model and a lamppost corona were used. It was set up such that for a given configuration of $h$, $a$, $i$, $\epsilon_3$, and $\alpha_{13}$ the line profile would be calculated and an image of the accretion disk produced and plotted together.
 

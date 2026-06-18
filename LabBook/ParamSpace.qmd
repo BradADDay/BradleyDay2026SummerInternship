@@ -48,10 +48,17 @@ Each of the 5 parameters were varied individual, with the remaining four being h
 
 Alongside the line profiles, images of the accretion disk were rendered with a colourmap denoting the redshift of light from a given part of the disk. The corona height was not varied here as it did not impact the render.
 
-![The effect of $\alpha_{13}$ on the accretion disk render. The event horizon appears to grow with $\alpha_{13}$](images/alpha13Render.png){fig-align="center" #fig-alpha13 width=80%}
+![The effect of $\alpha_{13}$ on the accretion disk render. The ISCO appears to grow with $\alpha_{13}$](images/alpha13Render.png){fig-align="center" #fig-alpha13 width=80%}
 
 ![The effect of $\epsilon_3$ on the redshift image. The shape of the disk does not change but the redshift profile does, particularly in the inner regions where the redshift tends to increase.](images/epsilon3Render.png){fig-align="center" #fig-epsilon3Render width=80%}
 
 ![The effect of inclination on the redshift image. The redshift becomes more apparent as the inclination increases and the disk becomes edge on. This agrees with the observed line profile trend of energy increasing with inclination as the effects of doppler shifting become more apparent with increasing energy.](images/inclRender.png){fig-align="center" #fig-inclRender width=80%}
 
-![The effect of black hole spin on the redshift image. The event horizon appears to shrink.](images/spinRender.png){fig-align="center" #fig-spinRender width=80%}
+![The effect of black hole spin on the redshift image. The ISCO appears to shrink.](images/spinRender.png){fig-align="center" #fig-spinRender width=80%}
+
+# Summary
+
+:::{.callout-important}
+- $\alpha_{22}$ and $\alpha_{52}$ had unpredictable or minimal effect on the line profile and rendered images so are therefore to be disregarded.
+- The spin 
+:::

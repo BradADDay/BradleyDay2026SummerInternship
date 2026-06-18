@@ -179,13 +179,13 @@ flux = paramVar(defaultSetupDict, bins, ComputeLineProfile;
                 render = false, minrₑ = -1., maxrₑ = 400., 
                 numrₑ = 100)
 
-plot(data, markersize=3)
-display(plot!(xlabel="Energy", ylabel="Flux (arb. units)"))
+flux += rand(-0.001:1e-7:0.001, length(flux))
+flux[flux.<0] .= 0
 
 data = InjectiveData(bins, flux, name="Data")
 
-flux += rand(-0.001:1e-7:0.001, length(flux))
-flux[flux.<0] .= 0
+plot(data, markersize=3)
+display(plot!(xlabel="Energy", ylabel="Flux (arb. units)"))
 
 model = LampPostJohannsen()
 

@@ -1,5 +1,6 @@
 using Gradus, SpectralFitting, Plots
 
+# Lamppost model for a Johannsen metric
 struct LampPostJohannsen{T} <: AbstractSpectralModel{T, Additive}
     "Normalisation"
     K::T
@@ -21,6 +22,7 @@ struct LampPostJohannsen{T} <: AbstractSpectralModel{T, Additive}
     ϵ3::T
 end
 
+# Utility function for instantiation
 function LampPostJohannsen(; K=1., h=10., E=1., R_in=-1., R_out=400., θ=60.,
                             a=0.998, α13=0., ϵ3=0.)
     K = FitParam(K)
@@ -35,26 +37,32 @@ function LampPostJohannsen(; K=1., h=10., E=1., R_in=-1., R_out=400., θ=60.,
     LampPostJohannsen(K, h, E, R_in, R_out, θ, a, α13, ϵ3)
 end
 
+# Defining how the fit works
 function SpectralFitting.invoke!(output, input, model::LampPostJohannsen)
 
+    # Instantiating the metric and observer position
     m = JohannsenMetric(;a = model.a, α13 = model.α13, ϵ3 = model.ϵ3)
     x = SVector(0.0, 1e4, deg2rad(model.θ), 0.0)
 
+    # Setting the inner radius to a multiple of the isco if set below zero
     if model.R_in < 0 
         R_In = abs(model.R_in) * Gradus.isco(m)
     else
         R_In = model.R_in
     end 
 
+    # Instantiating the disk
     d = ThinDisc(R_In, Inf)
 
+    # Generating an emissivity profile
     emissivityModel = LampPostModel(h = model.h)
     profile = emissivity_profile(m, d, emissivityModel)
 
+    # Computing the line profile
     data = lineprofile(m, x, d, profile; bins = copy(input), 
                        method = TransferFunctionMethod(), minrₑ=R_In, 
                        maxrₑ=model.R_out, numrₑ = 30)
-
+    
     output .= data[2][1:end-1]
     
 end

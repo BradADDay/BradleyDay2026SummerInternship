@@ -21,3 +21,5 @@ The model is instantiated using the `LampPostJohannsen` utility function. When c
 All fitting is handled by `SpectralFitting` through the Levenberg Marquadt algorithm. 
 
 To test the implementation a line profile was computed and random noise added to it. This was then passed through the fitting function. The fitting process currently takes a long time and yields poor results so more work is needed.
+
+Time was taken to streamline the functionality of main2.jl via keyword arguments and general code cleanup.

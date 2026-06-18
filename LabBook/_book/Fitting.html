@@ -438,6 +438,7 @@ window.Quarto = {
 <p>The model is instantiated using the <code>LampPostJohannsen</code> utility function. When called, the parameters are used to instantiate a <code>JohannsenMetric</code>, observer position, <code>ThinDisc</code>, and an emissivity profile. These are then used to compute the line profile as previously done which is returned.</p>
 <p>All fitting is handled by <code>SpectralFitting</code> through the Levenberg Marquadt algorithm.</p>
 <p>To test the implementation a line profile was computed and random noise added to it. This was then passed through the fitting function. The fitting process currently takes a long time and yields poor results so more work is needed.</p>
+<p>Time was taken to streamline the functionality of main2.jl via keyword arguments and general code cleanup.</p>
 
 
 

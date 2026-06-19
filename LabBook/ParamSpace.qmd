@@ -56,9 +56,13 @@ Alongside the line profiles, images of the accretion disk were rendered with a c
 
 ![The effect of black hole spin on the redshift image. The ISCO appears to shrink.](images/spinRender.png){fig-align="center" #fig-spinRender width=80%}
 
-# Summary
+## Summary
 
-:::{.callout-important}
+:::{.callout-important title="Summary"}
 - $\alpha_{22}$ and $\alpha_{52}$ had unpredictable or minimal effect on the line profile and rendered images so are therefore to be disregarded.
-- The spin 
+- $a$: Increasing the spin appears to shrink the ISCO of the accretion disk. Its effect on the line profile is less obvious, it appears to decrease the flux slightly but is otherwise negligible.
+- $h$: Increasing the corona height makes the line profile sharper and increases the peak flux, while decreasing the energy of the peak. It has no effect on the renders.
+- $\theta$: Increasing the inclination (where 0 degrees has the accretion disk face-on) smoothes out the line profile and increases the peak energy. The effect of redshift becomes more apparent with increased inclination.
+- $\alpha_{13}$: Increasing $\alpha_{13}$ appears to increase the radius of the ISCO and make the line profile sharper.
+- $\epsilon_3$: Increasing $\epsilon_3$ increases the height of the line profile, and makes it more chaotic.
 :::

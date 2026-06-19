@@ -88,5 +88,15 @@
     "crumbs": [
       "References"
     ]
+  },
+  {
+    "objectID": "ParamSpace.html#summary",
+    "href": "ParamSpace.html#summary",
+    "title": "3  Parameter Space Investigations",
+    "section": "3.3 Summary",
+    "text": "3.3 Summary\n\n\n\n\n\n\nImportantSummary\n\n\n\n\n\\(\\alpha_{22}\\) and \\(\\alpha_{52}\\) had unpredictable or minimal effect on the line profile and rendered images so are therefore to be disregarded.\n\\(a\\): Increasing the spin appears to shrink the ISCO of the accretion disk. Its effect on the line profile is less obvious, it appears to decrease the flux slightly but is otherwise negligible.\n\\(h\\): Increasing the corona height makes the line profile sharper and increases the peak flux, while decreasing the energy of the peak. It has no effect on the renders.\n\\(\\theta\\): Increasing the inclination (where 0 degrees has the accretion disk face-on) smoothes out the line profile and increases the peak energy. The effect of redshift becomes more apparent with increased inclination.\n\\(\\alpha_{13}\\): Increasing \\(\\alpha_{13}\\) appears to increase the radius of the ISCO and make the line profile sharper.\n\\(\\epsilon_3\\): Increasing \\(\\epsilon_3\\) increases the height of the line profile, and makes it more chaotic.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Parameter Space Investigations</span>"
+    ]
   }
 ]

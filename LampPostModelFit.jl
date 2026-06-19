@@ -61,7 +61,7 @@ function SpectralFitting.invoke!(output, input, model::LampPostJohannsen)
     # Computing the line profile
     data = lineprofile(m, x, d, profile; bins = copy(input), 
                        method = TransferFunctionMethod(), minrₑ=R_In, 
-                       maxrₑ=model.R_out, numrₑ = 30)
+                       maxrₑ=model.R_out, numrₑ = 20)
     
     output .= data[2][1:end-1]
     

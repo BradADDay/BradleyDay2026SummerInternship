@@ -2,10 +2,28 @@ using Gradus
 using Plots
 using ColorSchemes
 using SpectralFitting
+using Colors
+using Measures
 
 # =======================================================================
 # Functions
 # =======================================================================
+
+function RedshiftColormap(img)
+
+    img = collect(Iterators.flatten(img))
+
+    img[isnan.(img)] .= 1
+
+    iMax = maximum(img)
+    iMin = minimum(img)
+
+    mid = (1-iMin) / (iMax-iMin)
+
+    cmap = diverging_palette(0, 250, 100, mid=mid, d1=1, d2=1, b=0)
+
+    return cmap, (iMin, iMax)
+end
 
 function generateConfig(variables, setupDict)
     """
@@ -130,7 +148,7 @@ function ParamLoop(parameter, values, setupDict; bins=collect(range(0.1, 1.5, 18
     end
 
     # Plotting the results
-    plotting(parameter, results, bins; line, render)
+    Plotting(parameter, results, bins; line, render)
 end
 
 function Plotting(parameter, results, bins; line, render)
@@ -143,15 +161,31 @@ function Plotting(parameter, results, bins; line, render)
 
     # Plotting the redshift images
     if render
-        # Plotting the heatmaps as subplots
-        display(heatmap(results["α"], results["β"], results["image"], aspect_ratio = 1; 
-                layout = length(configs), title=[i for j in 1:1, i in configs], titleloc=:center, cmap=:redsblues))
-
-        # Plotting the heatmaps individually
-        for i in eachindex(configs)
-            display(heatmap(results["α"][i], results["β"][i], results["image"][i], aspect_ratio = :equal, title=configs[i]; clims=(0., 1.5), cmap=:redsblues))
-            savefig("testimages/$(configs[i]).png")
+        # Generating a colormap accurately depicting red/blueshift
+        cmap, clims = RedshiftColormap(results["image"])
+        
+        number = length(configs)
+        if number%2 != 0
+            number += 1
+            ps = Array{Any}(nothing, number)
+            ps[end] = scatter([0], [0], xlims=(1,2), label="", framestyle=:none)
+        else
+            ps = Array{Any}(nothing, number)
         end
+
+        # Looping through each config and plotting/storing the plot
+        for i in eachindex(configs)
+            ps[i] = heatmap(results["α"][i], results["β"][i], results["image"][i], aspect_ratio = 1; title=configs[i], 
+                    titleloc=:center, colorbar=false, cmap=cmap, clims=clims)
+        end
+        
+        # An empty scatter plot to generate the colorbar
+        h2 = scatter([0], [0], zcolor=[1], clims=clims, xlims=(1,2), label="", c=palette(cmap, 100), colorbar_title="Redshift", framestyle=:none, colorbar_titlefontsize=12)
+        
+        # Plotting the subplots
+        l = @layout [grid(Int(number/2),2) a{0.05w}]
+        display(plot(ps..., h2, layout=l, link=:all))
+
     end
 
     # Plotting the line profiles

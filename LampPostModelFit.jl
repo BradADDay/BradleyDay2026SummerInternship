@@ -23,7 +23,7 @@ struct LampPostJohannsen{T} <: AbstractSpectralModel{T, Additive}
 end
 
 # Utility function for instantiation
-function LampPostJohannsen(; K=1., h=10., E=1., R_in=-1., R_out=400., θ=60.,
+function LampPostJohannsen(;K=1., h=10., E=1., R_in=-1., R_out=400., θ=60.,
                             a=0.998, α13=0., ϵ3=0.)
     K = FitParam(K)
     h = FitParam(h, lower_limit=1.5, upper_limit=50., frozen=false)
@@ -62,10 +62,10 @@ function SpectralFitting.invoke!(output, input, model::LampPostJohannsen)
     profile = emissivity_profile(m, d, emissivityModel)
 
     # Computing the line profile
-    data = lineprofile(m, x, d, profile; bins = domain, 
+    _, flux = lineprofile(m, x, d, profile; bins = domain, 
                        method = TransferFunctionMethod(), minrₑ=R_In, 
-                       maxrₑ=model.R_out, numrₑ = 20)
+                       maxrₑ=model.R_out, numrₑ = 30)
     
-    output .= data[2][1:end-1]
+    output .= flux[1:end-1]
     
 end

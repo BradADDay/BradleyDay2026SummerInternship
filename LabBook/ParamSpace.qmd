@@ -50,7 +50,7 @@ Alongside the line profiles, images of the accretion disk were rendered with a c
 
 ![The effect of $\alpha_{13}$ on the accretion disk render. The ISCO appears to grow with $\alpha_{13}$](images/alpha13Render.png){fig-align="center" #fig-alpha13 width=80%}
 
-![The effect of $\epsilon_3$ on the redshift image. The shape of the disk does not change but the redshift profile does, particularly in the inner regions where the redshift tends to increase.](images/epsilon3Render.png){fig-align="center" #fig-epsilon3Render width=80%}
+![The effect of $\epsilon_3$ on the redshift image. The shape of the disk does not change but the redshift profile does, particularly in the shrinking of the blueshift region, and an overall decrease in the degree of redshifting.](images/epsilon3Render.png){fig-align="center" #fig-epsilon3Render width=80%}
 
 ![The effect of inclination on the redshift image. The redshift becomes more apparent as the inclination increases and the disk becomes edge on. This agrees with the observed line profile trend of energy increasing with inclination as the effects of doppler shifting become more apparent with increasing energy.](images/inclRender.png){fig-align="center" #fig-inclRender width=80%}
 

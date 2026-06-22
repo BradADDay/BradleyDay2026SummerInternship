@@ -12,15 +12,17 @@ Varying $\alpha_{52}$ showed near random, and near zero effect on the line and w
 
 ## Exploring the 5-dimensional parameter space
 
-Each of the 5 parameters were varied individual, with the remaining four being held at default values of
+Before varying the parameters it was necessary to determine the limits for useful variations. The spin is fundamentally limited to be $|a|<|M|$ and will thus be varied between 0 and 1. The ranges and default values for the parameter space are tabulated in @tbl-defaultsRanges.
 
-| Parameter      | Value |
-|----------------|-------|
-| $\alpha_{13}$  | 0.0   |
-| $\epsilon_{3}$ | 0.0   |
-| $a$            | 0.998 |
-| $h$            | 10 $R_G$   |
-| $i$            | 60$\degree$|
+| Parameter      | Minimum        | Maximum       | Default     |
+|----------------|----------------|---------------|-------------|
+| $\alpha_{13}$  | 0.0            | 50.0          | 0.0         |
+| $\epsilon_{3}$ | 0.0            | 30.0          | 0.0         |
+| $a$            | 0.0            | 1.0           | 0.998       |
+| $h$            | $R_{\rm ISCO}$ | 30 $R_G$      | 10 $R_G$    |
+| $i$            | 0.0$\degree$   | 90.0$\degree$ | 60$\degree$ | 
+
+: The ranges and default values for the parameter space. {#tbl-defaultsRanges}
 
 ### Line profiles
 
@@ -34,9 +36,9 @@ Each of the 5 parameters were varied individual, with the remaining four being h
 
 ![The line profiles resultant from varying $h$ between 5 and 30 gravitational radii.](images/coronaHeight.png){fig-align="center" #fig-coronaHeight}
 
-:::
+![The line profiles resultant from varying $a$ between 5 and 95% of $M(=1)$.](images/spin.png){fig-align="center" #fig-spin}
 
-![The line profiles resultant from varying $a$ between 5 and 95% of $M(=1)$.](images/spin.png){width=50% fig-align="center" #fig-spin}
+:::
 
 - @fig-alpha13 shows that increasing the free parameter $\alpha_{13}$ sharpens the two peaks of the line, increases the maximum flux, and makes it more narrow. 
 - @fig-epsilon3 shows that increasing the free parameter $\epsilon_{3}$ similarly increases the maximum flux, however the resultant profile is much more noisy. While $\alpha_{13}$ provided sharp peaks, $\epsilon_{3}$ provided broader peaks, particularly in the shorter one. 
@@ -48,7 +50,7 @@ Each of the 5 parameters were varied individual, with the remaining four being h
 
 Alongside the line profiles, images of the accretion disk were rendered with a colourmap denoting the redshift of light from a given part of the disk. The corona height was not varied here as it did not impact the render.
 
-![The effect of $\alpha_{13}$ on the accretion disk render. The ISCO appears to grow with $\alpha_{13}$](images/alpha13Render.png){fig-align="center" #fig-alpha13 width=80%}
+![The effect of $\alpha_{13}$ on the accretion disk render. The ISCO appears to grow with $\alpha_{13}$](images/alpha13Render.png){fig-align="center" #fig-alpha13Render width=80%}
 
 ![The effect of $\epsilon_3$ on the redshift image. The shape of the disk does not change but the redshift profile does, particularly in the shrinking of the blueshift region, and an overall decrease in the degree of redshifting.](images/epsilon3Render.png){fig-align="center" #fig-epsilon3Render width=80%}
 
@@ -66,3 +68,9 @@ Alongside the line profiles, images of the accretion disk were rendered with a c
 - $\alpha_{13}$: Increasing $\alpha_{13}$ appears to increase the radius of the ISCO and make the line profile sharper.
 - $\epsilon_3$: Increasing $\epsilon_3$ increases the height of the line profile, and makes it more chaotic.
 :::
+
+## Code Specifics
+
+The workhorse of the parameter investigations was the utility function `JohannsenParamVar` which sets up the metric and observer position and then calls either `ComputeLineProfile` or `RenderImage`. This utility function was made versatile using keyword arguments allowing for different methods to be called within it. This was then wrapped in `ParamLoop` which took the index (the variable to be looped through) and a set of values to call `JohannsenParamVar` for. 
+
+To maximise readablity of the redshift images, a custom colormap is made through `RedshiftColormap` which gives red for any values $<1$, blue for those $>1$, and white for those $=1$. This gave the images seen in @fig-alpha13Render - @fig-spinRender.

@@ -34,7 +34,7 @@ setupDict = Dict((
                   "α52" => 0.,
                   "ϵ3"  => 4., 
                   "θ"   => 70., 
-                  "h"   => 20.))
+                  "h"   => 10.))
 
 # Generating bins
 bins = collect(range(0.2, 1.5, 100))
@@ -44,10 +44,6 @@ flux = JohannsenParamVar(setupDict, bins, ComputeLineProfile;
                 render = false, minrₑ = -1., maxrₑ = 400., 
                 numrₑ = 100)
 
-scatter(bins, flux, label="True", minorticks=4, gridalpha=0.5, 
-     minorgrid=true, minorgridalpha=0.3, xlabel="Energy", 
-     ylabel="Flux (arb. units)", markersize=2)
-
 noise = 0.002
 noisyFlux = flux + rand(-noise:1e-8:noise, length(flux))
 noisyFlux[noisyFlux.<0] .= 0
@@ -55,8 +51,9 @@ noisyFlux[noisyFlux.<0] .= 0
 # Putting the flux into a data object
 data = InjectiveData(bins, noisyFlux, name="Noisy")
 
-# Plotting
-display(plot!(data, markersize=3))
+plot(data, label="True", minorticks=4, gridalpha=0.5, 
+     minorgrid=true, minorgridalpha=0.3, xlabel="Energy", 
+     ylabel="Flux (arb. units)", markersize=3, c=:black)
 
 # Setting up the fitting problem
 model = LampPostJohannsen()
@@ -67,6 +64,7 @@ println("+ Fitting...")
 result = SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true)
 
 # Plotting
-plot!(result)
+show(plot!(result, c=:red))
+plot!(bins, flux, c=:blue)
 
 println("Time elapsed: $(now() - t0)")

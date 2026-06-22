@@ -30,8 +30,8 @@ function LampPostJohannsen(; K=1., h=10., E=1., R_in=-1., R_out=400., θ=60.,
     E = FitParam(E, lower_limit=1., upper_limit=10., frozen=false)
     R_in = FitParam(R_in, lower_limit=-Inf, frozen=true)
     R_out = FitParam(R_out, lower_limit=-Inf, frozen=true)
-    θ = FitParam(θ, lower_limit=5., upper_limit=85.)
-    a = FitParam(a, lower_limit=-0.998, upper_limit=0.998)
+    θ = FitParam(θ, lower_limit=5., upper_limit=85., frozen=false)
+    a = FitParam(a, lower_limit=-0.998, upper_limit=0.998, frozen=false)
     α13 = FitParam(α13, lower_limit=0, upper_limit=50., frozen=false)
     ϵ3 = FitParam(ϵ3, lower_limit=0, upper_limit=30., frozen=false)
     LampPostJohannsen(K, h, E, R_in, R_out, θ, a, α13, ϵ3)
@@ -39,6 +39,9 @@ end
 
 # Defining how the fit works
 function SpectralFitting.invoke!(output, input, model::LampPostJohannsen)
+
+    # Scaling for energy
+    domain = copy(input) / model.E
 
     # Instantiating the metric and observer position
     m = JohannsenMetric(;a = model.a, α13 = model.α13, ϵ3 = model.ϵ3)
@@ -59,7 +62,7 @@ function SpectralFitting.invoke!(output, input, model::LampPostJohannsen)
     profile = emissivity_profile(m, d, emissivityModel)
 
     # Computing the line profile
-    data = lineprofile(m, x, d, profile; bins = copy(input), 
+    data = lineprofile(m, x, d, profile; bins = domain, 
                        method = TransferFunctionMethod(), minrₑ=R_In, 
                        maxrₑ=model.R_out, numrₑ = 20)
     

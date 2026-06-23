@@ -23,4 +23,6 @@ Data from the NuSTAR (Nuclear Spectroscopic Telescope Array) spacecraft @NuSTAR 
 
 ![The first attempt at fitting to data. The Johannsen metric was used to produce the blue line, and the Kerr metric was used to produce the red. Neither fit was particularly good which may either be the result of poor data, or a poor model.](images/FirstDataFit.png){fig-align="center"}
 
-The NuSTAR datasets have two distinct spectra from each telescope, which can be fit simultaneously, binding some of the parameters together. The fitting code was thus adjusted to fit both datasets simultaneously while binding all parameters other than the normalisation. The dataset labelled "nu80402315002" was once again used
+The NuSTAR datasets have two distinct spectra from each telescope, which can be fit simultaneously, binding some of the parameters together. The fitting code was thus adjusted to fit both datasets simultaneously while binding all parameters other than the normalisation. The dataset labelled "nu80402315002" was once again used.
+
+![](images/DualFit.png){fig-align="center"}

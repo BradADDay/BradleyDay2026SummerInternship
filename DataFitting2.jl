@@ -66,9 +66,11 @@ function FitLineProfile(dataA, dataB, energy, Model=LampPostJohannsen; kwargs...
     bind!(prob, (1, :a)   => (2, :a))
     bind!(prob, (1, :h)   => (2, :h))
     bind!(prob, (1, :θ)   => (2, :θ))
-    bind!(prob, (1, :α13) => (2, :α13))
-    bind!(prob, (1, :ϵ3)  => (2, :ϵ3))
     bind!(prob, (1, :E)   => (2, :E))
+    if Model == LampPostJohannsen
+        bind!(prob, (1, :α13) => (2, :α13))
+        bind!(prob, (1, :ϵ3)  => (2, :ϵ3))
+    end
 
     SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, kwargs...)
 end
@@ -116,6 +118,26 @@ plot!(residualsB; seriestype = :stepmid, c=:black, xlabel="Energy (keV)",
     legend=:outerright, framestyle=:box, xminorticks=4
 )
 
+# Fitting a line profile using Gradus' Johannsen metric
+println("Fitting Johannsen...")
+johannsenResult = FitLineProfile(residualsA, residualsB,
+    FitParam(6.4),
+    LampPostJohannsen
+)
+
+plot!(plotA, johannsenResult[1], c=:blue)
+plot!(plotB, johannsenResult[2], c=:blue)
+
+# Fitting a line profile using Gradus' Kerr metric
+println("Fitting Kerr...")
+kerrResult = FitLineProfile(residualsA, residualsB,
+    FitParam(6.4),
+    LampPostKerr
+)
+
+plot!(plotA, kerrResult[1], c=:red)
+plot!(plotB, kerrResult[2], c=:red)
+
 # Plotting
 layout = @layout [a{0.001w} (2,1)]
 yAxis = plot([0], c=:white; ylabel=L"Flux (counts s$^{-1}$ keV$^{-1}$)", 
@@ -124,29 +146,5 @@ yAxis = plot([0], c=:white; ylabel=L"Flux (counts s$^{-1}$ keV$^{-1}$)",
 figure = plot(yAxis, plotA, plotB; layout=layout, link=:x,  
     xlims=(5,7.5), xminorticks=4, margin=0cm
 )
-
-display(figure)
-
-# Fitting a line profile using Gradus' Johannsen metric
-println("Fitting Johannsen...")
-johannsenResult = FitLineProfile(residualsA, residualsB,
-    FitParam(6.4),
-    LampPostJohannsen; maxIter=5
-)
-
-plot!(plotA, johannsenResult[1], c=:blue)
-plot!(plotB, johannsenResult[2], c=:blue)
-
-display(figure)
-
-# Fitting a line profile using Gradus' Kerr metric
-println("Fitting Kerr...")
-kerrResult = FitLineProfile(residuals,
-    FitParam(6.4),
-    LampPostKerr; maxIter=5
-)
-
-plot!(plotA, kerrResult[1], c=:red)
-plot!(plotB, kerrResult[2], c=:red)
 
 display(figure)

@@ -1,0 +1,26 @@
+# Fitting to Data
+
+Data from the NuSTAR (Nuclear Spectroscopic Telescope Array) spacecraft @NuSTAR was used, and the dataset used for testing was `nu80402315002B01`. Data loading was handled by `SpectralFitting.jl` through the `OGIPDataset` struct. This takes the spectrum file as an argument and automatically pulls in the background, `.arf`, and `.rmf` files to compute the spectrum.
+
+## Initial Results
+
+| Model     | Variable      | Value | Error | $\chi^2$ |
+|-----------|---------------|-------|-------|----------|
+| Johannsen | $a$           | 0.57  | 1.88  | 116.84   |
+|           | $h$           | 50.00 | 8.77  |          |
+|           | $\theta$      | 58.24 | 4.93  |          |
+|           | $\alpha_{13}$ | 2.29  | 10.96 |          |
+|           | $\epsilon_3$  | 29.74 | 25.89 |          |
+|           | $K$           | 161.8 | 7.15  |          |
+|           | $E$           | 6.27  | 0.016 |          |
+| Kerr      | $a$           | 0.77  | 0.057 | 124.64   |
+|           | $h$           | 50.0  | 2.75  |          |
+|           | $\theta$      | 55.44 | 2.67  |          |
+|           | $K$           | 162.0 | 7.07  |          |
+|           | $E$           | 6.27  | 0.014 |          |
+
+: The ranges and default values for the parameter space. {#tbl-InitialFit}
+
+![The first attempt at fitting to data. The Johannsen metric was used to produce the blue line, and the Kerr metric was used to produce the red. Neither fit was particularly good which may either be the result of poor data, or a poor model.](images/FirstDataFit.png){fig-align="center"}
+
+The NuSTAR datasets have two distinct spectra from each telescope, which can be fit simultaneously, binding some of the parameters together. The fitting code was thus adjusted to fit both datasets simultaneously while binding all parameters other than the normalisation. The dataset labelled "nu80402315002" was once again used

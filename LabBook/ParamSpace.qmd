@@ -19,7 +19,7 @@ Before varying the parameters it was necessary to determine the limits for usefu
 | $\alpha_{13}$  | 0.0            | 50.0          | 0.0         |
 | $\epsilon_{3}$ | 0.0            | 30.0          | 0.0         |
 | $a$            | 0.0            | 1.0           | 0.998       |
-| $h$            | $R_{\rm ISCO}$ | 30 $R_G$      | 10 $R_G$    |
+| $h$            | $R_\text{ISCO}$| 30 $R_G$      | 10 $R_G$    |
 | $i$            | 0.0$\degree$   | 90.0$\degree$ | 60$\degree$ | 
 
 : The ranges and default values for the parameter space. {#tbl-defaultsRanges}

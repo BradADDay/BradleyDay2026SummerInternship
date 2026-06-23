@@ -24,5 +24,7 @@ To test the implementation a line profile was computed and random noise added to
 
 ![The first attempt at fitting to the noisy simulated data. This fit took 67 iterations and 15.3 minutes to complete.](images/FirstFit.png){fig-align="center" #fig-FirstFit}
 
-Upon fitting, the error `Warning: No parameter uncertainty estimation due to error: LinearAlgebra.SingularException(3)` occurs and therefore the fit is not currently quantified.
+Upon fitting, the error `Warning: No parameter uncertainty estimation due to error: LinearAlgebra.SingularException(3)` occurs and therefore the fit is not currently quantified. 
+
+With the current errors present it was decided to attempt the fit on actual data in order to determine whether they are a result of the data, or the fitting algorithm.
 

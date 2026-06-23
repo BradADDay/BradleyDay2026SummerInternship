@@ -12,6 +12,7 @@ book:
     - InitialGradus.qmd
     - ParamSpace.qmd
     - Fitting.qmd
+    - FittingData.qmd
     - references.qmd
 
 bibliography: references.bib

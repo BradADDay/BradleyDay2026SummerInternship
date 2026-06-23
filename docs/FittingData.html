@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>1&nbsp; Reading – Lab Book</title>
+<title>5&nbsp; Fitting to Data – Lab Book</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -53,8 +53,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./InitialGradus.html" rel="next">
-<link href="./index.html" rel="prev">
+<link href="./references.html" rel="next">
+<link href="./Fitting.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -315,7 +315,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./IronKalphaReviewSummary.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Reading</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./FittingData.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fitting to Data</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -351,7 +351,7 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./IronKalphaReviewSummary.html" class="sidebar-item-text sidebar-link active">
+  <a href="./IronKalphaReviewSummary.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Reading</span></span></a>
   </div>
 </li>
@@ -375,7 +375,7 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./FittingData.html" class="sidebar-item-text sidebar-link">
+  <a href="./FittingData.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fitting to Data</span></span></a>
   </div>
 </li>
@@ -395,7 +395,7 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#summary-of-broad-iron-lines-in-active-galactic-nuclei-broadironlines" id="toc-summary-of-broad-iron-lines-in-active-galactic-nuclei-broadironlines" class="nav-link active" data-scroll-target="#summary-of-broad-iron-lines-in-active-galactic-nuclei-broadironlines"><span class="header-section-number">1.1</span> Summary of “Broad Iron Lines in Active Galactic Nuclei” <span class="citation" data-cites="BroadIronLines">&nbsp;[1]</span></a></li>
+  <li><a href="#initial-results" id="toc-initial-results" class="nav-link active" data-scroll-target="#initial-results"><span class="header-section-number">5.1</span> Initial Results</a></li>
   </ul>
 </nav>
     </div>
@@ -405,7 +405,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Reading</span></h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fitting to Data</span></h1>
 </div>
 
 
@@ -422,83 +422,131 @@ window.Quarto = {
 </header>
 
 
-<hr>
-<section id="summary-of-broad-iron-lines-in-active-galactic-nuclei-broadironlines" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="summary-of-broad-iron-lines-in-active-galactic-nuclei-broadironlines"><span class="header-section-number">1.1</span> Summary of “Broad Iron Lines in Active Galactic Nuclei” <span class="citation" data-cites="BroadIronLines">&nbsp;[<a href="references.html#ref-BroadIronLines" role="doc-biblioref">1</a>]</span></h2>
-<p>Fluorescent iron line, Fe-K<span class="math inline">\(\alpha\)</span>, in the X-ray band at <span class="math inline">\(6.4-6.9\)</span> keV is the strongest narrow line emitted by an accretion disk around a black hole. Inverse Compton scattering of the soft photons (lower energy than the reactant particles) in a hot corona is the most likely candidate for the production of these X-rays. The emitted line is broadened and skewed due to the Doppler effect and gravitational redshift, and is often called the broad iron line due to being broadened to a FWHM of <span class="math inline">\(5\times 10^4\)</span> km s<span class="math inline">\(^{-1}\)</span>.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/ShapeOfIronLine.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="The profile of the broad iron line, image credit to Fabian (2000)[@BroadIronLines]."><img src="images/ShapeOfIronLine.jpg" class="img-fluid figure-img" alt="The profile of the broad iron line, image credit to Fabian (2000)&nbsp;[1]."></a></p>
-<figcaption>The profile of the broad iron line, image credit to Fabian (2000)<span class="citation" data-cites="BroadIronLines">&nbsp;[<a href="references.html#ref-BroadIronLines" role="doc-biblioref">1</a>]</span>.</figcaption>
+<p>Data from the NuSTAR (Nuclear Spectroscopic Telescope Array) spacecraft <span class="citation" data-cites="NuSTAR">&nbsp;[<a href="references.html#ref-NuSTAR" role="doc-biblioref">1</a>]</span> was used, and the dataset used for testing was <code>nu80402315002B01</code>. Data loading was handled by <code>SpectralFitting.jl</code> through the <code>OGIPDataset</code> struct. This takes the spectrum file as an argument and automatically pulls in the background, <code>.arf</code>, and <code>.rmf</code> files to compute the spectrum.</p>
+<section id="initial-results" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="initial-results"><span class="header-section-number">5.1</span> Initial Results</h2>
+<div id="tbl-InitialFit" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-InitialFit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.1: The ranges and default values for the parameter space.
+</figcaption>
+<div aria-describedby="tbl-InitialFit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>Variable</th>
+<th>Value</th>
+<th>Error</th>
+<th><span class="math inline">\(\chi^2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Johannsen</td>
+<td><span class="math inline">\(a\)</span></td>
+<td>0.57</td>
+<td>1.88</td>
+<td>116.84</td>
+</tr>
+<tr class="even">
+<td></td>
+<td><span class="math inline">\(h\)</span></td>
+<td>50.00</td>
+<td>8.77</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><span class="math inline">\(\theta\)</span></td>
+<td>58.24</td>
+<td>4.93</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><span class="math inline">\(\alpha_{13}\)</span></td>
+<td>2.29</td>
+<td>10.96</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><span class="math inline">\(\epsilon_3\)</span></td>
+<td>29.74</td>
+<td>25.89</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><span class="math inline">\(K\)</span></td>
+<td>161.8</td>
+<td>7.15</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><span class="math inline">\(E\)</span></td>
+<td>6.27</td>
+<td>0.016</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Kerr</td>
+<td><span class="math inline">\(a\)</span></td>
+<td>0.77</td>
+<td>0.057</td>
+<td>124.64</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><span class="math inline">\(h\)</span></td>
+<td>50.0</td>
+<td>2.75</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><span class="math inline">\(\theta\)</span></td>
+<td>55.44</td>
+<td>2.67</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><span class="math inline">\(K\)</span></td>
+<td>162.0</td>
+<td>7.07</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><span class="math inline">\(E\)</span></td>
+<td>6.27</td>
+<td>0.014</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
 </figure>
 </div>
-<p>Soft Comptonisation (multiple inverse Compton scattering by hot thermal electrons) occurs giving a power law X-ray spectrum. Flares from active or flaring regions irradiate the accretion disk forming a “reflection” component in the spectrum.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/ReflectionSpectrum.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Reflection spectrum from a Monte Carlo simulation of an illuminated slab. The dashed line is the incident continuum and the solid line shows the reflected spectrum. Image credit Reynolds (1996)[@BroadIronLines]"><img src="images/ReflectionSpectrum.jpg" class="img-fluid figure-img" style="width:10cm" alt="Reflection spectrum from a Monte Carlo simulation of an illuminated slab. The dashed line is the incident continuum and the solid line shows the reflected spectrum. Image credit Reynolds (1996)&nbsp;[1]"></a></p>
-<figcaption>Reflection spectrum from a Monte Carlo simulation of an illuminated slab. The dashed line is the incident continuum and the solid line shows the reflected spectrum. Image credit Reynolds (1996)<span class="citation" data-cites="BroadIronLines">&nbsp;[<a href="references.html#ref-BroadIronLines" role="doc-biblioref">1</a>]</span></figcaption>
-</figure>
-</div>
-<p>The iron line is produced when one of the two K-shell electrons is ejected following absorption of an X-ray, the threshold for neutral iron is 7.1 keV. The resultant state can decay through the dropping of an L-shell electron into the K-shell, releasing 6.4 keV as either an emission line photon (34%) or an Auger electron (66%). Ionised iron has a photoelectric threshold and the K<span class="math inline">\(\alpha\)</span> of higher energy. The strength of the iron line is measured in terms of its equivalent width.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Equivalent Width">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Equivalent Width
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>The equivalent width of a spectral line is the width of the rectangle which has the same area as that between the line and the continuum level.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/EquivalentWidth.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="A diagram indicating the equivalent width. The width of the rectangle is the equivalent width."><img src="images/EquivalentWidth.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:10cm" alt="A diagram indicating the equivalent width. The width of the rectangle is the equivalent width."></a></p>
+<p><a href="images/FirstDataFit.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="The first attempt at fitting to data. The Johannsen metric was used to produce the blue line, and the Kerr metric was used to produce the red. Neither fit was particularly good which may either be the result of poor data, or a poor model."><img src="images/FirstDataFit.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The first attempt at fitting to data. The Johannsen metric was used to produce the blue line, and the Kerr metric was used to produce the red. Neither fit was particularly good which may either be the result of poor data, or a poor model."></a></p>
 </figure>
 </div>
-<figcaption>A diagram indicating the equivalent width. The width of the rectangle is the equivalent width.</figcaption>
+<figcaption>The first attempt at fitting to data. The Johannsen metric was used to produce the blue line, and the Kerr metric was used to produce the red. Neither fit was particularly good which may either be the result of poor data, or a poor model.</figcaption>
 </figure>
 </div>
-</div>
-</div>
-</div>
-<p>The equivalent width is a function of the geometry of the accretion disk, the elemental abundances, the inclination angle, and the ionisation state.</p>
-<div class="callout callout-style-default callout-important callout-titled" title="Key Points">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Key Points
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<ul>
-<li><strong>X-ray Continuum</strong>: The hard X-ray continuum in AGNs and GBHCs is thought to be from active/flaring regions in the corona. Thermal electrons multiply inverse Compton scatter optical and UV photons from the disk to X-ray energies. A hard X-ray power law results and irradiates the accretion disk to produce a reflection component.</li>
-<li><strong>Reflection Component</strong>: The reflection component causes the spectrum to flatten above 10 keV as Compton recoil reduces the backscattered flux and results in a strong fluorescent iron line at <span class="math inline">\(\sim 6.4\)</span> keV. The energy and strength of this line depends on iron abundance, inclination of the disk, and its ionisation state. A strong iron absorption edge may also be present from an ionised disk.</li>
-<li><strong>Iron Line Profile</strong>: Doppler shifts, relativistic broadening and gravitational redshifting give the broad and skewed line profile. As the line comes from the innermost regions, these effects are very pronounced and may be used to determine the black hole spin and inclination angle of the accretion disk. In most Seyfert 1 galaxies, the disk is inclined at around 30<span class="math inline">\(^\circ\)</span>, consistent with the standard model.</li>
-<li><strong>Observations</strong>: The iron line was first clearly detected by Ginga and a line profile subsequently resolved by ASCA confirmed the broad and skewed shape expected from an accretion disk around a Schwarzschild black hole. RXTE has been used to study the line and continuum variability on shorter timescales, with reduced energy resolution.</li>
-<li><strong>Black Hole Spin</strong>: The radius of the ISCO decreases with spin. Since the line profile is sensitive to the innermost radius of fluorescent emission this may be used to estimate the black hole, with some astrophysical assumptions. With present time-averaged observations such measurements may be ambiguous as alternative models with different values for the spin may produce identical line profiles.</li>
-<li><strong>Alternative Models for the Production of the Broad Iron Line</strong>: Alternative models that do not require an accretion disk appear to fail, in particular the line width cannot be entirely due to Comptonisation. Hybrid models in which the Comptonisation and Doppler/gravitational effects produce the profile are heavily constrained.</li>
-<li><strong>Variability</strong>: Rapid X-ray continuum variability is observed in most AGNs, and the iron line is expected to vary in response to this with short time lag. Whilst these timescales are too short to be probed presently, significant and complex iron line variability has been observed. Often the line flux is seen to remain constant whilst the continuum changes, and there appears to be an anticorrelation between the reflected fraction and the equivalent width. In another study the reflected fraction and the photon index of the power law are correlated for individual objects and between different ones. These need to be explained as they appear contrary to our simple model of reflection. Flux correlated changes in the ionisation state of the disk may explain some of these facts.</li>
-<li><strong>Reverberation Mapping</strong>: The rapid variability is associated with activation of new flares in the corona above the accretion disk. X-ray reverberation mapping uses observations of the iron line response to sudden changes in the continuum to study the accretion disk and black hole. This may be used to determine the geometry of the X-ray emission and the black hole spin and mass.</li>
-<li><strong>Other Classes of Object</strong> Iron lines are observed in quasars, LLAGNs, radio-loud AGNs, and GBHCs. Quasars have the iron line decrease with increasing luminosity which may be due to the more luminous sources accreting closer to the Eddington limit being more highly ionised. Observations in LLAGNs may determine whether the accretion with low rates is an advection‐dominated accretion flow or a thin disk. Weak lines have been observed suggesting that their low accretion rate flows are thin disks rather than optically thick ADAFs. THe broad iron lines and reflection humps are weak or absent perhaps because the reflection signature is swamped by a beamed continuum. GBHCs show smeared absorption and emission features in the reflection spectra, and there is a debate as to the precise nature of the accretion flow within a few tens of Schwarzschild radii.</li>
-</ul>
-</div>
-</div>
-</div>
-<hr>
+<p>The NuSTAR datasets have two distinct spectra from each telescope, which can be fit simultaneously, binding some of the parameters together. The fitting code was thus adjusted to fit both datasets simultaneously while binding all parameters other than the normalisation. The dataset labelled “nu80402315002” was once again used</p>
 
 
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
-<div id="ref-BroadIronLines" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline"><a href="https://doi.org/10.1086/316610">A. C. Fabian <em>et al.</em>, Publications of the Astronomical Society of the Pacific <strong>112</strong>, 1145 (2000)</a>.</div>
+<div id="ref-NuSTAR" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline"><a href="https://doi.org/10.1088/0004-637X/770/2/103">F. A. Harrison <em>et al.</em>, American Physical Journal <strong>770</strong>, 103 (2013)</a>.</div>
 </div>
 </div>
 </section>
@@ -919,13 +967,13 @@ window.Quarto = {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link" aria-label="Preface">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
+      <a href="./Fitting.html" class="pagination-link" aria-label="Fitting Spectral Lines">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fitting Spectral Lines</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./InitialGradus.html" class="pagination-link" aria-label="Initial Gradus Testing">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Initial Gradus Testing</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

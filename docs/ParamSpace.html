@@ -601,6 +601,79 @@ Figure&nbsp;3.10: The effect of black hole spin on the redshift image. The ISCO 
 </figcaption>
 </figure>
 </div>
+<p>Some of the parameters appeared to change the radius of the ISCO. This was investigated by explicitly finding the ISCO, as tabulated below.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Value</th>
+<th>ISCO (<span class="math inline">\(R_G\)</span>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\alpha_{13}\)</span></td>
+<td>0.00</td>
+<td>1.24</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>16.67</td>
+<td>8.62</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>33.33</td>
+<td>11.70</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>50.00</td>
+<td>14.03</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\epsilon_3\)</span></td>
+<td>0.00</td>
+<td>1.24</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>10.00</td>
+<td>2.36</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>20.00</td>
+<td>2.90</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>30.00</td>
+<td>3.51</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(a\)</span></td>
+<td>0.00</td>
+<td>6.00</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>0.32</td>
+<td>4.92</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>0.63</td>
+<td>3.68</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>0.95</td>
+<td>1.94</td>
+</tr>
+</tbody>
+</table>
+<p>The ISCO is proportional to both <span class="math inline">\(\alpha_{13}\)</span> and <span class="math inline">\(\epsilon_3\)</span>, and inversely proportional to the spin.</p>
 </section>
 </section>
 <section id="summary" class="level2" data-number="3.3">
@@ -622,6 +695,7 @@ Figure&nbsp;3.10: The effect of black hole spin on the redshift image. The ISCO 
 <li><span class="math inline">\(\theta\)</span>: Increasing the inclination (where 0 degrees has the accretion disk face-on) smoothes out the line profile and increases the peak energy. The effect of redshift becomes more apparent with increased inclination.</li>
 <li><span class="math inline">\(\alpha_{13}\)</span>: Increasing <span class="math inline">\(\alpha_{13}\)</span> appears to increase the radius of the ISCO and make the line profile sharper.</li>
 <li><span class="math inline">\(\epsilon_3\)</span>: Increasing <span class="math inline">\(\epsilon_3\)</span> increases the height of the line profile, and makes it more chaotic.</li>
+<li>The ISCO is proportional to both <span class="math inline">\(\alpha_{13}\)</span> and <span class="math inline">\(\epsilon_3\)</span>, and inversely proportional to the spin.</li>
 </ul>
 </div>
 </div>
@@ -629,7 +703,7 @@ Figure&nbsp;3.10: The effect of black hole spin on the redshift image. The ISCO 
 <section id="code-specifics" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="code-specifics"><span class="header-section-number">3.4</span> Code Specifics</h2>
 <p>The workhorse of the parameter investigations was the utility function <code>JohannsenParamVar</code> which sets up the metric and observer position and then calls either <code>ComputeLineProfile</code> or <code>RenderImage</code>. This utility function was made versatile using keyword arguments allowing for different methods to be called within it. This was then wrapped in <code>ParamLoop</code> which took the index (the variable to be looped through) and a set of values to call <code>JohannsenParamVar</code> for.</p>
-<p>To maximise readablity of the redshift images, a custom colormap is made through <code>RedshiftColormap</code> which gives red for any values <span class="math inline">\(&lt;1\)</span>, blue for those <span class="math inline">\(&gt;1\)</span>, and white for those <span class="math inline">\(=1\)</span>. This gave the images seen in <a href="#fig-alpha13Render" class="quarto-xref">Figure&nbsp;<span>3.7</span></a> - <a href="#fig-spinRender" class="quarto-xref">Figure&nbsp;<span>3.10</span></a>.</p>
+<p>To maximise readablity of the redshift images, a custom colormap is made through <code>RedshiftColormap</code> which gives red for any values <span class="math inline">\(&lt;1\)</span>, blue for those <span class="math inline">\(&gt;1\)</span>, and white for those <span class="math inline">\(=1\)</span>. This gave the images seen in <a href="#fig-alpha13Render" class="quarto-xref">Figure&nbsp;<span>3.7</span></a>, <a href="#fig-epsilon3Render" class="quarto-xref"><span>3.8</span></a>, <a href="#fig-inclRender" class="quarto-xref"><span>3.9</span></a>, <a href="#fig-spinRender" class="quarto-xref"><span>3.10</span></a>.</p>
 
 
 </section>

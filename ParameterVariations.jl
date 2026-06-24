@@ -99,6 +99,7 @@ function JohannsenParamVar(setup, bins, func; kwargs...)
 
     # Instantiating the metric
     m = JohannsenMetric(setup["M"], setup["a"], setup["α13"], setup["α22"], setup["α52"], setup["ϵ3"])
+    print("ISCO: $(Gradus.isco(m))")
 
     # Calling the selected function
     output = func(m, x; λ_max=2x[2], height = setup["h"], bins=bins, kwargs...)

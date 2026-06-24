@@ -2,6 +2,7 @@ using SpectralFitting
 using Plots
 using LaTeXStrings
 using Measures
+using WAV
 
 include("LampPostModelFit.jl")
 
@@ -17,6 +18,11 @@ pyplot()
 
 DATADIR = "/home/brad/Documents/SummerInternship/data/"
 EXTENSION = "_sr_1000.pha"
+
+function CompleteSound()
+    y, fs = wavread(raw"./complete.wav")
+    wavplay(y, fs)
+end
 
 function Residuals(result, domain, scope; bounds = (5, 7.5))
     # select which result we want (only have one, but for generalisation to multi-model fits)
@@ -75,6 +81,25 @@ function FitLineProfile(dataA, dataB, energy, Model=LampPostJohannsen; kwargs...
     SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, kwargs...)
 end
 
+function FitPowerLawLineProfile(dataA, dataB, energy, Model=LampPostJohannsen; kwargs...)
+
+    modelA = Model(E=energy) + PowerLaw()
+    modelB = Model(E=energy) + PowerLaw()
+
+    prob = FittingProblem(modelA => dataA, modelB => dataB)
+    bind!(prob, (1, :a1, :a)   => (2, :a1, :a))
+    bind!(prob, (1, :a1, :h)   => (2, :a1, :h))
+    bind!(prob, (1, :a1, :θ)   => (2, :a1, :θ))
+    bind!(prob, (1, :a1, :E)   => (2, :a1, :E))
+    bind!(prob, (1, :a2, :a)   => (2, :a2, :a))
+    if Model == LampPostJohannsen
+        bind!(prob, (1, :a1, :α13) => (2, :a1, :α13))
+        bind!(prob, (1, :a1, :ϵ3)  => (2, :a1, :ϵ3))
+    end
+
+    SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, kwargs...)
+end
+
 function DualSpectrumPlot(plotA, plotB; bounds=(5,7.5))
     # Plotting
     layout = @layout [a{0.001w} (2,1)]
@@ -115,53 +140,39 @@ files = [
 ]
 
 index = 1
+dataRange = (3,10)
 
 # Reading the data
 pathA = joinpath(DATADIR, "$(files[index])A01$(EXTENSION)")
-dataA = LoadData(pathA)
+dataA = LoadData(pathA; dataRange)
 domainA = SpectralFitting.plotting_domain(dataA)
+
 pathB = joinpath(DATADIR, "$(files[index])B01$(EXTENSION)")
-dataB = LoadData(pathB)
+dataB = LoadData(pathB; dataRange)
 domainB = SpectralFitting.plotting_domain(dataB)
 
-# Fitting a power law
-println("Fitting power law...")
-powerLawFit = FitPowerLaw(dataA, dataB)
+kPlotA = PlotSpectrum(dataA)
+kPlotB = PlotSpectrum(dataB)
 
-plot1 = PlotSpectrum(dataA)
-plot!(plot1, powerLawFit[1])
-plot2 = PlotSpectrum(dataB)
-plot!(plot2, powerLawFit[2])
+# Fitting a power law and line profile simultaneously
 
-# Taking the residuals from the power law fit
-residualsA = Residuals(powerLawFit[1], domainA, "A"; bounds=(3,10))
-residualsB = Residuals(powerLawFit[2], domainB, "B"; bounds=(3,10))
-
-plotA = PlotSpectrum(residualsA)
-plotB = PlotSpectrum(residualsB; xlabel="Energy (keV)")
-DualSpectrumPlot(plotA, plotB; bounds=(3,10))
-
-##
-# Fitting a line profile using Gradus' Johannsen metric
+# Johannsen metric
 println("Fitting Johannsen...")
-johannsenResult = FitLineProfile(residualsA, residualsB,
-    FitParam(6.4),
-    LampPostJohannsen
-)
+johannsenResult = FitPowerLawLineProfile(dataA, dataB, FitParam(6.4), LampPostJohannsen)
 
-# Plotting the Johannsen fit
-plot!(plotA, johannsenResult[1], c=:blue)
-plot!(plotB, johannsenResult[2], c=:blue)
+jPlotA = PlotSpectrum(johannsenResult[1])
+jPlotB = PlotSpectrum(johannsenResult[2])
 
-# Fitting a line profile using Gradus' Kerr metric
+DualSpectrumPlot(jPlotA, jPlotB; dataRange)
+CompleteSound()
+
+# Kerr metric
 println("Fitting Kerr...")
-kerrResult = FitLineProfile(residualsA, residualsB,
-    FitParam(6.4),
-    LampPostKerr
-)
+kerrResult = FitPowerLawLineProfile(dataA, dataB, FitParam(6.4), LampPostKerr)
 
-# Plotting the Kerr fit
-plot!(plotA, kerrResult[1], c=:red)
-plot!(plotB, kerrResult[2], c=:red)
+plot!(kPlotA, kerrResult[1])
+plot!(kPlotB, kerrResult[2])
 
-DualSpectrumPlot(plotA, plotB; bounds=(3,10))
+DualSpectrumPlot(kPlotA, kPlotB; bounds=dataRange)
+CompleteSound()
+

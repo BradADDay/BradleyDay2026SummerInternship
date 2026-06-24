@@ -29,7 +29,7 @@ end
 # Utility function for instantiation
 function LampPostJohannsen(;
     K = FitParam(1.),
-    h = FitParam(10., lower_limit=1.5, upper_limit=100., frozen=false),
+    h = FitParam(10., lower_limit=1.5, upper_limit=30., frozen=false),
     E = FitParam(1., lower_limit=1., upper_limit=10., frozen=false),
     R_in = FitParam(-1., lower_limit=-Inf, frozen=true),
     R_out = FitParam(400., lower_limit=-Inf, frozen=true),
@@ -69,7 +69,7 @@ function SpectralFitting.invoke!(output, input, model::LampPostJohannsen)
     # Computing the line profile
     _, flux = lineprofile(m, x, d, profile; bins = domain, 
                        method = TransferFunctionMethod(), minrₑ=R_In, 
-                       maxrₑ=model.R_out, numrₑ = 30)
+                       maxrₑ=model.R_out, numrₑ = 40)
     
     output .= flux[1:end-1]
     
@@ -100,7 +100,7 @@ end
 # Utility function for instantiation
 function LampPostKerr(;
     K = FitParam(1.),
-    h = FitParam(10., lower_limit=1.5, upper_limit=100., frozen=false),
+    h = FitParam(10., lower_limit=1.5, upper_limit=30., frozen=false),
     E = FitParam(1., lower_limit=1., upper_limit=10., frozen=false),
     R_in = FitParam(-1., lower_limit=-Inf, frozen=true),
     R_out = FitParam(400., lower_limit=-Inf, frozen=true),

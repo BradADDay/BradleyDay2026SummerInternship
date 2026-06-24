@@ -58,6 +58,25 @@ Alongside the line profiles, images of the accretion disk were rendered with a c
 
 ![The effect of black hole spin on the redshift image. The ISCO appears to shrink.](images/spinRender.png){fig-align="center" #fig-spinRender width=80%}
 
+Some of the parameters appeared to change the radius of the ISCO. This was investigated by explicitly finding the ISCO, as tabulated below.
+
+| Parameter     | Value | ISCO ($R_G$) |
+|---------------|-------|--------------|
+| $\alpha_{13}$ | 0.00  | 1.24         |
+|               | 16.67 | 8.62         |
+|               | 33.33 | 11.70        |
+|               | 50.00 | 14.03        |
+| $\epsilon_3$  | 0.00  | 1.24         |
+|               | 10.00 | 2.36         |
+|               | 20.00 | 2.90         |
+|               | 30.00 | 3.51         |
+| $a$           | 0.00  | 6.00         |
+|               | 0.32  | 4.92         |
+|               | 0.63  | 3.68         |
+|               | 0.95  | 1.94         |
+
+The ISCO is proportional to both $\alpha_{13}$ and $\epsilon_3$, and inversely proportional to the spin.
+
 ## Summary
 
 :::{.callout-important title="Summary"}
@@ -67,10 +86,11 @@ Alongside the line profiles, images of the accretion disk were rendered with a c
 - $\theta$: Increasing the inclination (where 0 degrees has the accretion disk face-on) smoothes out the line profile and increases the peak energy. The effect of redshift becomes more apparent with increased inclination.
 - $\alpha_{13}$: Increasing $\alpha_{13}$ appears to increase the radius of the ISCO and make the line profile sharper.
 - $\epsilon_3$: Increasing $\epsilon_3$ increases the height of the line profile, and makes it more chaotic.
+- The ISCO is proportional to both $\alpha_{13}$ and $\epsilon_3$, and inversely proportional to the spin.
 :::
 
 ## Code Specifics
 
 The workhorse of the parameter investigations was the utility function `JohannsenParamVar` which sets up the metric and observer position and then calls either `ComputeLineProfile` or `RenderImage`. This utility function was made versatile using keyword arguments allowing for different methods to be called within it. This was then wrapped in `ParamLoop` which took the index (the variable to be looped through) and a set of values to call `JohannsenParamVar` for. 
 
-To maximise readablity of the redshift images, a custom colormap is made through `RedshiftColormap` which gives red for any values $<1$, blue for those $>1$, and white for those $=1$. This gave the images seen in @fig-alpha13Render - @fig-spinRender.
+To maximise readablity of the redshift images, a custom colormap is made through `RedshiftColormap` which gives red for any values $<1$, blue for those $>1$, and white for those $=1$. This gave the images seen in [@fig-alpha13Render; -@fig-epsilon3Render; -@fig-inclRender; -@fig-spinRender].

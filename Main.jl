@@ -17,7 +17,7 @@ include("Defaults.jl")
 # =======================================================================
 
 # Looping through the values for each variable and computing the line profile
-# ParamLoop("a", range(0, 0.95, 4), copy(defaultSetupDict); line=false, render=true, imageSize=(40,30))
+ParamLoop("θ", range(5, 85, 4), copy(defaultSetupDict); line=false, render=true, imageSize=(40,30))
 
 ## =======================================================================
 # Fitting

@@ -1,0 +1,19 @@
+#===========================================
+Johannsen
+---------------------
+# Metric Parameters
+M = 1.0
+a = 0.998
+# Perturbation Parameters
+α13 = 0.0
+α22 = 0.0
+α52 = 0.0
+# Black Hole Parameters
+inclination = 60 degrees
+corona height = 10
+
+Rendering the redshift image fails with 32.3 <= ϵ3 <= 34.6 with the warning
+"Warning: Interpolation out of bounds 4.240072705986144 ∉ [4.24053837577945,  4.240545853004616]. Additional geodesic samples may be required (will not log again)."
+
+Getting a line profile with a lamppost corona and 32.3 <= ϵ3 <= 34.6 yields the error
+DomainError(-1701.518298945888, "sqrt was called with a negative real argument but will only return a complex result if called with a complex argument. Try sqrt(Complex(x)).")

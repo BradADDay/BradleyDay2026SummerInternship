@@ -28,3 +28,51 @@ The NuSTAR datasets have two distinct spectra from each telescope, which can be 
 ![The fits to the nu80402315002 dataset. The Johannsen fit is shown in blue, and the Kerr fit in red.](images/DualFit.png){fig-align="center" #fig-DualFit}
 
 It is evident from @fig-DualFit that the fitting process needs refinement as the fits do not currently fit the data well, and therefore drawing comparisons would be useless.
+
+Following these experiments it was decided to fit a composite model of `PowerLaw` + `LampPost`, with the latter being the line profiles generated using either the Kerr or Johannsen metric through `Gradus.jl`. The first attempt at this provided the plots below.
+
+![The composite fit using the Johannsen metric.](images/Johannsennu80402315002.png){fig-align="center"}
+
+![The composite fit using the Kerr metric](images/Kerrnu80402315002.png){fig-align="center"}
+
+The inner and outer radii of the accretion disk were set constant at the ISCO and 400 $R_g$ respectively. The Johannsen metric currently seems to yield a better fit, however this appears to be an effect of parameters other than the deformation parameters $\alpha_{13}$ and $\epsilon_{3}$ as they were both relatively small ($1.0285$ and $1.6702\times10^{-5}$, respectively). It may therefore be more effective to investigate the effect of these parameters by first fitting the Kerr metric to the data to find the Kerr parameters, then fitting the Johannsen metric with the found parameters, only allowing the two deformation parameters to vary.
+
+Further reading suggests that it may be possible to constrain the parameters for fitting further. In T. Johannsen's 2013 paper describing the Johannsen metric @JohannsenMetric, the following constraints were derived for the deformation parameters:
+
+$$
+\epsilon_3 > -\frac{(M + \sqrt{M^2 - a^2})^3}{M^3}
+$$ {#eq-Epsilon3Constraint}
+
+and 
+
+$$
+\alpha_{13} > -\frac{(M + \sqrt{M^2 - a^2})^3}{M^3}
+$$ {#eq-Alpha13Constraint}
+
+Until now, the deformation parameters had been allowed to take only positive values. These constraints show that this was potentially a naive restriction, thus the code should be adapted to allow for negative values with these constraints. This would ideally be done through `SpectralFitting.jl`'s parameter patching functionality or equivalent however if that is possible remains to be seen. For now, the lower bound for the deformation parameters has been set to -1, which is allowed no matter how large $a$ gets.
+
+```{julia}
+using Plots
+using LaTeXStrings
+pyplot()
+
+function Constraints(a)
+    - (1 + sqrt(1 - a^2))^3
+end
+
+a = range(-0.998, 0.998, 100)
+
+plot(a, Constraints.(a); xlabel="Black hole spin", ylabel=L"\alpha_{13}\;/\;\epsilon_{3}", gridalpha=0.5, minorgrid=true, minorgridalpha=0.3, label=nothing, ylims=(-8,0), c=:black)
+hline!([-1], linestyle=:dash, c=:red, label=nothing)
+```
+
+<!-- 
+To Do:
+- Get working on PC/GPU
+- Figure out if dynamically setting lower bound is possible
+- Comment and clean up code
+- Fit Kerr to freeze parameters?
+    - Check if this would be valid
+    - I think it'd cause overfitting
+- Make utility to retrieve fitting parameters easily
+-->

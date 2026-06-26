@@ -35,8 +35,8 @@ function LampPostJohannsen(;
     R_out = FitParam(400., lower_limit=-Inf, frozen=true),
     θ = FitParam(60., lower_limit=5., upper_limit=85., frozen=false),
     a = FitParam(0.998, lower_limit=-0.998, upper_limit=0.998, frozen=false),
-    α13 = FitParam(0., lower_limit=0, upper_limit=50., frozen=false),
-    ϵ3 = FitParam(0., lower_limit=0, upper_limit=30., frozen=false)
+    α13 = FitParam(-1., lower_limit=0, upper_limit=50., frozen=false),
+    ϵ3 = FitParam(-1., lower_limit=0, upper_limit=30., frozen=false)
     )
 
     LampPostJohannsen(K, h, E, R_in, R_out, θ, a, α13, ϵ3)

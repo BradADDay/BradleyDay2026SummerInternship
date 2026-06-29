@@ -461,7 +461,7 @@ window.Quarto = {
 </header>
 
 
-<p>Data from the NuSTAR (Nuclear Spectroscopic Telescope Array) spacecraft <span class="citation" data-cites="NuSTAR">&nbsp;[<a href="#ref-NuSTAR" role="doc-biblioref">1</a>]</span> was used, and the dataset used for testing was <code>nu80402315002B01</code>. Data loading was handled by <code>SpectralFitting.jl</code> through the <code>OGIPDataset</code> struct. This takes the spectrum file as an argument and automatically pulls in the background, <code>.arf</code>, and <code>.rmf</code> files to compute the spectrum.</p>
+<p>Data from the NuSTAR (Nuclear Spectroscopic Telescope Array) spacecraft <span class="citation" data-cites="NuSTAR">&nbsp;[<a href="references.html#ref-NuSTAR" role="doc-biblioref">1</a>]</span> was used, and the dataset used for testing was <code>nu80402315002B01</code>. Data loading was handled by <code>SpectralFitting.jl</code> through the <code>OGIPDataset</code> struct. This takes the spectrum file as an argument and automatically pulls in the background, <code>.arf</code>, and <code>.rmf</code> files to compute the spectrum.</p>
 <section id="initial-results" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="initial-results"><span class="header-section-number">5.1</span> Initial Results</h2>
 <div id="tbl-InitialFit" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -591,7 +591,7 @@ Figure&nbsp;5.1: The fits to the nu80402315002 dataset. The Johannsen fit is sho
 </figcaption>
 </figure>
 </div>
-<p>It is evident from <a href="#fig-DualFit" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-DualFit</span></a> that the fitting process needs refinement as the fits do not currently fit the data well, and therefore drawing comparisons would be useless.</p>
+<p>It is evident from <a href="#fig-DualFit" class="quarto-xref">Figure&nbsp;<span>5.1</span></a> that the fitting process needs refinement as the fits do not currently fit the data well, and therefore drawing comparisons would be useless.</p>
 <p>Following these experiments it was decided to fit a composite model of <code>PowerLaw</code> + <code>LampPost</code>, with the latter being the line profiles generated using either the Kerr or Johannsen metric through <code>Gradus.jl</code>. The first attempt at this provided the plots below.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -614,7 +614,7 @@ Figure&nbsp;5.1: The fits to the nu80402315002 dataset. The Johannsen fit is sho
 </figure>
 </div>
 <p>The inner and outer radii of the accretion disk were set constant at the ISCO and 400 <span class="math inline">\(R_g\)</span> respectively. The Johannsen metric currently seems to yield a better fit, however this appears to be an effect of parameters other than the deformation parameters <span class="math inline">\(\alpha_{13}\)</span> and <span class="math inline">\(\epsilon_{3}\)</span> as they were both relatively small (<span class="math inline">\(1.0285\)</span> and <span class="math inline">\(1.6702\times10^{-5}\)</span>, respectively). It may therefore be more effective to investigate the effect of these parameters by first fitting the Kerr metric to the data to find the Kerr parameters, then fitting the Johannsen metric with the found parameters, only allowing the two deformation parameters to vary.</p>
-<p>Further reading suggests that it may be possible to constrain the parameters for fitting further. In T. Johannsen’s 2013 paper describing the Johannsen metric <span class="citation" data-cites="JohannsenMetric">&nbsp;[<a href="#ref-JohannsenMetric" role="doc-biblioref">2</a>]</span>, the following constraints were derived for the deformation parameters:</p>
+<p>Further reading suggests that it may be possible to constrain the parameters for fitting further. In T. Johannsen’s 2013 paper describing the Johannsen metric <span class="citation" data-cites="JohannsenMetric">&nbsp;[<a href="references.html#ref-JohannsenMetric" role="doc-biblioref">2</a>]</span>, the following constraints were derived for the deformation parameters:</p>
 <p><span id="eq-Epsilon3Constraint"><span class="math display">\[
 \epsilon_3 &gt; -\frac{(M + \sqrt{M^2 - a^2})^3}{M^3}
 \tag{5.1}\]</span></span></p>
@@ -645,8 +645,6 @@ Figure&nbsp;5.1: The fits to the nu80402315002 dataset. The Johannsen fit is sho
 </div>
 <!-- 
 To Do:
-- Get working on PC/GPU
-- Figure out if dynamically setting lower bound is possible
 - Comment and clean up code
 - Fit Kerr to freeze parameters?
     - Check if this would be valid
@@ -655,7 +653,7 @@ To Do:
 -->
 
 
-<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
 <div id="ref-NuSTAR" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[1] </div><div class="csl-right-inline"><a href="https://doi.org/10.1088/0004-637X/770/2/103">F. A. Harrison <em>et al.</em>, American Physical Journal <strong>770</strong>, 103 (2013)</a>.</div>
 </div>

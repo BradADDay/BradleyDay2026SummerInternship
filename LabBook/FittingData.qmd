@@ -68,8 +68,6 @@ hline!([-1], linestyle=:dash, c=:red, label=nothing)
 
 <!-- 
 To Do:
-- Get working on PC/GPU
-- Figure out if dynamically setting lower bound is possible
 - Comment and clean up code
 - Fit Kerr to freeze parameters?
     - Check if this would be valid

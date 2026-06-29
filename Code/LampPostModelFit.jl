@@ -1,5 +1,9 @@
 using Gradus, SpectralFitting, Plots
 
+function DeformationConstraints(a)
+    -(1+sqrt(1 - a^2))^3
+end
+
 # ===============================================================
 # Johannsen Metric
 # ===============================================================
@@ -35,8 +39,8 @@ function LampPostJohannsen(;
     R_out = FitParam(400., lower_limit=-Inf, frozen=true),
     θ = FitParam(60., lower_limit=5., upper_limit=85., frozen=false),
     a = FitParam(0.998, lower_limit=-0.998, upper_limit=0.998, frozen=false),
-    α13 = FitParam(-1., lower_limit=0, upper_limit=50., frozen=false),
-    ϵ3 = FitParam(-1., lower_limit=0, upper_limit=30., frozen=false)
+    α13 = FitParam(-1., upper_limit=50., frozen=false),
+    ϵ3 = FitParam(-1., upper_limit=30., frozen=false)
     )
 
     LampPostJohannsen(K, h, E, R_in, R_out, θ, a, α13, ϵ3)
@@ -59,6 +63,14 @@ function SpectralFitting.invoke!(output, input, model::LampPostJohannsen)
     else
         R_In = model.R_in
     end 
+
+    if model.α13 < DeformationConstraints(model.a)
+        model.α13 = DeformationConstraints(model.a)
+    end
+
+    if model.ϵ3 < DeformationConstraints(model.a)
+        model.ϵ3 = DeformationConstraints(model.a)
+    end
 
     # Generating an emissivity profile
     emissivityModel = LampPostModel(h = model.h)

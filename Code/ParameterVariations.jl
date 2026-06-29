@@ -61,7 +61,7 @@ function ComputeLineProfile(m, x; height, bins = range(0.0, 1.5, 180), minrₑ=-
 
     # Computing the line profile
     _, flux = lineprofile(m, x, d, profile; verbose=true, bins=bins, 
-            method=TransferFunctionMethod(), minrₑ=minrₑ, maxrₑ=maxrₑ, numrₑ=200)
+            method=TransferFunctionMethod(), minrₑ=minrₑ, maxrₑ=maxrₑ, numrₑ=30)
 
     return flux
 end
@@ -99,7 +99,7 @@ function JohannsenParamVar(setup, bins, func; kwargs...)
 
     # Instantiating the metric
     m = JohannsenMetric(setup["M"], setup["a"], setup["α13"], setup["α22"], setup["α52"], setup["ϵ3"])
-    print("ISCO: $(Gradus.isco(m))")
+    # print("ISCO: $(Gradus.isco(m))")
 
     # Calling the selected function
     output = func(m, x; λ_max=2x[2], height = setup["h"], bins=bins, kwargs...)

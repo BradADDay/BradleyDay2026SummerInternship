@@ -85,14 +85,7 @@ function FitLineProfile(dataA, dataB, energy, Model=LampPostJohannsen; kwargs...
     SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, kwargs...)
 end
 
-function DeformationConstraints!(p)
-    p.a1.α13.lower_limit = -(1+sqrt(1 - p.a1.a^2))^3
-end
-
-function DefineProblem(dataA, dataB, energy, model)
-
-    modelA = model(E=energy) + PowerLaw()
-    modelB = model(E=energy) + PowerLaw()
+function DefineProblem(modelA, modelB, dataA, dataB)
 
     prob = FittingProblem(modelA => dataA, modelB => dataB)
 
@@ -105,18 +98,27 @@ function DefineProblem(dataA, dataB, energy, model)
     return prob
 end
 
-function FitPowerLawLineProfile(dataA, dataB, energy, model::LampPostJohannsen; kwargs...)
+function FitPowerLawLineProfile(dataA, dataB, energy::FitParam, kerrResult::FitResult; kwargs...)
 
-    prob = DefineProblem(dataA, dataB, energy, model)
+    LP1 = LampPostJohannsen(K=FitParam(kerrResult[1].u[1]), h=FitParam(kerrResult[1].u[2]), E=energy, θ=FitParam(kerrResult[1].u[4]), a=FitParam(kerrResult[1].u[5]))
+    LP2 = LampPostJohannsen(K=FitParam(kerrResult[2].u[1]), h=FitParam(kerrResult[2].u[2]), E=energy, θ=FitParam(kerrResult[2].u[4]), a=FitParam(kerrResult[2].u[5]))
+    PL1 = PowerLaw(K=FitParam(kerrResult[1].u[6], frozen=true), a=FitParam(kerrResult[1].u[7], frozen=true))
+    PL2 = PowerLaw(K=FitParam(kerrResult[2].u[6], frozen=true), a=FitParam(kerrResult[2].u[7], frozen=true))
+
+    prob = DefineProblem(LP1+PL1, LP2+PL2, dataA, dataB)
+
     bind!(prob, (1, :a1, :α13) => (2, :a1, :α13))
     bind!(prob, (1, :a1, :ϵ3)  => (2, :a1, :ϵ3))
 
     SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, kwargs...)
 end
 
-function FitPowerLawLineProfile(dataA, dataB, energy, model::LampPostKerr; kwargs...)
+function FitPowerLawLineProfile(dataA, dataB, energy::FitParam; kwargs...)
 
-    prob = DefineProblem(dataA, dataB, energy, model)
+    modelA = LampPostKerr(E=energy) + PowerLaw()
+    modelB = LampPostKerr(E=energy) + PowerLaw()
+
+    prob = DefineProblem(modelA, modelB, dataA, dataB)
 
     SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, kwargs...)
 end
@@ -190,41 +192,45 @@ files = [
     "nu80502304006"
 ]
 
-index = 1
+index = 3
 dataRange = (3,10)
 
 # Reading the data
 pathA = joinpath(DATADIR, "$(files[index])A01$(EXTENSION)")
 dataA = LoadData(pathA; dataRange)
-@save joinpath(OUTPUT, "dataA.bson") dataA
 domainA = SpectralFitting.plotting_domain(dataA)
 
 pathB = joinpath(DATADIR, "$(files[index])B01$(EXTENSION)")
 dataB = LoadData(pathB; dataRange)
-@save joinpath(OUTPUT, "dataB.bson") dataB
 domainB = SpectralFitting.plotting_domain(dataB)
 
 ## ===============================================================
 
 # Fitting a power law and line profile simultaneously
-
 # allowing the energy to vary between 6.4 keV (neutral/weakly ionised) and 7 (H-like iron)
 energy = FitParam(6.4, lower_limit=6.4, upper_limit=7)
 
-# Johannsen metric
-println("Fitting Johannsen...")
-johannsenResult = FitPowerLawLineProfile(dataA, dataB, energy, LampPostJohannsen)
-@save joinpath(OUTPUT, "johannsenResult$(files[index]).bson") johannsenResult
+pathA = joinpath(DATADIR, "$(files[index])A01$(EXTENSION)")
+dataA = LoadData(pathA; dataRange)
+domainA = SpectralFitting.plotting_domain(dataA)
+
+pathB = joinpath(DATADIR, "$(files[index])B01$(EXTENSION)")
+dataB = LoadData(pathB; dataRange)
 
 # Kerr metric
 println("Fitting Kerr...")
-kerrResult = FitPowerLawLineProfile(dataA, dataB, energy, LampPostKerr)
+kerrResult = FitPowerLawLineProfile(dataA, dataB, energy)
 @save joinpath(OUTPUT, "kerrResult$(files[index]).bson") kerrResult
+
+# Johannsen metric
+println("Fitting Johannsen...")
+johannsenResult = FitPowerLawLineProfile(dataA, dataB, energy, kerrResult)
+@save joinpath(OUTPUT, "johannsenResult$(files[index]).bson") johannsenResult
 
 ## ================================================================
 
-@load joinpath(OUTPUT, "kerrResultnu80402315004.bson") kerrResult
-@load joinpath(OUTPUT, "johannsenResultnu80402315004.bson") johannsenResult
+@load joinpath(OUTPUT, "kerrResult$(files[index]).bson") kerrResult
+@load joinpath(OUTPUT, "johannsenResult$(files[index]).bson") johannsenResult
 
 plotA = PlotSpectrum(dataA)
 plot!(plotA, kerrResult[1])

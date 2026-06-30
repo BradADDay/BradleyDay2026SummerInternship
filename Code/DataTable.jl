@@ -21,11 +21,11 @@ approx 1.4179 per parameter combo
 
 num = 2
 
-#= hs   = range( 1.5  , 30.   , 10)
-as   = range(-0.998,  0.998, 5)
+hs   = range( 1.5  , 30.   , 10)
+as   = range(-0.998,  0.998, 7)
 θs   = range( 5.   , 85.   , 10)
-α13s = range(0.   , 50.   , 5)
-ϵ3s  = range(0.   , 30.   , 10) =#
+α13s = range(0.   , 50.   , 7)
+ϵ3s  = range(0.   , 30.   , 10)
 
 hs   = range( 1.5  , 30.   , 2)
 as   = range(-0.998,  0.998, 2)

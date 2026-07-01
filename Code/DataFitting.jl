@@ -5,7 +5,11 @@ using Measures
 using WAV
 using BSON: @save, @load
 
+<<<<<<< HEAD
 include("FittingModels.jl")
+=======
+include("LampPostModelFit.jl")
+>>>>>>> c482177c9ab188292c53cf672ee3e0f595a34125
 include("ParameterVariations.jl")
 
 default(titlefont = (12, "serif"), 
@@ -18,10 +22,17 @@ default(titlefont = (12, "serif"),
 
 pyplot()
 
+<<<<<<< HEAD
 const ROOT = "/home/brad/Documents/SummerInternship/"
 const DATADIR = joinpath(ROOT, "data")
 const EXTENSION = "_sr_1000.pha"
 const OUTPUT = joinpath(ROOT, "output/")
+=======
+ROOT = "/home/brad/Documents/SummerInternship/"
+DATADIR = joinpath(ROOT, "data")
+EXTENSION = "_sr_1000.pha"
+OUTPUT = joinpath(ROOT, "output/")
+>>>>>>> c482177c9ab188292c53cf672ee3e0f595a34125
 
 function CompleteSound()
     y, fs = wavread(raw"./complete.wav")

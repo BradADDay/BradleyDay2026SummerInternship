@@ -5,4 +5,8 @@ data/
 testimages/
 bsonFiles/
 output/
+<<<<<<< HEAD
 Code/utils/model.FITS
+=======
+Code/models
+>>>>>>> c482177c9ab188292c53cf672ee3e0f595a34125

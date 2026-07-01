@@ -51,20 +51,7 @@ $$ {#eq-Alpha13Constraint}
 
 Until now, the deformation parameters had been allowed to take only positive values. These constraints show that this was potentially a naive restriction, thus the code should be adapted to allow for negative values with these constraints. This would ideally be done through `SpectralFitting.jl`'s parameter patching functionality or equivalent however if that is possible remains to be seen. For now, the lower bound for the deformation parameters has been set to -1, which is allowed no matter how large $a$ gets.
 
-```{julia}
-using Plots
-using LaTeXStrings
-pyplot()
-
-function Constraints(a)
-    - (1 + sqrt(1 - a^2))^3
-end
-
-a = range(-0.998, 0.998, 100)
-
-plot(a, Constraints.(a); xlabel="Black hole spin", ylabel=L"\alpha_{13}\;/\;\epsilon_{3}", gridalpha=0.5, minorgrid=true, minorgridalpha=0.3, label=nothing, ylims=(-8,0), c=:black)
-hline!([-1], linestyle=:dash, c=:red, label=nothing)
-```
+![](images/alpha13spin.png)
 
 <!-- 
 To Do:

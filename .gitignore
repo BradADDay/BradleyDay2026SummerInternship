@@ -3,5 +3,6 @@
 Reading/
 data/
 testimages/
-/bsonFiles
-/output
+bsonFiles/
+output/
+Code/models

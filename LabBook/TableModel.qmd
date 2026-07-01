@@ -45,3 +45,15 @@ Using the nu80402315002 dataset as before, the new model yielded the following r
 Comparing to the previous fits, the $\chi^2$ value for both of these fits were surprisingly improved. The Kerr fit was completed by freezing the deformation parameters at 0. 
 
 These fits took only 30 seconds to fit and plot both metrics, which was significantly faster than previous which could take an hour or more for a single fit. 
+
+## Next Steps
+
+After review of the log file, it was found that a lot of the cases where the deformation parameters were zero failed. This is significant as it implies that many of the Kerr model interpolations are innacurate due to the "correction" method used (setting missing values to zero). Using code to parse the unique values for each of the 5 parameters, it was found that every instance of failure had $h=1.5$. It was thus decided that upon the next iteration of the model, the lower bound of $h$ would be set to 3. This value was determined after some brief testing with the failed runs, manually setting $h=3$. $h=2$ was also attempted, however this similarly caused errors.
+
+Building on what was discussed in the previous chapter regarding the lower bounds for the parameters, it was also tested whether a value of -1  computed correctly for both of the deformation parameters. This was successful and thus a partial implementation of these bounds can be completed. 
+
+Further testing was also conducted in the parameter space of $a$ where it was found that the line profile does not change with the sign of $a$. This will allow for much more resolution without increasing the length of computation.
+
+To use the negative deformation parameters, their allowed values must be reduced as it is necessary to have confidence in the deformation = 0 (Kerr) cases. They will therefore take the values $\alpha_{13}, \epsilon_3 \in [-1, 10], \mathbb{Z}$. The other variables will take $h\in[3,15]$, $a\in[0,0.998]$ and $\theta\in [5,85]$. Thus 7 values will be taken for $a$, 12 for the deformation parameters, and 9 for $h,\;\theta$, giving a total size of 81648 for the table.
+
+The final iteration that needs to be made upon the data is to increase the domain, as the model is currently forced to extrapolate causing unexpected issues, likely forcing the fitting to take worse values to avoid these errors

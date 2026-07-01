@@ -40,10 +40,10 @@ end
 # Default constructor
 function XS_LampPostJohannsen(;
     K = FitParam(1.),
-    h = FitParam(10., lower_limit=1.5, upper_limit=30., frozen=false),
     E = FitParam(1., lower_limit=1., upper_limit=10., frozen=false),
-    θ = FitParam(60., lower_limit=5., upper_limit=85., frozen=false),
     a = FitParam(0.998, lower_limit=-0.998, upper_limit=0.998, frozen=false),
+    h = FitParam(10., lower_limit=1.5, upper_limit=30., frozen=false),
+    θ = FitParam(60., lower_limit=5., upper_limit=85., frozen=false),
     α13 = FitParam(0., upper_limit=50., frozen=false),
     ϵ3 = FitParam(0., upper_limit=30., frozen=false)
     )
@@ -69,6 +69,14 @@ function SpectralFitting.invoke!(output, input, model::XS_LampPostJohannsen)
 
         output .= flux[1:end-1]
     end
+end
+
+function SpectralFitting.invokemodel!(input, model::XS_LampPostJohannsen)
+
+    output = zeros(length(input)-1)
+
+    SpectralFitting.invoke!(output, input, model)
+
 end
 
 # ===============================================================

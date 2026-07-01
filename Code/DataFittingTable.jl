@@ -106,7 +106,7 @@ function PlotSpectrum(data; xlabel=nothing, ylabel=nothing)
     # Plotting the spectrum
     plot!(data; seriestype = :stepmid, c=:black, 
         legend=:outerright, framestyle=:box, xminorticks=4,
-        xlabel=xlabel, ylabel=ylabel, edgecolor=nothing
+        xlabel=xlabel, ylabel=ylabel, edgecolor=nothing, facecolor=nothing
     )
 
     # Functionality to turn off the x ticks
@@ -117,20 +117,24 @@ function PlotSpectrum(data; xlabel=nothing, ylabel=nothing)
     return plot
 end
 
-function SeparateModel(model; johannsen=false)
-    params = model.u
-    K, h, θ, a = params[1:4]
-    Kp, ap = params[end-1:end]
+function SeparateModel(result, model="J")
 
-    α13, ϵ3 = params[5:6]
-    return LampPostJohannsen(;
-        K = FitParam(K),
-        h = FitParam(h),
-        θ = FitParam(θ),
-        a = FitParam(a),
-        α13 = FitParam(α13),
-        ϵ3 = FitParam(ϵ3)
-    ), PowerLaw(K = FitParam(Kp), a = FitParam(ap))
+    values = result.u
+
+    K, E, a, h, θ = values[1:5]
+    K2, a2 = values[end-1:end]
+
+    if model == "J"
+        α13, ϵ3 = values[6:7]
+        LP = XS_LampPostJohannsen(;K=K, E=E, a=a, h=h, θ=θ, α13=α13, ϵ3=ϵ3)
+    else
+        LP = XS_LampPostJohannsen(;K=K, E=E, a=a, h=h, θ=θ)
+    end
+    
+    PL = PowerLaw(K=K2, a=a2)
+
+    return LP, PL
+
 end
 
 # List of available datasets
@@ -172,10 +176,10 @@ kerrResult = FitPowerLawLineProfile(dataA, dataB; E=energy, α13=FitParam(0.0, f
 
 # Plotting
 plotA = PlotSpectrum(dataA)
-plot!(plotA, kerrResult[1])
+plot!(plotA, kerrResult[1]; c=:red)
 
 plotB = PlotSpectrum(dataB; xlabel="Energy (keV)")
-plot!(plotB, kerrResult[2])
+plot!(plotB, kerrResult[2]; c=:red)
 
 kerrFigure = DualSpectrumPlot(plotA, plotB; bounds=(3,10))
 
@@ -190,10 +194,16 @@ johannsenResult = FitPowerLawLineProfile(dataA, dataB; E=energy)
 
 # Plotting
 plotA = PlotSpectrum(dataA)
-plot!(plotA, johannsenResult[1])
+plot!(plotA, johannsenResult[1]; c=:red)
+
+lineA, _ = SeparateModel(johannsenResult[1])
+plot!(plotA, domainA, 100000 * SpectralFitting.invokemodel!(domainA, line), label="LineFit")
 
 plotB = PlotSpectrum(dataB; xlabel="Energy (keV)")
-plot!(plotB, johannsenResult[2])
+plot!(plotB, johannsenResult[2]; c=:red)
+
+lineA, _ = SeparateModel(johannsenResult[1])
+plot!(plotB, domainB, line.K * SpectralFitting.invokemodel!(domainA, line), label="LineFit")
 
 johanFigure = DualSpectrumPlot(plotA, plotB; bounds=(3,10))
 
@@ -207,3 +217,4 @@ savefig(joinpath(OUTPUT, "TableJohannsen$(files[index]).png"))
 @save joinpath(OUTPUT, "TableJohannsenResult$(files[index]).bson") johannsenResult
 
 CompleteSound()
+

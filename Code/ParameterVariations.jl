@@ -61,7 +61,7 @@ function ComputeLineProfile(m, x; height, bins = range(0.0, 1.5, 180), minrₑ=-
 
     # Computing the line profile
     _, flux = lineprofile(m, x, d, profile; verbose=true, bins=bins, 
-            method=TransferFunctionMethod(), minrₑ=minrₑ, maxrₑ=maxrₑ, numrₑ=30)
+            method=TransferFunctionMethod(), minrₑ=minrₑ, maxrₑ=maxrₑ, numrₑ=300)
 
     return flux
 end

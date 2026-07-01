@@ -8,11 +8,39 @@ using Dates
 
 gr()
 
-include("LampPostModelFit.jl")
+include("FittingModels.jl")
 include("ParameterVariations.jl")
 include("Defaults.jl")
 
-# =======================================================================
+E = 6.4
+a = 0.7
+h = 8.
+θ = 60.
+α13 = 0.
+ϵ3 = 0.
+
+# Model parameters
+setupDict = Dict((
+                  "M"   => 1., 
+                  "a"   => a, 
+                  "α13" => α13, 
+                  "α22" => 0., 
+                  "α52" => 0.,
+                  "ϵ3"  => ϵ3, 
+                  "θ"   => θ, 
+                  "h"   => h))
+
+bins = range(3, 9, 999)
+
+flux = JohannsenParamVar(setupDict, bins/E, ComputeLineProfile)
+
+plot(bins, flux)
+
+model = XS_LampPostJohannsen(; K=1., E=E, a=a, h=h, θ=θ, α13=α13, ϵ3=ϵ3)
+
+plot!(bins, SpectralFitting.invokemodel!(range(3, 9, 1000), model))
+
+## =======================================================================
 # Parameter space
 # =======================================================================
 

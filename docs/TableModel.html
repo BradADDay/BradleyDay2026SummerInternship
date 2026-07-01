@@ -409,6 +409,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#performance" id="toc-performance" class="nav-link" data-scroll-target="#performance"><span class="header-section-number">6.4.1</span> Performance</a></li>
   </ul></li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps"><span class="header-section-number">6.5</span> Next Steps</a></li>
   </ul>
 </nav>
     </div>
@@ -522,6 +523,15 @@ window.Quarto = {
 </div>
 <p>Comparing to the previous fits, the <span class="math inline">\(\chi^2\)</span> value for both of these fits were surprisingly improved. The Kerr fit was completed by freezing the deformation parameters at 0.</p>
 <p>These fits took only 30 seconds to fit and plot both metrics, which was significantly faster than previous which could take an hour or more for a single fit.</p>
+</section>
+</section>
+<section id="next-steps" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="next-steps"><span class="header-section-number">6.5</span> Next Steps</h2>
+<p>After review of the log file, it was found that a lot of the cases where the deformation parameters were zero failed. This is significant as it implies that many of the Kerr model interpolations are innacurate due to the “correction” method used (setting missing values to zero). Using code to parse the unique values for each of the 5 parameters, it was found that every instance of failure had <span class="math inline">\(h=1.5\)</span>. It was thus decided that upon the next iteration of the model, the lower bound of <span class="math inline">\(h\)</span> would be set to 3. This value was determined after some brief testing with the failed runs, manually setting <span class="math inline">\(h=3\)</span>. <span class="math inline">\(h=2\)</span> was also attempted, however this similarly caused errors.</p>
+<p>Building on what was discussed in the previous chapter regarding the lower bounds for the parameters, it was also tested whether a value of -1 computed correctly for both of the deformation parameters. This was successful and thus a partial implementation of these bounds can be completed.</p>
+<p>Further testing was also conducted in the parameter space of <span class="math inline">\(a\)</span> where it was found that the line profile does not change with the sign of <span class="math inline">\(a\)</span>. This will allow for much more resolution without increasing the length of computation.</p>
+<p>To use the negative deformation parameters, their allowed values must be reduced as it is necessary to have confidence in the deformation = 0 (Kerr) cases. They will therefore take the values <span class="math inline">\(\alpha_{13}, \epsilon_3 \in [-1, 10], \mathbb{Z}\)</span>. The other variables will take <span class="math inline">\(h\in[3,15]\)</span>, <span class="math inline">\(a\in[0,0.998]\)</span> and <span class="math inline">\(\theta\in [5,85]\)</span>. Thus 7 values will be taken for <span class="math inline">\(a\)</span>, 12 for the deformation parameters, and 9 for <span class="math inline">\(h,\;\theta\)</span>, giving a total size of 81648 for the table.</p>
+<p>The final iteration that needs to be made upon the data is to increase the domain, as the model is currently forced to extrapolate causing unexpected issues, likely forcing the fitting to take worse values to avoid these errors</p>
 
 
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
@@ -532,7 +542,6 @@ window.Quarto = {
 <div class="csl-left-margin">[2] </div><div class="csl-right-inline"><a href="https://doi.org/10.5281/zenodo.17390971">F. Baker and A. Young, Zenodo (2025)</a>.</div>
 </div>
 </div>
-</section>
 </section>
 
 </main> <!-- /main -->

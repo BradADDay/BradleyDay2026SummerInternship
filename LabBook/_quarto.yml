@@ -18,6 +18,7 @@ book:
     - ParamSpace.qmd
     - Fitting.qmd
     - FittingData.qmd
+    - TableModel.qmd
     - references.qmd
 
 bibliography: references.bib

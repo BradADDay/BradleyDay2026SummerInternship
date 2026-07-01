@@ -4,6 +4,7 @@ using LaTeXStrings
 using Measures
 using WAV
 using BSON: @save, @load
+using BenchmarkTools
 
 # Loading in files
 include("FittingModels.jl")

@@ -13,10 +13,10 @@ include("ParameterVariations.jl")
 include("Defaults.jl")
 
 E = 6.4
-a = 0.7
+a = 0.2
 h = 8.
-θ = 60.
-α13 = 0.
+θ = 80.
+α13 = 3.
 ϵ3 = 0.
 
 # Model parameters
@@ -30,15 +30,18 @@ setupDict = Dict((
                   "θ"   => θ, 
                   "h"   => h))
 
-bins = range(3, 9, 999)
 
-flux = JohannsenParamVar(setupDict, bins/E, ComputeLineProfile)
+bins = range(1, 9, 999)
 
-plot(bins, flux)
+flux1 = JohannsenParamVar(setupDict, bins/6.4, ComputeLineProfile)
 
-model = XS_LampPostJohannsen(; K=1., E=E, a=a, h=h, θ=θ, α13=α13, ϵ3=ϵ3)
+plot(bins, flux1/maximum(flux1))
 
-plot!(bins, SpectralFitting.invokemodel!(range(3, 9, 1000), model))
+model = XS_LampPostJohannsen(K=1., E=6.4, a=a, h=h, θ=θ, α13=α13, ϵ3=ϵ3)
+
+flux2 = invokemodel!(range(1, 9, 1000), model)
+
+plot!(bins, flux2/maximum(flux2))
 
 ## =======================================================================
 # Parameter space

@@ -5,20 +5,37 @@ using Measures
 using WAV
 using BSON: @save, @load
 using BenchmarkTools
+using PairPlots
+
+pyplot()
+
+cm2in(x) = 0.3937008x
+cm2px(x) = Int(round(cm2in(x) * 100))
 
 # Loading in files
 include("FittingModels.jl")
 include("ParameterVariations.jl")
 
 # Setting plotting defaults
-default(titlefont = (12, "serif"), 
-    guidefont = (12, "serif"), 
-    legendfont = (12, "serif"), 
-    tickfont = (10, "serif"), 
+#= default(titlefont = (12, "serif"), 
+    guidefont = (10, "serif"), 
+    legendfont = (5, "serif"), 
+    tickfont = (8, "serif"), 
     gridalpha=0.,
-    minorticks=true
+    minorticks=true,
+    dpi=300,
+    size=cm2px.((8,5))
+) =#
+
+default(titlefont = (12, "serif"), 
+    guidefont = (10, "serif"), 
+    legendfont = (8, "serif"), 
+    tickfont = (8, "serif"), 
+    gridalpha=0.,
+    minorticks=true,
+    dpi=300,
+    size=cm2px.((12,9))
 )
-pyplot()
 
 # Setting Filepaths
 const ROOT = "/home/brad/Documents/SummerInternship/"
@@ -75,12 +92,16 @@ function FitPowerLawLineProfile(dataA, dataB; kwargs...)
     SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true)
 end
 
-function DualSpectrumPlot(plotA, plotB; bounds=(5,7.5), kwargs...)
+function DualSpectrumPlot(plotA, plotB; bounds=(5,7.5), title="", kwargs...)
     """Plotting the results of the fit to the two datasets"""
 
     # Plotting
     # Defining the layout
-    layout = @layout [a{0.001w} (2,1)]
+    layout = @layout [a{0.001h}; [b{0.001w} (2,1)]]
+
+    Title = plot([0], c=:white; title=title, 
+        framestyle=:none, gridalpha=0, legend=false, xlims=(1,2)
+    )
 
     # Plotting the y axis label
     yAxis = plot([0], c=:white; ylabel=L"Flux (counts s$^{-1}$ keV$^{-1}$)", 
@@ -88,7 +109,7 @@ function DualSpectrumPlot(plotA, plotB; bounds=(5,7.5), kwargs...)
     )
 
     # Plotting the data
-    figure = plot(yAxis, plotA, plotB; layout=layout, link=:x,  
+    figure = plot(Title, yAxis, plotA, plotB; layout=layout, link=:x,  
         xlims=bounds, xminorticks=4, margin=1mm, kwargs...
     )
 
@@ -97,27 +118,45 @@ function DualSpectrumPlot(plotA, plotB; bounds=(5,7.5), kwargs...)
     return figure
 end
 
-function PlotSpectrum(data; xlabel=nothing, ylabel=nothing)
+function PlotSpectrum(data::SpectralData; xlabel=nothing, ylabel=nothing)
     """Plot a spectrum with a vertical line denoting the iron Kα line"""
 
     # Plotting the vertical line
-    plot = vline([6.4], c=:black, linestyle=:dash, label=nothing)
+    plot = vline([6.4], c=:black, linestyle=:dash, label=nothing, xminorticks=4)
 
     # Plotting the spectrum
-    plot!(data; seriestype = :stepmid, c=:black, 
-        legend=:outerright, framestyle=:box, xminorticks=4,
-        xlabel=xlabel, ylabel=ylabel, edgecolor=nothing, facecolor=nothing
+    plot!(plot, data; seriestype = :stepmid, c=:black, 
+        legend=:topright, framestyle=:box,
+        xlabel=xlabel, ylabel=ylabel, label=nothing, 
+        markercolor=:black, xticks=append!(collect(3.:10.), 6.4),
+        lc=:black, lw=0.5
     )
 
     # Functionality to turn off the x ticks
     if isnothing(xlabel)
-        plot!(xformatter= _-> "")
+        plot!(plot, xformatter= _-> "")
     end
 
     return plot
 end
 
-function SeparateModel(result, model="J")
+function PlotSpectrum(data::SpectralData, fit; xlabel=nothing, ylabel=nothing)
+    """Plot a spectrum with a vertical line denoting the iron Kα line"""
+
+    plot!(PlotSpectrum(data; xlabel=xlabel, ylabel=ylabel), fit; c=:red, lw=1)
+end
+
+function PlotFits(dataA, fitA, dataB, fitB; bounds=(3, 10), title="")
+
+    plotA = PlotSpectrum(dataA, fitA)
+
+    plotB = PlotSpectrum(dataB, fitB; xlabel="Energy (keV)")
+
+    DualSpectrumPlot(plotA, plotB; bounds=bounds, title=title)
+
+end
+
+function SeparateModel(result, domain, model="J")
 
     values = result.u
 
@@ -131,11 +170,65 @@ function SeparateModel(result, model="J")
         LP = XS_LampPostJohannsen(;K=K, E=E, a=a, h=h, θ=θ)
     end
     
-    PL = PowerLaw(K=K2, a=a2)
+    println(K2)
+
+    PL = invokemodel(domain, PowerLaw(K = FitParam(K2), a=FitParam(a2)))
 
     return LP, PL
 
 end
+
+function FitContour(result, params, param1, param2)
+
+    values = copy(result.u)
+
+    stats = zeros(length(param1), length(param2))
+
+    for i in eachindex(param1)
+        for j in eachindex(param2)
+            values[params[1]] = param1[i]
+            values[params[2]] = param2[j]
+            stats[i,j] = measure(ChiSquared(), result, values)
+        end
+    end
+
+    pairplot(stats)
+    
+    scatter!([result.u[params[1]]], [result.u[params[2]]])
+end
+
+#= function FitContour(result, params, param1, param2)
+
+    values = copy(result.u)
+
+    stats = zeros(length(param1), length(param2))
+
+    for i in eachindex(param1)
+        for j in eachindex(param2)
+            values[params[1]] = param1[i]
+            values[params[2]] = param2[j]
+            stats[i,j] = measure(ChiSquared(), result, values)
+        end
+    end
+
+    println(size(stats))
+
+    # 1, 2, and 3 sigma contours
+    stdev = std(stats)
+    contour(
+        param1,
+        param2,
+        stats .- sum(result.stats),
+        levels = [1stdev, 2stdev, 3stdev],
+        xlabel = params[3],
+        ylabel = params[4]
+    )
+    scatter!([result.u[params[1]]], [result.u[params[2]]])
+end =#
+
+# ======================================================================================
+# Setup
+# ======================================================================================
 
 # List of available datasets
 files = [
@@ -151,7 +244,7 @@ files = [
 ]
 
 dataRange = (3,10)
-index = 1
+index = 2
 
 # Reading the data
 pathA = joinpath(DATADIR, "$(files[index])A01$(EXTENSION)")
@@ -163,7 +256,7 @@ dataB = LoadData(pathB; dataRange)
 domainB = SpectralFitting.plotting_domain(dataB)
 
 # Allowing the energy to vary between 6.4 keV (neutral/weakly ionised) and 7 (H-like iron)
-energy = FitParam(6.4, lower_limit=6.4, upper_limit=7)
+energy = FitParam(6.4, lower_limit=6.4, upper_limit=7, frozen=false)
 
 # ======================================================================================
 # Kerr metric
@@ -175,15 +268,11 @@ println("Fitting Kerr...")
 kerrResult = FitPowerLawLineProfile(dataA, dataB; E=energy, α13=FitParam(0.0, frozen=true), ϵ3=FitParam(0.0, frozen=true))
 
 # Plotting
-plotA = PlotSpectrum(dataA)
-plot!(plotA, kerrResult[1]; c=:red)
+PlotFits(dataA, kerrResult[1], dataB, kerrResult[2]; title="Kerr Fit")
 
-plotB = PlotSpectrum(dataB; xlabel="Energy (keV)")
-plot!(plotB, kerrResult[2]; c=:red)
+FitContour(kerrResult[2], (3, 4, "a", "h"), range(0, 0.998, 50), range(0, 30, 50))
 
-kerrFigure = DualSpectrumPlot(plotA, plotB; bounds=(3,10))
-
-# ======================================================================================
+## ======================================================================================
 # Johannsen metric
 # ======================================================================================
 
@@ -193,19 +282,9 @@ println("Fitting Johannsen...")
 johannsenResult = FitPowerLawLineProfile(dataA, dataB; E=energy)
 
 # Plotting
-plotA = PlotSpectrum(dataA)
-plot!(plotA, johannsenResult[1]; c=:red)
+PlotFits(dataA, johannsenResult[1], dataB, johannsenResult[2]; title="Johannsen Fit")
 
-lineA, _ = SeparateModel(johannsenResult[1])
-plot!(plotA, domainA, 100000 * SpectralFitting.invokemodel!(domainA, line), label="LineFit")
-
-plotB = PlotSpectrum(dataB; xlabel="Energy (keV)")
-plot!(plotB, johannsenResult[2]; c=:red)
-
-lineA, _ = SeparateModel(johannsenResult[1])
-plot!(plotB, domainB, line.K * SpectralFitting.invokemodel!(domainA, line), label="LineFit")
-
-johanFigure = DualSpectrumPlot(plotA, plotB; bounds=(3,10))
+FitContour(johannsenResult[2], (2, 4, "E", "h"), range(1., 10., 50), range(0, 35, 50))
 
 # ======================================================================================
 # Saving

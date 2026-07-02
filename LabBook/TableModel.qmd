@@ -56,4 +56,8 @@ Further testing was also conducted in the parameter space of $a$ where it was fo
 
 To use the negative deformation parameters, their allowed values must be reduced as it is necessary to have confidence in the deformation = 0 (Kerr) cases. They will therefore take the values $\alpha_{13}, \epsilon_3 \in [-1, 10], \mathbb{Z}$. The other variables will take $h\in[3,15]$, $a\in[0,0.998]$ and $\theta\in [5,85]$. Thus 7 values will be taken for $a$, 12 for the deformation parameters, and 9 for $h,\;\theta$, giving a total size of 81648 for the table.
 
-The final iteration that needs to be made upon the data is to increase the domain, as the model is currently forced to extrapolate causing unexpected issues, likely forcing the fitting to take worse values to avoid these errors
+The final iteration that needs to be made upon the data is to increase the domain, as the model is currently forced to extrapolate causing unexpected issues, likely forcing the fitting to take worse values to avoid these errors.
+
+All of these iterations were implemented and another dataset computed. At the time of writing these computations are still ongoing and therefore time was taken to clean up the plotting and do further reading.
+
+Functionality was then added to plot a contour plot of the fit statistic ($\chi^2$) for a pair of fit parameters. The fits are however not currently accurate enough to determine the functionality of this plot, thus this remains to be used.

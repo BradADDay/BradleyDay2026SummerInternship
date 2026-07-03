@@ -37,7 +37,7 @@ tbl.setisEscale(True)
 # Defining the energies
 # ===============================================================
 
-tbl.setEnergies(np.linspace(0.2, 1.5, 1001))
+tbl.setEnergies(np.linspace(0., 3., 1001))
 
 # ===============================================================
 # Defining the parameters
@@ -46,11 +46,12 @@ tbl.setEnergies(np.linspace(0.2, 1.5, 1001))
 tbl.setNumIntParams(5)
 tbl.setNumAddParams(0)
 
+
 # ---------------------------------------------------------------
 # Spin
 # ---------------------------------------------------------------
 
-spins = [-0.998, -0.6653333333333333, -0.33266666666666667, 0.0, 0.33266666666666667, 0.6653333333333333, 0.998]
+spins = [0.0, 0.16633333333333333, 0.33266666666666667, 0.499, 0.6653333333333333, 0.8316666666666667, 0.998]
 spin = tableParameter("SPIN", 0, 0.998, 0.001, -0.998, -0.998, 0.998, 0.998)
 spin.setTabulatedValues(spins)
 
@@ -60,8 +61,8 @@ tbl.pushParameter(spin)
 # Height
 # ---------------------------------------------------------------
 
-heights = [1.5, 4.666666666666667, 7.833333333333333, 11.0, 14.166666666666666, 17.333333333333332, 20.5, 23.666666666666668, 26.833333333333332, 30.0]
-height = tableParameter("HEIGHT", 0, 10.0, 0.1, 1.5, 1.5, 30.0, 30.0) 
+heights = [3.0, 4.5, 6.0, 7.5, 9.0, 10.5, 12.0, 13.5, 15.0]
+height = tableParameter("HEIGHT", 0, 10.0, 0.1, 3.0, 3.0, 15.0, 15.0) 
 height.setTabulatedValues(heights)
 
 tbl.pushParameter(height)
@@ -70,7 +71,7 @@ tbl.pushParameter(height)
 # Inclination
 # ---------------------------------------------------------------
 
-inclinations = [5.0, 13.88888888888889, 22.77777777777778, 31.666666666666668, 40.55555555555556, 49.44444444444444, 58.333333333333336, 67.22222222222223, 76.11111111111111, 85.0]
+inclinations = [5.0, 15.0, 25.0, 35.0, 45.0, 55.0, 65.0, 75.0, 85.0]
 inclination = tableParameter("INCLINATION", 0, 60.0, 0.1, 5.0, 5.0, 85.0, 85.0) 
 inclination.setTabulatedValues(inclinations)
 
@@ -80,8 +81,8 @@ tbl.pushParameter(inclination)
 # Alpha13
 # ---------------------------------------------------------------
 
-alphas = [0.0, 8.333333333333334, 16.666666666666668, 25.0, 33.333333333333336, 41.666666666666664, 50.0]
-alpha13 = tableParameter("ALPHA13", 0, 0.0, 0.1, 0.0, 0.0, 50.0, 50.0) 
+alphas = [-0.4, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+alpha13 = tableParameter("ALPHA13", 0, 0.0, 0.1, -0.4, -0.4, 10.0, 10.0) 
 alpha13.setTabulatedValues(alphas)
 
 tbl.pushParameter(alpha13)
@@ -90,8 +91,8 @@ tbl.pushParameter(alpha13)
 # Epsilon3
 # ---------------------------------------------------------------
 
-epsilons = [0.0, 3.3333333333333335, 6.666666666666667, 10.0, 13.333333333333334, 16.666666666666668, 20.0, 23.333333333333332, 26.666666666666668, 30.0]
-epsilon3 = tableParameter("EPSILON3", 0, 0.0, 0.1, 0.0, 0.0, 30.0, 30.0)
+epsilons = [-0.4, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+epsilon3 = tableParameter("EPSILON3", 0, 0.0, 0.1, -0.4, -0.4, 10.0, 10.0)
 epsilon3.setTabulatedValues(epsilons)
 
 tbl.pushParameter(epsilon3)
@@ -101,10 +102,14 @@ tbl.pushParameter(epsilon3)
 # ===============================================================
 
 # Reading the CSV
-df = pd.read_csv("data/spectra.csv")
+print("Loading CSVs...")
+df2 = pd.read_csv("data/spectra2.csv")
+df3 = pd.read_csv("data/spectra3.csv")
+df4 = pd.read_csv("data/NegativeDeformation.csv")
 i=0
 
 # Looping through the parameters in the same order as for generation
+print("Parameter loop...")
 for a in spins:
     for h in heights:
         for theta in inclinations:
@@ -113,14 +118,18 @@ for a in spins:
 
                     # Pulling the flux from the CSV 
                     try:
-                        flux = df[getColumn(a, h, theta, alpha, epsilon)].to_numpy()
-
-                    # Setting the flux to zero if the spectrum failed
-                    # This may be better done through interpolation in the future, 
-                    # however it was often consecutive parameter combinations that failed
+                        flux = df2[getColumn(a, h, theta, alpha, epsilon)].to_numpy()
                     except:
-                        flux = np.zeros(1000)
-                        i+=1
+                        try:
+                            flux = df3[getColumn(a, h, theta, alpha, epsilon)].to_numpy()
+                        except:
+                            try:
+                                flux = df4[getColumn(a, h, theta, alpha, epsilon)].to_numpy()
+                            # Setting the flux to zero if the spectrum failed
+                            # This may be better done through interpolation in the future, 
+                            # however it was often consecutive parameter combinations that failed
+                            except:
+                                flux = np.zeros(1000)
                     
                     # Storing the spectrum and pushing it to the table alongside its parameter combination
                     spec = tableSpectrum()
@@ -129,7 +138,7 @@ for a in spins:
                     tbl.pushSpectrum(spec)
 
 # Saving the file
-tablefile = "test.FITS"
+tablefile = "model2.FITS"
 if (os.path.exists(tablefile)): 
     os.remove(tablefile)
 status = tbl.write(tablefile)

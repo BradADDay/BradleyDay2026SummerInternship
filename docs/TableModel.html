@@ -410,6 +410,7 @@ window.Quarto = {
   <li><a href="#performance" id="toc-performance" class="nav-link" data-scroll-target="#performance"><span class="header-section-number">6.4.1</span> Performance</a></li>
   </ul></li>
   <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps"><span class="header-section-number">6.5</span> Next Steps</a></li>
+  <li><a href="#current-issues-20260703" id="toc-current-issues-20260703" class="nav-link" data-scroll-target="#current-issues-20260703"><span class="header-section-number">6.6</span> Current Issues 2026/07/03</a></li>
   </ul>
 </nav>
     </div>
@@ -534,6 +535,26 @@ window.Quarto = {
 <p>The final iteration that needs to be made upon the data is to increase the domain, as the model is currently forced to extrapolate causing unexpected issues, likely forcing the fitting to take worse values to avoid these errors.</p>
 <p>All of these iterations were implemented and another dataset computed. At the time of writing these computations are still ongoing and therefore time was taken to clean up the plotting and do further reading.</p>
 <p>Functionality was then added to plot a contour plot of the fit statistic (<span class="math inline">\(\chi^2\)</span>) for a pair of fit parameters. The fits are however not currently accurate enough to determine the functionality of this plot, thus this remains to be used.</p>
+</section>
+<section id="current-issues-20260703" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="current-issues-20260703"><span class="header-section-number">6.6</span> Current Issues 2026/07/03</h2>
+<p>The table model currently does not contain the full set of spectra for negative values of the deformation parameters. For high spin parameters, the code will sometimes fail to compute the line profile citing either one of two errors:</p>
+<pre><code>ErrorException("No boundaries for minimization could be determined. It is likely this configuration does not have an ISCO solution.")</code></pre>
+<p>or</p>
+<pre><code>DomainError([VALUE], "sqrt was called with a negative real argument but will only return a complex result if called with a complex argument. Try sqrt(Complex(x)).")</code></pre>
+<p>This occurs when attempting to use negative values below <span class="math inline">\(\sim-0.4\)</span> for either, or both, of the deformation parameters. This is likely either a bug, or an artefact of the Johannsen metric. The only currently known constraints on allowed values of <span class="math inline">\(\alpha_{13}\)</span> and <span class="math inline">\(\epsilon_{3}\)</span> are those stated in Equations <a href="FittingData.html#eq-Epsilon3Constraint" class="quarto-xref">Equation&nbsp;<span>5.1</span></a> and <a href="FittingData.html#eq-Alpha13Constraint" class="quarto-xref">Equation&nbsp;<span>5.2</span></a>, which all values used satisfy. The current working theory is thus that this may be a bug with <code>Gradus.jl</code> however this requires further research.</p>
+<p>There also exists the restriction that <span class="math inline">\(|a|&lt;1\)</span> to avoid a naked singularity <span class="citation" data-cites="ConstrainingAlpha13">&nbsp;[<a href="references.html#ref-ConstrainingAlpha13" role="doc-biblioref">3</a>]</span>, however this is once again satisfied by the used values.</p>
+<p>The table model is currently capable of extrapolating, which provides reasonable estimates of the line profile for negative values (see <a href="#fig-GradusTableCompare" class="quarto-xref">Figure&nbsp;<span>6.1</span></a>) however it would not be preferable to rely on extrapolation to constrain the parameters.</p>
+<div id="fig-GradusTableCompare" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-GradusTableCompare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/GradusTableCompare.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;6.1: "><img src="images/GradusTableCompare.png" id="fig-GradusTableCompare" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-GradusTableCompare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.1
+</figcaption>
+</figure>
+</div>
 
 
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
@@ -542,6 +563,9 @@ window.Quarto = {
 </div>
 <div id="ref-SpectralFitting" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[2] </div><div class="csl-right-inline"><a href="https://doi.org/10.5281/zenodo.17390971">F. Baker and A. Young, Zenodo (2025)</a>.</div>
+</div>
+<div id="ref-ConstrainingAlpha13" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline"><a href="https://doi.org/10.1103/PhysRevD.99.083001">A. Tripathi <em>et al.</em>, Phys. Rev. D <strong>99</strong>, 083001 (2019)</a>.</div>
 </div>
 </div>
 </section>

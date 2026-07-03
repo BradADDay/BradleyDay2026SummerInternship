@@ -5,7 +5,6 @@ using Measures
 using WAV
 using BSON: @save, @load
 using BenchmarkTools
-using PairPlots
 
 pyplot()
 
@@ -13,7 +12,7 @@ cm2in(x) = 0.3937008x
 cm2px(x) = Int(round(cm2in(x) * 100))
 
 # Loading in files
-include("FittingModels.jl")
+include("FittingModelsCopy.jl")
 include("ParameterVariations.jl")
 
 # Setting plotting defaults
@@ -45,7 +44,7 @@ const OUTPUT = joinpath(ROOT, "output/")
 
 function CompleteSound()
     """A function to play a sound when the program finishes running"""
-    y, fs = wavread("$ROOT/Code/utils/complete.wav")
+    y, fs = wavread("$ROOT/Code/utils/tuturu.wav")
     wavplay(y, fs)
 end
 
@@ -180,21 +179,20 @@ end
 
 function FitContour(result, params, param1, param2)
 
-    values = copy(result.u)
+    values1 = copy(result.u)
+    values2 = copy(result.u)
 
-    stats = zeros(length(param1), length(param2))
+    stats = fill(zeros(length(param1)), 2)
 
     for i in eachindex(param1)
-        for j in eachindex(param2)
-            values[params[1]] = param1[i]
-            values[params[2]] = param2[j]
-            stats[i,j] = measure(ChiSquared(), result, values)
-        end
+        values1[params[1]] = param1[i]
+        values2[params[2]] = param2[i]
+        stats[1][i] = measure(ChiSquared(), result, values1)
+        stats[2][i] = measure(ChiSquared(), result, values2)
     end
 
-    pairplot(stats)
+    pairplot((;x=stats[1], y=stats[2]))
     
-    scatter!([result.u[params[1]]], [result.u[params[2]]])
 end
 
 #= function FitContour(result, params, param1, param2)
@@ -244,7 +242,7 @@ files = [
 ]
 
 dataRange = (3,10)
-index = 2
+index = 1
 
 # Reading the data
 pathA = joinpath(DATADIR, "$(files[index])A01$(EXTENSION)")
@@ -265,12 +263,12 @@ energy = FitParam(6.4, lower_limit=6.4, upper_limit=7, frozen=false)
 println("Fitting Kerr...")
 
 # Fitting the table model with the deformation parameters set to 0
-kerrResult = FitPowerLawLineProfile(dataA, dataB; E=energy, α13=FitParam(0.0, frozen=true), ϵ3=FitParam(0.0, frozen=true))
+kerrResult = FitPowerLawLineProfile(dataA, dataB; E=copy(energy), α13=FitParam(0.0, frozen=true), ϵ3=FitParam(0.0, frozen=true))
 
 # Plotting
 PlotFits(dataA, kerrResult[1], dataB, kerrResult[2]; title="Kerr Fit")
 
-FitContour(kerrResult[2], (3, 4, "a", "h"), range(0, 0.998, 50), range(0, 30, 50))
+kerrResult
 
 ## ======================================================================================
 # Johannsen metric
@@ -279,14 +277,12 @@ FitContour(kerrResult[2], (3, 4, "a", "h"), range(0, 0.998, 50), range(0, 30, 50
 println("Fitting Johannsen...")
 
 # Fitting the table model
-johannsenResult = FitPowerLawLineProfile(dataA, dataB; E=energy)
+johannsenResult = FitPowerLawLineProfile(dataA, dataB; E=copy(energy))
 
 # Plotting
 PlotFits(dataA, johannsenResult[1], dataB, johannsenResult[2]; title="Johannsen Fit")
 
-FitContour(johannsenResult[2], (2, 4, "E", "h"), range(1., 10., 50), range(0, 35, 50))
-
-# ======================================================================================
+## ======================================================================================
 # Saving
 # ======================================================================================
 

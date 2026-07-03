@@ -2,6 +2,7 @@
 using DataFrames
 using CSV
 using Dates
+using ProgressBars
 
 """
 Generate a csv of line profiles by varying the 5 parameters for the Johannsen metric:
@@ -22,19 +23,21 @@ approx 1.4179 per parameter combo
 """
 
 # Defining the parameter space
-hs   = range( 1.5  , 30.   , 10)
-as   = range(-0.998,  0.998, 7)
-θs   = range( 5.   , 85.   , 10)
-α13s = range(0.    , 50.   , 7)
-ϵ3s  = range(0.    , 30.   , 10)
+hs   = range( 3  , 15.   , 9)
+as   = range(0, 0.998, 7)
+θs   = range( 5.   , 85.   , 9)
+α13s = [-0.4]
+ϵ3s  = [-0.4]
 
 # Output file
-file = "output/spectra.csv"
+file = "data/NegativeDeformation.csv"
 df = DataFrame()
 i=1
 
 # Using 1000 bins for high resolution to reduce the effects of interpolation
-bins = collect(range(0.2, 1.5, 1000))
+bins = collect(range(0., 3., 1000))
+
+pbar = ProgressBar(total=9*9*7)
 
 # Looping through the parameter space, generating and saving spectra
 for a in as
@@ -44,6 +47,13 @@ for a in as
                 for ϵ3 in ϵ3s
                     combination = "$a, $h, $θ, $α13, $ϵ3"
                     try
+
+                        if (α13 >= 0) & (ϵ3 >= 0)
+                            throw(DomainError(-1, "An intentional error to avoid wasting compute time"))
+                        end
+
+                        update(pbar)
+
                         setup = Dict((
                             ["θ", θ], 
                             ["α13", α13], 
@@ -59,17 +69,20 @@ for a in as
                         flux = JohannsenParamVar(setup, bins, ComputeLineProfile)
                         insertcols!(df, i, combination => flux)
                         i+=1
-                    catch
+                    catch err
                         # If the parameter combination fails, noting this in a log file
-                        open("output/log.txt", "a") do io
+                        open("output/log3.txt", "a") do io
                             write(io, "$(now()): Combination ($combination) failed!\n")
+                        end
+                        open("output/err.txt", "a") do io
+                            write(io, "$(now()): $err\n")
                         end
                     end
                 end
             end
             # Saving to CSV periodically to avoid losing all data in the event of a crash etc.
-            CSV.write(file1, df)
-            df = DataFrame(CSV.File(file1))
+            CSV.write(file, df)
+            df = DataFrame(CSV.File(file))
         end
     end
 end

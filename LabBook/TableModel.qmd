@@ -61,3 +61,22 @@ The final iteration that needs to be made upon the data is to increase the domai
 All of these iterations were implemented and another dataset computed. At the time of writing these computations are still ongoing and therefore time was taken to clean up the plotting and do further reading.
 
 Functionality was then added to plot a contour plot of the fit statistic ($\chi^2$) for a pair of fit parameters. The fits are however not currently accurate enough to determine the functionality of this plot, thus this remains to be used.
+
+## Current Issues 2026/07/03
+
+The table model currently does not contain the full set of spectra for negative values of the deformation parameters. For high spin parameters, the code will sometimes fail to compute the line profile citing either one of two errors:
+```
+ErrorException("No boundaries for minimization could be determined. It is likely this configuration does not have an ISCO solution.")
+```
+or
+```
+DomainError([VALUE], "sqrt was called with a negative real argument but will only return a complex result if called with a complex argument. Try sqrt(Complex(x)).")
+```
+
+This occurs when attempting to use negative values below $\sim-0.4$ for either, or both, of the deformation parameters. This is likely either a bug, or an artefact of the Johannsen metric. The only currently known constraints on allowed values of $\alpha_{13}$ and $\epsilon_{3}$ are those stated in Equations @eq-Epsilon3Constraint and @eq-Alpha13Constraint, which all values used satisfy. The current working theory is thus that this may be a bug with `Gradus.jl` however this requires further research. 
+
+There also exists the restriction that $|a|<1$ to avoid a naked singularity @ConstrainingAlpha13, however this is once again satisfied by the used values.
+
+The table model is currently capable of extrapolating, which provides reasonable estimates of the line profile for negative values (see @fig-GradusTableCompare) however it would not be preferable to rely on extrapolation to constrain the parameters.
+
+![](images/GradusTableCompare.png){#fig-GradusTableCompare}

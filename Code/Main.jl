@@ -6,96 +6,77 @@ using SpectralFitting
 using Colors
 using Dates
 
-gr()
+pyplot()
 
 include("FittingModels.jl")
 include("ParameterVariations.jl")
 include("Defaults.jl")
 
+cm2in(x) = 0.3937008x
+cm2px(x) = Int(round(cm2in(x) * 100))
+
+default(titlefont = (12, "serif"), 
+    guidefont = (10, "serif"), 
+    legendfont = (8, "serif"), 
+    tickfont = (8, "serif"), 
+    gridalpha=0.,
+    minorticks=true,
+    dpi=300,
+    size=cm2px.((12,9))
+)
+
 E = 6.4
-a = 0.2
-h = 8.
-θ = 80.
-α13 = 3.
-ϵ3 = 0.
+a = 0.998
+h = 10.
+θ = 60.
+α13 = -0.4
+ϵ3 = -0.4
 
-# Model parameters
 setupDict = Dict((
-                  "M"   => 1., 
-                  "a"   => a, 
-                  "α13" => α13, 
-                  "α22" => 0., 
-                  "α52" => 0.,
-                  "ϵ3"  => ϵ3, 
-                  "θ"   => θ, 
-                  "h"   => h))
+     "M"   => 1., 
+     "a"   => a, 
+     "α13" => α13, 
+     "α22" => 0., 
+     "α52" => 0.,
+     "ϵ3"  => ϵ3, 
+     "θ"   => θ, 
+     "h"   => h
+))
 
+bins = range(3, 10, 1000)
 
-bins = range(1, 9, 999)
+model = XS_LampPostJohannsen(;K=1., E=E, a=a, h=h, θ=θ, α13=α13, ϵ3=ϵ3)
+plot(bins[1:end-1], invokemodel!(bins, model); label="Table", xlabel="Energy (keV)", ylabel="(arb units)")
 
 flux1 = JohannsenParamVar(setupDict, bins/6.4, ComputeLineProfile)
+plot!(bins, flux1; label="Gradus")
 
-plot(bins, flux1/maximum(flux1))
+##
+for α13 in 0:0.2:1., ϵ3 in 0:0.2:1.
+     α13 = -α13
+     ϵ3 = -ϵ3
+     println(α13, " ", ϵ3)
+     try
+          # Model parameters
+          setupDict = Dict((
+                         "M"   => 1., 
+                         "a"   => a, 
+                         "α13" => α13, 
+                         "α22" => 0., 
+                         "α52" => 0.,
+                         "ϵ3"  => ϵ3, 
+                         "θ"   => θ, 
+                         "h"   => h))
 
-model = XS_LampPostJohannsen(K=1., E=6.4, a=a, h=h, θ=θ, α13=α13, ϵ3=ϵ3)
 
-flux2 = invokemodel!(range(1, 9, 1000), model)
+          bins = range(1, 9, 999)
 
-plot!(bins, flux2/maximum(flux2))
+          flux1 = JohannsenParamVar(setupDict, bins/6.4, ComputeLineProfile)
 
-## =======================================================================
-# Parameter space
-# =======================================================================
-
-# Looping through the values for each variable and computing the line profile
-ParamLoop("θ", range(5, 85, 4), copy(defaultSetupDict); line=false, render=true, imageSize=(40,30))
-
-## =======================================================================
-# Fitting
-# =======================================================================
-
-t0 = now()
-
-# Model parameters
-setupDict = Dict((
-                  "M"   => 1., 
-                  "a"   => 0.8, 
-                  "α13" => 20., 
-                  "α22" => 0., 
-                  "α52" => 0.,
-                  "ϵ3"  => 4., 
-                  "θ"   => 70., 
-                  "h"   => 10.))
-
-# Generating bins
-bins = collect(range(0.2, 1.5, 100))
-
-# Simulating a noisy emission line
-flux = JohannsenParamVar(setupDict, bins, ComputeLineProfile; 
-                render = false, minrₑ = -1., maxrₑ = 400., 
-                numrₑ = 100)
-
-noise = 0.002
-noisyFlux = flux + rand(-noise:1e-8:noise, length(flux))
-noisyFlux[noisyFlux.<0] .= 0
-
-# Putting the flux into a data object
-data = InjectiveData(bins, noisyFlux, name="Noisy")
-
-plot(data, label="True", minorticks=4, gridalpha=0.5, 
-     minorgrid=true, minorgridalpha=0.3, xlabel="Energy", 
-     ylabel="Flux (arb. units)", markersize=3, c=:black)
-
-# Setting up the fitting problem
-model = LampPostJohannsen()
-prob = FittingProblem(model => data)
-
-# Fitting
-println("+ Fitting...")
-result = SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true)
-
-# Plotting
-show(plot!(result, c=:red))
-plot!(bins, flux, c=:blue)
-
-println("Time elapsed: $(now() - t0)")
+     catch err
+          println("Failed")
+          open("./err.txt", "a") do io
+               write(io, "$α13, $ϵ3\n$err\n")
+          end
+     end
+end

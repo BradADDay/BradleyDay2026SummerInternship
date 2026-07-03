@@ -39,13 +39,13 @@ end
 
 # Default constructor
 function XS_LampPostJohannsen(;
-    K = FitParam(1.),
-    E = FitParam(1., lower_limit=1., upper_limit=10., frozen=false),
-    a = FitParam(0.998, lower_limit=0, upper_limit=0.998, frozen=false),
-    h = FitParam(10., lower_limit=3., upper_limit=15., frozen=false),
-    θ = FitParam(60., lower_limit=5., upper_limit=85., frozen=false),
-    α13 = FitParam(0., lower_limit=-0.5, upper_limit=10., frozen=false),
-    ϵ3 = FitParam(0., lower_limit=-0.5, upper_limit=10., frozen=false)
+    K   = FitParam(1.),
+    E   = FitParam(1.,  lower_limit=1.,   upper_limit=10.,   frozen=false),
+    a   = FitParam(0.7, lower_limit=0,    upper_limit=0.998, frozen=false),
+    h   = FitParam(10., lower_limit=3.,   upper_limit=15.,   frozen=false),
+    θ   = FitParam(60., lower_limit=5.,   upper_limit=85.,   frozen=false),
+    α13 = FitParam(2.,  lower_limit=-0.4, upper_limit=10.,   frozen=false),
+    ϵ3  = FitParam(2.,  lower_limit=-0.4, upper_limit=10.,   frozen=false)
     )
 
     XS_LampPostJohannsen(table, K, E, a, h, θ, α13, ϵ3)
@@ -60,12 +60,37 @@ function SpectralFitting.invoke!(output, input, model::XS_LampPostJohannsen)
         # Scaling for energy
         domain = copy(input) / E
 
-        # Getting the line profile shape from the table
-        profile = SpectralFitting.interpolate_table!(table, a, h, θ, α13, ϵ3)
+        # Using Gradus if the deformation parameters are negative to avoid extrapolation
+        if ((α13 < 0) | (ϵ3 < 0)) & (a > 0.99)
 
-        # Interpolating the profile to get the result for the input domain
-        interp = linear_interpolation(table.data.energy_bins[1:end-1], profile, extrapolation_bc=Line())
-        flux = interp.(domain)
+            println(α13, " ", ϵ3, " ", a)
+
+            # Instantiating the metric, disk and observer position
+            m = JohannsenMetric(;a = a, α13 = α13, ϵ3 = ϵ3)
+            x = SVector(0.0, 1e4, deg2rad(θ), 0.0)
+            d = ThinDisc(0., Inf)
+
+            # Setting the inner radius to a multiple of the isco if set below zero
+            R_In = Gradus.isco(m)
+
+            # Generating an emissivity profile
+            emissivityModel = LampPostModel(h = h)
+            profile = emissivity_profile(m, d, emissivityModel)
+
+            # Computing the line profile
+            _, flux = lineprofile(m, x, d, profile; bins = domain, 
+                            method = TransferFunctionMethod(), minrₑ=R_In, 
+                            maxrₑ=400, numrₑ = 30)
+            
+            output .= flux[1:end-1]
+        else    
+            # Getting the line profile shape from the table
+            profile = SpectralFitting.interpolate_table!(table, a, h, θ, α13, ϵ3)
+
+            # Interpolating the profile to get the result for the input domain
+            interp = linear_interpolation(table.data.energy_bins[1:end-1], profile, extrapolation_bc=Line())
+            flux = interp.(domain)
+        end
 
         output .= flux[1:end-1]
     end

@@ -26,18 +26,22 @@ approx 1.4179 per parameter combo
 hs   = range( 3  , 15.   , 9)
 as   = range(0, 0.998, 7)
 θs   = range( 5.   , 85.   , 9)
-α13s = [-0.4]
-ϵ3s  = [-0.4]
+α13s = [-0.4, 0., 2., 4., 6., 8., 10.]
+ϵ3s  = [-0.4, 0., 2., 4., 6., 8., 10.]
+
+OUTDIR = "tabledata/"
+
+# mkdir(OUTDIR)
 
 # Output file
-file = "data/NegativeDeformation.csv"
 df = DataFrame()
 i=1
+j=0
 
 # Using 1000 bins for high resolution to reduce the effects of interpolation
 bins = collect(range(0., 3., 1000))
 
-pbar = ProgressBar(total=9*9*7)
+pbar = ProgressBar(total=length(hs)*length(as)*length(θs)*length(α13s)*length(ϵ3s))
 
 # Looping through the parameter space, generating and saving spectra
 for a in as
@@ -47,10 +51,6 @@ for a in as
                 for ϵ3 in ϵ3s
                     combination = "$a, $h, $θ, $α13, $ϵ3"
                     try
-
-                        if (α13 >= 0) & (ϵ3 >= 0)
-                            throw(DomainError(-1, "An intentional error to avoid wasting compute time"))
-                        end
 
                         update(pbar)
 
@@ -71,18 +71,19 @@ for a in as
                         i+=1
                     catch err
                         # If the parameter combination fails, noting this in a log file
-                        open("output/log3.txt", "a") do io
+                        open(joinpath(OUTDIR, "log.txt"), "a") do io
                             write(io, "$(now()): Combination ($combination) failed!\n")
                         end
-                        open("output/err.txt", "a") do io
+                        open(joinpath(OUTDIR, "err.txt"), "a") do io
                             write(io, "$(now()): $err\n")
                         end
                     end
                 end
             end
-            # Saving to CSV periodically to avoid losing all data in the event of a crash etc.
-            CSV.write(file, df)
-            df = DataFrame(CSV.File(file))
         end
     end
+    # Saving to CSV periodically to avoid losing all data in the event of a crash etc.
+    CSV.write(joinpath(OUTDIR, "$j"), df)
+    j+=1
+    df = DataFrame()
 end

@@ -23,9 +23,9 @@ approx 1.4179 per parameter combo
 """
 
 # Defining the parameter space
-hs   = range( 3  , 15.   , 9)
-as   = range(0, 0.998, 7)
-θs   = range( 5.   , 85.   , 9)
+hs   = range( 3  , 15.   , 7)
+as   = range(0, 0.998, 5)
+θs   = range( 5.   , 85.   , 7)
 α13s = [-0.4, 0., 2., 4., 6., 8., 10.]
 ϵ3s  = [-0.4, 0., 2., 4., 6., 8., 10.]
 

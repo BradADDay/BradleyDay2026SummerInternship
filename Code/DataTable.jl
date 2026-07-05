@@ -36,7 +36,7 @@ OUTDIR = "tabledata/"
 # Output file
 df = DataFrame()
 i=1
-j=0
+j=1
 
 # Using 1000 bins for high resolution to reduce the effects of interpolation
 bins = collect(range(0., 3., 1000))
@@ -86,4 +86,5 @@ for a in as
     CSV.write(joinpath(OUTDIR, "$j"), df)
     j+=1
     df = DataFrame()
+    i=1
 end

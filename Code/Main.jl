@@ -27,10 +27,10 @@ default(titlefont = (12, "serif"),
 
 E = 6.4
 a = 0.998
-h = 10.
-θ = 60.
-α13 = -0.4
-ϵ3 = -0.4
+h = 11.
+θ = 45.
+α13 = 5.
+ϵ3 = -1.
 
 setupDict = Dict((
      "M"   => 1., 
@@ -46,10 +46,11 @@ setupDict = Dict((
 bins = range(3, 10, 1000)
 
 model = XS_LampPostJohannsen(;K=1., E=E, a=a, h=h, θ=θ, α13=α13, ϵ3=ϵ3)
-plot(bins[1:end-1], invokemodel!(bins, model); label="Table", xlabel="Energy (keV)", ylabel="(arb units)")
+flux = invokemodel!(bins, model)
+plot(bins[1:end-1], flux/maximum(flux); label="Table", xlabel="Energy (keV)", ylabel="(arb units)")
 
 flux1 = JohannsenParamVar(setupDict, bins/6.4, ComputeLineProfile)
-plot!(bins, flux1; label="Gradus")
+plot!(bins, flux1/maximum(flux1); label="Gradus")
 
 ##
 for α13 in 0:0.2:1., ϵ3 in 0:0.2:1.

@@ -12,7 +12,7 @@ cm2in(x) = 0.3937008x
 cm2px(x) = Int(round(cm2in(x) * 100))
 
 # Loading in files
-include("FittingModelsCopy.jl")
+include("FittingModels.jl")
 include("ParameterVariations.jl")
 
 # Setting plotting defaults
@@ -42,10 +42,27 @@ const DATADIR = joinpath(ROOT, "data")
 const EXTENSION = "_sr_1000.pha"
 const OUTPUT = joinpath(ROOT, "output/")
 
+setindex(nt::NamedTuple, key::AbstractString, value) = merge(nt, (Symbol(key) => value,))
+
 function CompleteSound()
     """A function to play a sound when the program finishes running"""
     y, fs = wavread("$ROOT/Code/utils/tuturu.wav")
     wavplay(y, fs)
+end
+
+function Residuals(result, domain; bounds = (3, 10))
+    # select which result we want (only have one, but for generalisation to multi-model fits)
+    r = result
+    y = calculate_objective!(r, r.u)
+    obj, var = get_objective(r), get_objective_variance(r)
+    residuals = @. (obj - y) / sqrt(var)
+
+    # Filtering to include interesting region
+    residuals = residuals[(domain .> bounds[1]) .& (domain .< bounds[2])]
+    domain = domain[(domain .> bounds[1]) .& (domain .< bounds[2])]
+
+    # Putting into a data object
+    InjectiveData(domain, residuals, name="Residuals")
 end
 
 function LoadData(path; dataRange=(3,12))
@@ -88,7 +105,18 @@ function FitPowerLawLineProfile(dataA, dataB; kwargs...)
     prob = BindParameters(modelA, modelB, dataA, dataB)
 
     # Fitting the model to the data
-    SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true)
+    SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, maxIter=Int(1e4))
+end
+
+function FitPowerLawLineProfile(dataA, dataB, modelA, modelB)
+    """Fit a composite model of a power law and line profile 
+    from the Johannsen table model"""
+
+    # Binding the parameters together, excluding only the normalisation
+    prob = BindParameters(modelA, modelB, dataA, dataB)
+
+    # Fitting the model to the data
+    SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, maxIter=Int(1e4))
 end
 
 function DualSpectrumPlot(plotA, plotB; bounds=(5,7.5), title="", kwargs...)
@@ -117,7 +145,7 @@ function DualSpectrumPlot(plotA, plotB; bounds=(5,7.5), title="", kwargs...)
     return figure
 end
 
-function PlotSpectrum(data::SpectralData; xlabel=nothing, ylabel=nothing)
+function PlotSpectrum(data; xlabel=nothing, ylabel=nothing)
     """Plot a spectrum with a vertical line denoting the iron Kα line"""
 
     # Plotting the vertical line
@@ -155,47 +183,38 @@ function PlotFits(dataA, fitA, dataB, fitB; bounds=(3, 10), title="")
 
 end
 
-function SeparateModel(result, domain, model="J")
+function GetParams(result; model="J")
 
     values = result.u
 
     K, E, a, h, θ = values[1:5]
     K2, a2 = values[end-1:end]
 
+    LP = (K=K, E, a, h, θ)
+    PL = (K=K2, a=a2)
+
     if model == "J"
         α13, ϵ3 = values[6:7]
-        LP = XS_LampPostJohannsen(;K=K, E=E, a=a, h=h, θ=θ, α13=α13, ϵ3=ϵ3)
-    else
-        LP = XS_LampPostJohannsen(;K=K, E=E, a=a, h=h, θ=θ)
+        setindex(LP, "α13", α13)
+        setindex(LP, "ϵ3", ϵ3)
     end
-    
-    println(K2)
 
-    PL = invokemodel(domain, PowerLaw(K = FitParam(K2), a=FitParam(a2)))
+    LP, PL
+end
+        
+function SeparateModel(result, domain, model="J")
+
+    LPParams, PLParams = GetParams(result; model=model)
+
+    LP = XS_LampPostJohannsen(;LPParams...)
+
+    PL = PowerLaw(PLParams...)
 
     return LP, PL
 
 end
 
 function FitContour(result, params, param1, param2)
-
-    values1 = copy(result.u)
-    values2 = copy(result.u)
-
-    stats = fill(zeros(length(param1)), 2)
-
-    for i in eachindex(param1)
-        values1[params[1]] = param1[i]
-        values2[params[2]] = param2[i]
-        stats[1][i] = measure(ChiSquared(), result, values1)
-        stats[2][i] = measure(ChiSquared(), result, values2)
-    end
-
-    pairplot((;x=stats[1], y=stats[2]))
-    
-end
-
-#= function FitContour(result, params, param1, param2)
 
     values = copy(result.u)
 
@@ -222,7 +241,24 @@ end
         ylabel = params[4]
     )
     scatter!([result.u[params[1]]], [result.u[params[2]]])
-end =#
+end
+
+function PlotResiduals(data, fit)
+
+    fitPlot = PlotSpectrum(data, fit; ylabel=L"Flux (counts s$^{-1}$ keV$^{-1}$)")
+
+    residuals = Residuals(fit, SpectralFitting.plotting_domain(data))
+    resPlot = scatter(residuals; markershape=:cross, markersize=3, c=:black, msw=0, xlabel="Energy (keV)", label=nothing, ylabel="Residuals")
+    vline!(resPlot, [6.4]; line=(:black, :dash), label=nothing)
+    hline!(resPlot, [0]; c=:black, label=nothing)
+
+    layout = @layout [a{0.75h}; b{0.25h}]
+
+    figure = plot(fitPlot, resPlot; layout = layout)
+
+    display(figure)
+    
+end
 
 # ======================================================================================
 # Setup
@@ -242,54 +278,60 @@ files = [
 ]
 
 dataRange = (3,10)
-index = 1
+index = 2
 
-# Reading the data
-pathA = joinpath(DATADIR, "$(files[index])A01$(EXTENSION)")
-dataA = LoadData(pathA; dataRange)
-domainA = SpectralFitting.plotting_domain(dataA)
+for index in eachindex(files)
+    
+    # Reading the data
+    pathA = joinpath(DATADIR, "$(files[index])A01$(EXTENSION)")
+    dataA = LoadData(pathA; dataRange)
+    domainA = SpectralFitting.plotting_domain(dataA)
 
-pathB = joinpath(DATADIR, "$(files[index])B01$(EXTENSION)")
-dataB = LoadData(pathB; dataRange)
-domainB = SpectralFitting.plotting_domain(dataB)
+    pathB = joinpath(DATADIR, "$(files[index])B01$(EXTENSION)")
+    dataB = LoadData(pathB; dataRange)
+    domainB = SpectralFitting.plotting_domain(dataB)
 
-# Allowing the energy to vary between 6.4 keV (neutral/weakly ionised) and 7 (H-like iron)
-energy = FitParam(6.4, lower_limit=6.4, upper_limit=7, frozen=false)
+    # Allowing the energy to vary between 6.4 keV (neutral/weakly ionised) and 7 (H-like iron)
+    energy = FitParam(6.4, lower_limit=6.4, upper_limit=7, frozen=false)
 
-# ======================================================================================
-# Kerr metric
-# ======================================================================================
+    # ======================================================================================
+    # Kerr metric
+    # ======================================================================================
 
-println("Fitting Kerr...")
+    println("Fitting Kerr...")
 
-# Fitting the table model with the deformation parameters set to 0
-kerrResult = FitPowerLawLineProfile(dataA, dataB; E=copy(energy), α13=FitParam(0.0, frozen=true), ϵ3=FitParam(0.0, frozen=true))
+    # Fitting the table model with the deformation parameters set to 0
+    kerrResult = FitPowerLawLineProfile(dataA, dataB; E=copy(energy), α13=FitParam(0.0, frozen=true), ϵ3=FitParam(0.0, frozen=true))
 
-# Plotting
-PlotFits(dataA, kerrResult[1], dataB, kerrResult[2]; title="Kerr Fit")
+    # Plotting
+    PlotFits(dataA, kerrResult[1], dataB, kerrResult[2]; title="Kerr Fit")
+    PlotResiduals(dataA, kerrResult[1])
 
-kerrResult
+    LP, PL = GetParams(kerrResult; model="K")
 
-## ======================================================================================
-# Johannsen metric
-# ======================================================================================
+    # ======================================================================================
+    # Johannsen metric
+    # ======================================================================================
 
-println("Fitting Johannsen...")
+    println("Fitting Johannsen...")
 
-# Fitting the table model
-johannsenResult = FitPowerLawLineProfile(dataA, dataB; E=copy(energy))
+    # Fitting the table model
+    johannsenResult = FitPowerLawLineProfile(dataA, dataB; E=energy)
 
-# Plotting
-PlotFits(dataA, johannsenResult[1], dataB, johannsenResult[2]; title="Johannsen Fit")
+    # Plotting
+    PlotFits(dataA, johannsenResult[1], dataB, johannsenResult[2]; title="Johannsen Fit")
+    PlotResiduals(dataA, johannsenResult[1])
 
-## ======================================================================================
-# Saving
-# ======================================================================================
+    # ======================================================================================
+    # Saving
+    # ======================================================================================
 
-savefig(joinpath(OUTPUT, "TableKerr$(files[index]).png"))
-@save joinpath(OUTPUT, "TableKerrResult$(files[index]).bson") kerrResult
-savefig(joinpath(OUTPUT, "TableJohannsen$(files[index]).png"))
-@save joinpath(OUTPUT, "TableJohannsenResult$(files[index]).bson") johannsenResult
+    savefig(joinpath(OUTPUT, "TableKerr$(files[index]).png"))
+    @save joinpath(OUTPUT, "TableKerrResult$(files[index]).bson") kerrResult
+    savefig(joinpath(OUTPUT, "TableJohannsen$(files[index]).png"))
+    @save joinpath(OUTPUT, "TableJohannsenResult$(files[index]).bson") johannsenResult
+
+    close("all")
+end
 
 CompleteSound()
-

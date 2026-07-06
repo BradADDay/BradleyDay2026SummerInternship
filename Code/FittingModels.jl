@@ -44,8 +44,8 @@ function XS_LampPostJohannsen(;
     a = FitParam(0.998, lower_limit=0, upper_limit=0.998, frozen=false),
     h = FitParam(10., lower_limit=3., upper_limit=15., frozen=false),
     θ = FitParam(60., lower_limit=5., upper_limit=85., frozen=false),
-    α13 = FitParam(0., lower_limit=-0.5, upper_limit=10., frozen=false),
-    ϵ3 = FitParam(0., lower_limit=-0.5, upper_limit=10., frozen=false)
+    α13 = FitParam(0., lower_limit=-0.4, upper_limit=10., frozen=false),
+    ϵ3 = FitParam(0., lower_limit=-0.4, upper_limit=10., frozen=false)
     )
 
     XS_LampPostJohannsen(table, K, E, a, h, θ, α13, ϵ3)

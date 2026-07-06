@@ -23,11 +23,17 @@ approx 1.4179 per parameter combo
 """
 
 # Defining the parameter space
-hs   = range( 3  , 15.   , 7)
 as   = range(0, 0.998, 5)
+hs   = range( 3  , 15.   , 7)
 θs   = range( 5.   , 85.   , 7)
 α13s = [-0.4, 0., 2., 4., 6., 8., 10.]
 ϵ3s  = [-0.4, 0., 2., 4., 6., 8., 10.]
+
+for i in [as, hs, θs, α13s, ϵ3s]
+    open("vars.txt", "a") do io
+        write(io, "$(collect(i)),\n")
+    end
+end
 
 OUTDIR = "tabledata/"
 

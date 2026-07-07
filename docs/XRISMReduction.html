@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>6&nbsp; Developing and Migrating to a Table Model – Lab Book</title>
+<title>7&nbsp; Notes for the Reduction of XRISM Data – Lab Book</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -23,27 +23,42 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
 }
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -53,8 +68,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./XRISMReduction.html" rel="next">
-<link href="./FittingData.html" rel="prev">
+<link href="./references.html" rel="next">
+<link href="./TableModel.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -112,35 +127,6 @@ window.MathJax = {
 };
 </script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -315,7 +301,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./TableModel.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Developing and Migrating to a Table Model</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./XRISMReduction.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Notes for the Reduction of XRISM Data</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -382,14 +368,14 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./TableModel.html" class="sidebar-item-text sidebar-link active">
+  <a href="./TableModel.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Developing and Migrating to a Table Model</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./XRISMReduction.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">XRISMReduction.html</span></span></a>
+  <a href="./XRISMReduction.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Notes for the Reduction of XRISM Data</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -408,15 +394,15 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">6.1</span> Introduction</a></li>
-  <li><a href="#data-generation" id="toc-data-generation" class="nav-link" data-scroll-target="#data-generation"><span class="header-section-number">6.2</span> Data Generation</a></li>
-  <li><a href="#loading-into-fits-format" id="toc-loading-into-fits-format" class="nav-link" data-scroll-target="#loading-into-fits-format"><span class="header-section-number">6.3</span> Loading into FITS Format</a></li>
-  <li><a href="#the-model" id="toc-the-model" class="nav-link" data-scroll-target="#the-model"><span class="header-section-number">6.4</span> The Model</a>
+  <li><a href="#pipeline-scripts" id="toc-pipeline-scripts" class="nav-link active" data-scroll-target="#pipeline-scripts"><span class="header-section-number">7.1</span> Pipeline Scripts</a>
   <ul class="collapse">
-  <li><a href="#performance" id="toc-performance" class="nav-link" data-scroll-target="#performance"><span class="header-section-number">6.4.1</span> Performance</a></li>
+  <li><a href="#reprocessing" id="toc-reprocessing" class="nav-link" data-scroll-target="#reprocessing"><span class="header-section-number">7.1.1</span> Reprocessing:</a></li>
+  <li><a href="#analysis-setup" id="toc-analysis-setup" class="nav-link" data-scroll-target="#analysis-setup"><span class="header-section-number">7.1.2</span> Analysis Setup</a></li>
+  <li><a href="#psp-limit-checks" id="toc-psp-limit-checks" class="nav-link" data-scroll-target="#psp-limit-checks"><span class="header-section-number">7.1.3</span> PSP Limit Checks</a></li>
   </ul></li>
-  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps"><span class="header-section-number">6.5</span> Next Steps</a></li>
-  <li><a href="#current-issues-20260703" id="toc-current-issues-20260703" class="nav-link" data-scroll-target="#current-issues-20260703"><span class="header-section-number">6.6</span> Current Issues 2026/07/03</a></li>
+  <li><a href="#removing-anomalous-pixels-from-xtend-data" id="toc-removing-anomalous-pixels-from-xtend-data" class="nav-link" data-scroll-target="#removing-anomalous-pixels-from-xtend-data"><span class="header-section-number">7.2</span> Removing Anomalous Pixels from Xtend Data</a></li>
+  <li><a href="#proximity-and-rise-time-screening" id="toc-proximity-and-rise-time-screening" class="nav-link" data-scroll-target="#proximity-and-rise-time-screening"><span class="header-section-number">7.3</span> Proximity and Rise time screening</a></li>
+  <li><a href="#extract-broadband-images-and-establish-source-center-coordinates" id="toc-extract-broadband-images-and-establish-source-center-coordinates" class="nav-link" data-scroll-target="#extract-broadband-images-and-establish-source-center-coordinates"><span class="header-section-number">7.4</span> Extract Broadband Images and Establish Source Center Coordinates</a></li>
   </ul>
 </nav>
     </div>
@@ -426,7 +412,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Developing and Migrating to a Table Model</span></h1>
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Notes for the Reduction of XRISM Data</span></h1>
 </div>
 
 
@@ -443,137 +429,277 @@ window.Quarto = {
 </header>
 
 
-<section id="introduction" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">6.1</span> Introduction</h2>
-<p>Due to having to render the line profile through Gradus upon every iteration of the fit, the model took a significant amount of time to fit to the data. Thus other methods were looked into and it was decided to develop a table model, allowing for the pre-computation of the line profiles. The computed profiles could then be interpolated between for a given set of parameters, significantly speeding up computation. This would of course decrease the accuracy of the model, however the increased efficiency would likely be worth that loss.</p>
-<p>The structure for XSPEC table models is well documented at <a href="https://heasarc.gsfc.nasa.gov/FTP/caldb/docs/memos/ogip_92_009/ogip_92_009.pdf">XSPEC Table Models</a> <span class="citation" data-cites="XSPECModelSpecification">&nbsp;[<a href="references.html#ref-XSPECModelSpecification" role="doc-biblioref">1</a>]</span>, thus the model was constructed using this specification. <code>SpectralFitting.jl</code> also has compatibility with this model format, which made integration more viable (see <a href="https://github.com/JuliaAstro/SpectralFitting.jl/blob/main/src/meta-models/table-models.jl">here</a> for more <span class="citation" data-cites="SpectralFitting">&nbsp;[<a href="references.html#ref-SpectralFitting" role="doc-biblioref">2</a>]</span>).</p>
+<p>With HEASOFT and CalDB installed and instantiated:</p>
+<ul>
+<li>Data will have observation ID as top directory, e.g.&nbsp;000125000/</li>
+<li>Pipeline scripts must be run in a directory that contains this directory</li>
+</ul>
+<section id="pipeline-scripts" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="pipeline-scripts"><span class="header-section-number">7.1</span> Pipeline Scripts</h2>
+<p>For all following commands replace <code>000125000</code> with the obsid for your data. All commands here are run starting from the <code>000125000/</code> directory.</p>
+<section id="reprocessing" class="level3" data-number="7.1.1">
+<h3 data-number="7.1.1" class="anchored" data-anchor-id="reprocessing"><span class="header-section-number">7.1.1</span> Reprocessing:</h3>
+<p>In the directory above data directory run the following for the resolve data</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the pipeline</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">xapipeline</span> indir=000125000 outdir=000125000_rsl_reproc steminputs=xa000125000 stemoutputs=DEFAULT entry_stage=1 exit_stage=3 instrument=resolve verify_input=no create_ehkmkf=no calc_pointing=yes calc_optaxis=yes calc_gtilost=no calc_adrgti=no calc_mxsgti=no rsl_gainfile=CALDB calmethod=FE55 linetocorrect=MnKa seed=650504 numevent=1000 minevent=200 extraspread=40 spangti=no</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Pack and cleanup logs</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">7z</span> a 000125000_rsl_logs.7z <span class="pp">*</span>.log</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="pp">*</span>.log</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Enter the directory, remove duplicate files and gzip</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> 000125000_rsl_reproc</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="pp">*</span>.hk</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">gzip</span> <span class="pp">*</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ..</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Then for the Xtend data</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the pipeline</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">xapipeline</span> indir=000125000 outdir=000125000_xtd_reproc steminputs=xa000125000 stemoutputs=DEFAULT entry_stage=1 exit_stage=3 instrument=xtend verify_input=no create_ehkmkf=no calc_pointing=yes calc_optaxis=yes seed=650504</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Pack and cleanup logs</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">7z</span> a 000125000_xtd_logs.7z <span class="pp">*</span>.log</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="pp">*</span>.log</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Enter the directory, remove duplicate files and gzip</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> 000125000_xtd_reproc</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="pp">*</span>.hk</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">gzip</span> <span class="pp">*</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ..</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="data-generation" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="data-generation"><span class="header-section-number">6.2</span> Data Generation</h2>
-<p>The spectra for the model were simply generated by looping through a defined parameter space, with a given number of values for each of the 5 parameters. The values selected were defined as follows</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Parameter</th>
-<th>Lower Bound</th>
-<th>Upper Bound</th>
-<th>Number</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">\(a\)</span></td>
-<td>-0.998</td>
-<td>0.998</td>
-<td>7</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(h\)</span></td>
-<td>1.5</td>
-<td>30</td>
-<td>10</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\theta\)</span></td>
-<td>5</td>
-<td>85</td>
-<td>10</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\alpha_{13}\)</span></td>
-<td>0</td>
-<td>50</td>
-<td>7</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\epsilon_3\)</span></td>
-<td>0</td>
-<td>30</td>
-<td>10</td>
-</tr>
-</tbody>
-</table>
-<p>This gave a total of 49,000 combinations to loop through. Seven values were used for both <span class="math inline">\(a\)</span> and <span class="math inline">\(\alpha_{13}\)</span> as they had the smallest, and most predictable effect on the line profile, respectively. In a later iteration of this model it would be ideal to have a larger parameter space to reduce the innacuracies of interpolation, however for a test case it was necessary to keep compute times down. The line profiles were stored in columns of a CSV with the header containing the parameter information.</p>
-<p>Certain parameter combinations would fail to compute, and therefore a log file was kept, noting the combination and when it failed. This allowed the computations to run over night without risk of an error. The final compute time for this data generation was 16 hours. 3,500 of the 49,000 did not compute correctly, thus there is 45,500 datapoints in the grid.</p>
+<section id="analysis-setup" class="level3" data-number="7.1.2">
+<h3 data-number="7.1.2" class="anchored" data-anchor-id="analysis-setup"><span class="header-section-number">7.1.2</span> Analysis Setup</h3>
+<p>Then make a directory for the analysis and copy the following files</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> analysis</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> 000125000_xtd_reproc/<span class="pp">*</span>_cl.evt.gz analysis/</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> 000125000_rsl_reproc/<span class="pp">*</span>_cl.evt.gz analysis/</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> 000125000_rsl_reproc/xa000125000.ehk.gz 000125000_rsl_reproc/xa000125000rsl_px1000_exp.gti.gz 000125000_xtd_reproc/xa000125000xtd_p031100010.bimg.gz analysis/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="loading-into-fits-format" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="loading-into-fits-format"><span class="header-section-number">6.3</span> Loading into FITS Format</h2>
-<p>This data was then loaded into a FITS file following the XSPEC model format using the python wrapper for the <code>heasp</code> C library, <code>heasoftpy</code> (see the <a href="https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/headas/heasp/node2.html">documentation</a> for more information). The model specification requires that the grid be rectilinear <span class="citation" data-cites="XSPECModelSpecification">&nbsp;[<a href="references.html#ref-XSPECModelSpecification" role="doc-biblioref">1</a>]</span>, thus it was not possible to simply disregard the failed runs, and the spectra for these combinations was set to be zeroed out. This was determined to be acceptable as the majority of the failed runs had large <span class="math inline">\(\alpha_{13}\)</span> or <span class="math inline">\(\epsilon_3\)</span>, which from earlier testing was noted to be unlikely during fitting, thus the failed combinations would be unlikely to be used for interpolation.</p>
+<section id="psp-limit-checks" class="level3" data-number="7.1.3">
+<h3 data-number="7.1.3" class="anchored" data-anchor-id="psp-limit-checks"><span class="header-section-number">7.1.3</span> PSP Limit Checks</h3>
+<p>Run PSP limit check to see if the unscreened count rate exceeds the psp limit.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rslbratios</span> infile=xa000125000rsl_p0px1000_uf.evt.gz filetype=uf outroot=rsl000125000_ufbr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This gives a info on if quadrants exceed 50 cts s^-1, which makes the data unusable. Next run rslbratios on the cleaned resolve data:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rslbratios</span> infile=xa000125000rsl_p0px1000_cl.evt.gz filetype=cl outroot=rsl000125000_clbr lcbin=128.0</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This gives the same info but for the cleaned data and outputs the following which will be used later</p>
+<ul>
+<li><code>rsl000125000_clbr_2keVto12keV_hist.fits</code>: Observed vs.&nbsp;predicted branching ratios in the energy range specified by the “eband” parameter</li>
+<li><code>rsl000125000_clbr_full_lc.fits</code>: Full array light curves by grade</li>
+<li><code>rsl000125000_clbr_pix_lc.fits</code>: Per-pixel light curves by grade</li>
+<li><code>rsl000125000_clbr_gradeFrac_lc.fits</code>: Grade fractions versus time</li>
+<li><code>rsl000125000_clbr_2keVto12keV_pixMap.img</code>: 20 images of counts by grade, and grade fractions for two energy bands</li>
+</ul>
 </section>
-<section id="the-model" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="the-model"><span class="header-section-number">6.4</span> The Model</h2>
-<p>To create a model in SpectralFitting using the table, the data was loaded into a <code>TableModelData</code> struct. This could then be wrapped using <code>TableModelInterpolation</code> such that it can work with the <code>TableModelInterpolation</code> function. This functionality made it trivial to set up the interpolation through the parameter grid by simply calling</p>
-<pre><code>SpectralFitting.interpolate_table!(table, a, h, θ, α13, ϵ3)</code></pre>
-<p>This returned a spectrum with 1000 datapoints, which could then be interpolated over the domain of the input data. With this architecture it was simple to fit the data as previous.</p>
-<section id="performance" class="level3" data-number="6.4.1">
-<h3 data-number="6.4.1" class="anchored" data-anchor-id="performance"><span class="header-section-number">6.4.1</span> Performance</h3>
-<p>Using the nu80402315002 dataset as before, the new model yielded the following results.</p>
+</section>
+<section id="removing-anomalous-pixels-from-xtend-data" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="removing-anomalous-pixels-from-xtend-data"><span class="header-section-number">7.2</span> Removing Anomalous Pixels from Xtend Data</h2>
+<p>All following commands are run from the <code>000125000_xtd_reproc/</code> directory</p>
+<p>First generate region files using ds9, viewing the image in DET coordinates with the command.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ds9</span> <span class="st">"xa000125000xtd_p031100010_cl.evt.gz[bin=detx,dety]"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/TableKerrnu80402315002.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="The table model result for the Kerr metric"><img src="images/TableKerrnu80402315002.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The table model result for the Kerr metric"></a></p>
+<p><a href="images/Regions.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="The regions used."><img src="images/Regions.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The regions used."></a></p>
 </figure>
 </div>
-<figcaption>The table model result for the Kerr metric</figcaption>
+<figcaption>The regions used.</figcaption>
 </figure>
 </div>
+<p>Three regions were selected and labelled as follows:</p>
+<ul>
+<li>White: <code>1_bottom.reg</code></li>
+<li>Green: <code>1_src.reg</code></li>
+<li>Cyan: <code>1_top.reg</code></li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">punlearn</span> xtdpixclip</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">xtdpixclip</span> evtinfile=<span class="st">"xa000125000xtd_p031100010_cl.evt.gz"</span> outroot=<span class="st">"xa000125000xtd_p031100010_cl"</span> pmode=histo nhistbins=-1 incregionfiles=<span class="st">"1_top.reg,1_bottom.reg,1_src.reg"</span> emax=24.575 chatter=2 clobber=yes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The above is used to determine the thresholds to use as cutoffs for anomolous pixels. The output histograms are shown below</p>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/TableJohannsennu80402315002.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="The table model result for the Johannsen metric"><img src="images/TableJohannsennu80402315002.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The table model result for the Johannsen metric"></a></p>
+<p><a href="images/BottomRegion.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="The bottom region histogram"><img src="images/BottomRegion.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The bottom region histogram"></a></p>
 </figure>
 </div>
-<figcaption>The table model result for the Johannsen metric</figcaption>
+<figcaption>The bottom region histogram</figcaption>
 </figure>
 </div>
-<p>Comparing to the previous fits, the <span class="math inline">\(\chi^2\)</span> value for both of these fits were surprisingly improved. The Kerr fit was completed by freezing the deformation parameters at 0.</p>
-<p>These fits took only 30 seconds to fit and plot both metrics, which was significantly faster than previous which could take an hour or more for a single fit.</p>
-</section>
-</section>
-<section id="next-steps" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="next-steps"><span class="header-section-number">6.5</span> Next Steps</h2>
-<p>After review of the log file, it was found that a lot of the cases where the deformation parameters were zero failed. This is significant as it implies that many of the Kerr model interpolations are innacurate due to the “correction” method used (setting missing values to zero). Using code to parse the unique values for each of the 5 parameters, it was found that every instance of failure had <span class="math inline">\(h=1.5\)</span>. It was thus decided that upon the next iteration of the model, the lower bound of <span class="math inline">\(h\)</span> would be set to 3. This value was determined after some brief testing with the failed runs, manually setting <span class="math inline">\(h=3\)</span>. <span class="math inline">\(h=2\)</span> was also attempted, however this similarly caused errors.</p>
-<p>Building on what was discussed in the previous chapter regarding the lower bounds for the parameters, it was also tested whether a value of -1 computed correctly for both of the deformation parameters. This was successful and thus a partial implementation of these bounds can be completed.</p>
-<p>Further testing was also conducted in the parameter space of <span class="math inline">\(a\)</span> where it was found that the line profile does not change with the sign of <span class="math inline">\(a\)</span>. This will allow for much more resolution without increasing the length of computation.</p>
-<p>To use the negative deformation parameters, their allowed values must be reduced as it is necessary to have confidence in the deformation = 0 (Kerr) cases. They will therefore take the values <span class="math inline">\(\alpha_{13}, \epsilon_3 \in [-1, 10], \mathbb{Z}\)</span>. The other variables will take <span class="math inline">\(h\in[3,15]\)</span>, <span class="math inline">\(a\in[0,0.998]\)</span> and <span class="math inline">\(\theta\in [5,85]\)</span>. Thus 7 values will be taken for <span class="math inline">\(a\)</span>, 12 for the deformation parameters, and 9 for <span class="math inline">\(h,\;\theta\)</span>, giving a total size of 81648 for the table.</p>
-<p>The final iteration that needs to be made upon the data is to increase the domain, as the model is currently forced to extrapolate causing unexpected issues, likely forcing the fitting to take worse values to avoid these errors.</p>
-<p>All of these iterations were implemented and another dataset computed. At the time of writing these computations are still ongoing and therefore time was taken to clean up the plotting and do further reading.</p>
-<p>Functionality was then added to plot a contour plot of the fit statistic (<span class="math inline">\(\chi^2\)</span>) for a pair of fit parameters. The fits are however not currently accurate enough to determine the functionality of this plot, thus this remains to be used.</p>
-</section>
-<section id="current-issues-20260703" class="level2" data-number="6.6">
-<h2 data-number="6.6" class="anchored" data-anchor-id="current-issues-20260703"><span class="header-section-number">6.6</span> Current Issues 2026/07/03</h2>
-<p>The table model currently does not contain the full set of spectra for negative values of the deformation parameters. For high spin parameters, the code will sometimes fail to compute the line profile citing either one of two errors:</p>
-<pre><code>ErrorException("No boundaries for minimization could be determined. It is likely this configuration does not have an ISCO solution.")</code></pre>
-<p>or</p>
-<pre><code>DomainError([VALUE], "sqrt was called with a negative real argument but will only return a complex result if called with a complex argument. Try sqrt(Complex(x)).")</code></pre>
-<p>This occurs when attempting to use negative values below <span class="math inline">\(\sim-0.4\)</span> for either, or both, of the deformation parameters. This is likely either a bug, or an artefact of the Johannsen metric. The only currently known constraints on allowed values of <span class="math inline">\(\alpha_{13}\)</span> and <span class="math inline">\(\epsilon_{3}\)</span> are those stated in Equations <a href="FittingData.html#eq-Epsilon3Constraint" class="quarto-xref">Equation&nbsp;<span>5.1</span></a> and <a href="FittingData.html#eq-Alpha13Constraint" class="quarto-xref">Equation&nbsp;<span>5.2</span></a>, which all values used satisfy. The current working theory is thus that this may be a bug with <code>Gradus.jl</code> however this requires further research.</p>
-<p>There also exists the restriction that <span class="math inline">\(|a|&lt;1\)</span> to avoid a naked singularity <span class="citation" data-cites="ConstrainingAlpha13">&nbsp;[<a href="references.html#ref-ConstrainingAlpha13" role="doc-biblioref">3</a>]</span>, however this is once again satisfied by the used values.</p>
-<p>The table model is currently capable of extrapolating, which provides reasonable estimates of the line profile for negative values (see <a href="#fig-GradusTableCompare" class="quarto-xref">Figure&nbsp;<span>6.1</span></a>) however it would not be preferable to rely on extrapolation to constrain the parameters.</p>
-<div id="fig-GradusTableCompare" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-GradusTableCompare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="images/GradusTableCompare.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;6.1: "><img src="images/GradusTableCompare.png" id="fig-GradusTableCompare" class="img-fluid figure-img"></a>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-GradusTableCompare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.1
-</figcaption>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/SourceRegion.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="The source region histogram"><img src="images/SourceRegion.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The source region histogram"></a></p>
 </figure>
 </div>
+<figcaption>The source region histogram</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/TopRegion.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="The top region histogram"><img src="images/TopRegion.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The top region histogram"></a></p>
+</figure>
+</div>
+<figcaption>The top region histogram</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>from these histograms it is possible to select the thresholds to cut off anomolous data. For the two non-source regions a threshold of 8 was selected, and for the source region 1000 was selected. With the regions selected run</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">punlearn</span> xtdpixclip</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">xtdpixclip</span> evtinfile=<span class="st">"xa000125000xtd_p031100010_cl.evt.gz"</span> outroot=<span class="st">"xa000125000xtd_p031100010_cl"</span> pmode=apply thresholds=<span class="st">"20,20,600"</span> incregionfiles=<span class="st">"1_top.reg,1_bottom.reg,1_src.reg"</span> emax=24.575 chatter=2 clobber=yes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/Raw.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="The Raw image"><img src="images/Raw.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The Raw image"></a></p>
+</figure>
+</div>
+<figcaption>The Raw image</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/Clean.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="The cleaned image"><img src="images/Clean.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The cleaned image"></a></p>
+</figure>
+</div>
+<figcaption>The cleaned image</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/BadPX.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="The filtered out pixels"><img src="images/BadPX.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The filtered out pixels"></a></p>
+</figure>
+</div>
+<figcaption>The filtered out pixels</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="proximity-and-rise-time-screening" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="proximity-and-rise-time-screening"><span class="header-section-number">7.3</span> Proximity and Rise time screening</h2>
+<ul>
+<li>Proximity screening: Removing frame events based on the unlikelihood of events happening too close together in a given time interval. This must be balanced against the loss of counts.</li>
+<li>Rise-time screening:</li>
+</ul>
+<p>The effect of both can be previewed through the FITS files</p>
+<pre><code>rsl000125000_clbr_prox_Hp_spectra.fits
+rsl000125000_clbr_rise_Hp_spectra.fits</code></pre>
+<p>These were examined using the following julia script</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode julia eval-false code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">FITSFiles</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Plots</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>file <span class="op">=</span> <span class="fu">fits</span>(<span class="st">"/home/brad/Downloads/000125000_rsl_reproc/rsl000125000_clbr_rise_Hp_spectra.fits"</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">display</span>(<span class="fu">plot</span>(file[<span class="fl">3</span>].data.PI, file[<span class="fl">3</span>].data.DIFF; xlabel<span class="op">=</span><span class="st">"PI Channel"</span>, ylabel<span class="op">=</span><span class="st">"Difference (counts)"</span>, title<span class="op">=</span><span class="st">"Rise-Time Screening"</span>, label<span class="op">=</span><span class="cn">nothing</span>))</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>file <span class="op">=</span> <span class="fu">fits</span>(<span class="st">"/home/brad/Downloads/000125000_rsl_reproc/rsl000125000_clbr_prox_Hp_spectra.fits"</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="fu">display</span>(<span class="fu">plot</span>(file[<span class="fl">3</span>].data.PI, file[<span class="fl">3</span>].data.DIFF; xlabel<span class="op">=</span><span class="st">"PI Channel"</span>, ylabel<span class="op">=</span><span class="st">"Difference (counts)"</span>, title<span class="op">=</span><span class="st">"Proximity Screening"</span>, label<span class="op">=</span><span class="cn">nothing</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/RiseTime.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="The Rise-time filtering difference"><img src="images/RiseTime.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The Rise-time filtering difference"></a></p>
+</figure>
+</div>
+<figcaption>The Rise-time filtering difference</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/Proximity.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="The Proximity filtering difference"><img src="images/Proximity.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The Proximity filtering difference"></a></p>
+</figure>
+</div>
+<figcaption>The Proximity filtering difference</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>The losses for each were determined to be worth it for this dataset, thus the both filters were applied with the command:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ftcopy</span> infile=<span class="st">"xa000125000rsl_p0px1000_cl.evt[EVENTS][(PI&gt;=600) &amp;&amp; (((((RISE_TIME+0.00075*DERIV_MAX)&gt;46)&amp;&amp;((RISE_TIME+0.00075*DERIV_MAX)&lt;58))&amp;&amp;ITYPE&lt;4)||(ITYPE==4))&amp;&amp;STATUS[4]==b0]"</span> outfile=xa000125000rsl_p0px1000_cl2.evt copyall=yes clobber=yes history=yes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>To skip proximity filtering you can omit <code>&amp;&amp;STATUS[4]==b0</code>.</p>
+</section>
+<section id="extract-broadband-images-and-establish-source-center-coordinates" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="extract-broadband-images-and-establish-source-center-coordinates"><span class="header-section-number">7.4</span> Extract Broadband Images and Establish Source Center Coordinates</h2>
+<ul>
+<li>Check the value of the EXPOSURE keyword in the cleaned event files, if the exposure time is unexpectedly low then consult section 9 of the <a href="https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/quickstart/xrism_quick_start_guide_v3p2_251204a.pdf">XRISM QSG</a>.</li>
+<li>You should now have the following files
+<ul>
+<li><code>xa000125000rsl_p0px1000_cl2.evt</code> (Resolve) and</li>
+<li><code>xa000125000xtd_p031100010_cl.evt</code> or <code>xa000125000xtd_p031100010_xpc_clnevt.fits</code> (Xtend)</li>
+</ul></li>
+</ul>
+<p>Start XSELECT and make a 2-10 keV resolve image in DET coordinates as:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">terminal</span><span class="op">&gt;</span> xselect</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">xselect</span><span class="op">&gt;</span> read eve xa000125000rsl_p0px1000_cl2.evt .</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">xselect</span><span class="op">&gt;</span> set image DET</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="ex">xselect</span><span class="op">&gt;</span> filter pha_cutoff 4000 20000</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="ex">xselect</span><span class="op">&gt;</span> extr image</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="ex">xselect</span><span class="op">&gt;</span> save image xa000125000rsl_p0px1000_detimg.fits</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The centre should be close to (3.5, 3.5), we only need to estimate this approximately as it is used as a sanity check against the RA and DEC coordinates. For most standard observations we can simply assume this centre coordinate.</p>
+<p>Next copy over a resolve region file</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="va">$HEADAS</span>/refdata/region_RSL_det.reg .</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>and make another region file <code>exclude_calsource.reg</code> containing</p>
+<pre><code>physical
+-circle(920.0,1530.0,92.0)
+-circle(919.0,271.0,91.0)</code></pre>
+<p>Next make a 0.5-10 keV Xtend image in DET coordinates</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xselect</span><span class="op">&gt;</span> clear all</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">xselect</span><span class="op">&gt;</span> read eve xa000125000xtd_p031100010_xpc_clnevt.fits.gz .</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">xselect</span><span class="op">&gt;</span> set image DET</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="ex">xselect</span><span class="op">&gt;</span> filter region exclude_calsources.reg</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="ex">xselect</span><span class="op">&gt;</span> filter pha_cutoff 83 1667</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="ex">xselect</span><span class="op">&gt;</span> extr image</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="ex">xselect</span><span class="op">&gt;</span> save image xa000125000xtd_p031100010_detimg.fits</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Now we can estimate the centroid of the source in DET coordinates using <code>ds9</code>, it is reccommended to use a rectangle of length 5 arcmin and width as wide as possible for 1/8 Window mode images. For full window mode it is reccommended to use a circle of radius 2.5 arcmin. The regions selected here are shown below</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/SourceBgdRegions.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="images/SourceBgdRegions.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
+</figure>
+</div>
+<p>and were saved as</p>
+<pre><code>region_000125000xtd_src.reg
+region_000125000xtd_bgd.reg</code></pre>
 
 
-<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
-<div id="ref-XSPECModelSpecification" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">K. A. Arnaud, <em><a href="https://heasarc.gsfc.nasa.gov/docs/heasarc/caldb/docs/memos/ogip_92_009/ogip_92_009.pdf">The File Format for XSPEC Table Models</a></em> (NASA, Greenbelt, MD20771, 2021).</div>
-</div>
-<div id="ref-SpectralFitting" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[2] </div><div class="csl-right-inline"><a href="https://doi.org/10.5281/zenodo.17390971">F. Baker and A. Young, Zenodo (2025)</a>.</div>
-</div>
-<div id="ref-ConstrainingAlpha13" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[3] </div><div class="csl-right-inline"><a href="https://doi.org/10.1103/PhysRevD.99.083001">A. Tripathi <em>et al.</em>, Phys. Rev. D <strong>99</strong>, 083001 (2019)</a>.</div>
-</div>
-</div>
 </section>
 
 </main> <!-- /main -->
@@ -992,13 +1118,13 @@ Figure&nbsp;6.1
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./FittingData.html" class="pagination-link" aria-label="Fitting to Data">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fitting to Data</span></span>
+      <a href="./TableModel.html" class="pagination-link" aria-label="Developing and Migrating to a Table Model">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Developing and Migrating to a Table Model</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./XRISMReduction.html" class="pagination-link" aria-label="XRISMReduction.html">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">XRISMReduction.html</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

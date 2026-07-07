@@ -188,5 +188,65 @@
     "crumbs": [
       "References"
     ]
+  },
+  {
+    "objectID": "XRISMReduction.html",
+    "href": "XRISMReduction.html",
+    "title": "7  Notes for the Reduction of XRISM Data",
+    "section": "",
+    "text": "7.1 Pipeline Scripts\nWith HEASOFT and CalDB installed and instantiated:\nFor all following commands replace 000125000 with the obsid for your data. All commands here are run starting from the 000125000/ directory.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Notes for the Reduction of XRISM Data</span>"
+    ]
+  },
+  {
+    "objectID": "XRISMReduction.html#pipelines",
+    "href": "XRISMReduction.html#pipelines",
+    "title": "7  Notes for the Reduction of XRISM Data",
+    "section": "",
+    "text": "7.1.1 Reprocessing:\nIn the directory above data directory run the following for the resolve data\n# Run the pipeline\nxapipeline indir=000125000 outdir=000125000_rsl_reproc steminputs=xa000125000 stemoutputs=DEFAULT entry_stage=1 exit_stage=3 instrument=resolve verify_input=no create_ehkmkf=no calc_pointing=yes calc_optaxis=yes calc_gtilost=no calc_adrgti=no calc_mxsgti=no rsl_gainfile=CALDB calmethod=FE55 linetocorrect=MnKa seed=650504 numevent=1000 minevent=200 extraspread=40 spangti=no\n\n# Pack and cleanup logs\n7z a 000125000_rsl_logs.7z *.log\nrm *.log\n\n# Enter the directory, remove duplicate files and gzip\ncd 000125000_rsl_reproc\nrm *.hk\ngzip *\n\ncd ..\nThen for the Xtend data\n# Run the pipeline\nxapipeline indir=000125000 outdir=000125000_xtd_reproc steminputs=xa000125000 stemoutputs=DEFAULT entry_stage=1 exit_stage=3 instrument=xtend verify_input=no create_ehkmkf=no calc_pointing=yes calc_optaxis=yes seed=650504\n\n# Pack and cleanup logs\n7z a 000125000_xtd_logs.7z *.log\nrm *.log\n\n# Enter the directory, remove duplicate files and gzip\ncd 000125000_xtd_reproc\nrm *.hk\ngzip *\n\ncd ..\nThen make a directory for the analysis and copy the following files\nmkdir analysis\n\ncp 000125000_xtd_reproc/*_cl.evt.gz analysis/\ncp 000125000_rsl_reproc/*_cl.evt.gz analysis/\ncp 000125000_rsl_reproc/xa000125000.ehk.gz 000125000_rsl_reproc/xa000125000rsl_px1000_exp.gti.gz 000125000_xtd_reproc/xa000125000xtd_p031100010.bimg.gz analysis/\n\nRun PSP limit check to see if the unscreened count rate exceeds the psp limit\nrslbratios infile=xa000125000rsl_p0px1000_uf.evt.gz filetype=uf outroot=rsl000125000_ufbr\nThis gives a info on if quadrants exceed 50 cts s^-1, which makes the data unusable\nRun rslbratios on the cleaned resolve data\nrslbratios infile=xa000125000rsl_p0px1000_cl.evt.gz filetype=cl outroot=rsl000125000_clbr lcbin=128.0\nThis gives the same info but for the cleaned data\nrsl000125000_clbr_2keVto12keV_hist.fits: Observed vs. predicted branching ratios in the energy range specified by the “eband” parameter rsl000125000_clbr_full_lc.fits: Full array light curves by grade rsl000125000_clbr_pix_lc.fits: Per-pixel light curves by grade rsl000125000_clbr_gradeFrac_lc.fits: Grade fractions versus time rsl000125000_clbr_2keVto12keV_pixMap.img: 20 images of counts by grade, and grade fractions for two energy bands\nThen\n\nGenerate region files using ds9\n\npunlearn xtdpixclip xtdpixclip evtinfile=“xa000125000xtd_p031100010_cl.evt.gz” outroot=“xa000125000xtd_p031100010_cl” pmode=histo nhistbins=-1 incregionfiles=“1_top.reg,1_bottom.reg,1_src.reg” emax=24.575 chatter=2 clobber=yes",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Notes for the Reduction of XRISM Data</span>"
+    ]
+  },
+  {
+    "objectID": "XRISMReduction.html#pipeline-scripts",
+    "href": "XRISMReduction.html#pipeline-scripts",
+    "title": "7  Notes for the Reduction of XRISM Data",
+    "section": "",
+    "text": "7.1.1 Reprocessing:\nIn the directory above data directory run the following for the resolve data\n# Run the pipeline\nxapipeline indir=000125000 outdir=000125000_rsl_reproc steminputs=xa000125000 stemoutputs=DEFAULT entry_stage=1 exit_stage=3 instrument=resolve verify_input=no create_ehkmkf=no calc_pointing=yes calc_optaxis=yes calc_gtilost=no calc_adrgti=no calc_mxsgti=no rsl_gainfile=CALDB calmethod=FE55 linetocorrect=MnKa seed=650504 numevent=1000 minevent=200 extraspread=40 spangti=no\n\n# Pack and cleanup logs\n7z a 000125000_rsl_logs.7z *.log\nrm *.log\n\n# Enter the directory, remove duplicate files and gzip\ncd 000125000_rsl_reproc\nrm *.hk\ngzip *\n\ncd ..\nThen for the Xtend data\n# Run the pipeline\nxapipeline indir=000125000 outdir=000125000_xtd_reproc steminputs=xa000125000 stemoutputs=DEFAULT entry_stage=1 exit_stage=3 instrument=xtend verify_input=no create_ehkmkf=no calc_pointing=yes calc_optaxis=yes seed=650504\n\n# Pack and cleanup logs\n7z a 000125000_xtd_logs.7z *.log\nrm *.log\n\n# Enter the directory, remove duplicate files and gzip\ncd 000125000_xtd_reproc\nrm *.hk\ngzip *\n\ncd ..\n\n\n7.1.2 Analysis Setup\nThen make a directory for the analysis and copy the following files\nmkdir analysis\n\ncp 000125000_xtd_reproc/*_cl.evt.gz analysis/\ncp 000125000_rsl_reproc/*_cl.evt.gz analysis/\ncp 000125000_rsl_reproc/xa000125000.ehk.gz 000125000_rsl_reproc/xa000125000rsl_px1000_exp.gti.gz 000125000_xtd_reproc/xa000125000xtd_p031100010.bimg.gz analysis/\n\n\n7.1.3 PSP Limit Checks\nRun PSP limit check to see if the unscreened count rate exceeds the psp limit.\nrslbratios infile=xa000125000rsl_p0px1000_uf.evt.gz filetype=uf outroot=rsl000125000_ufbr\nThis gives a info on if quadrants exceed 50 cts s^-1, which makes the data unusable. Next run rslbratios on the cleaned resolve data:\nrslbratios infile=xa000125000rsl_p0px1000_cl.evt.gz filetype=cl outroot=rsl000125000_clbr lcbin=128.0\nThis gives the same info but for the cleaned data and outputs the following which will be used later\n\nrsl000125000_clbr_2keVto12keV_hist.fits: Observed vs. predicted branching ratios in the energy range specified by the “eband” parameter\nrsl000125000_clbr_full_lc.fits: Full array light curves by grade\nrsl000125000_clbr_pix_lc.fits: Per-pixel light curves by grade\nrsl000125000_clbr_gradeFrac_lc.fits: Grade fractions versus time\nrsl000125000_clbr_2keVto12keV_pixMap.img: 20 images of counts by grade, and grade fractions for two energy bands",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Notes for the Reduction of XRISM Data</span>"
+    ]
+  },
+  {
+    "objectID": "XRISMReduction.html#removing-anomalous-pixels-from-xtend-data",
+    "href": "XRISMReduction.html#removing-anomalous-pixels-from-xtend-data",
+    "title": "7  Notes for the Reduction of XRISM Data",
+    "section": "7.2 Removing Anomalous Pixels from Xtend Data",
+    "text": "7.2 Removing Anomalous Pixels from Xtend Data\nAll following commands are run from the 000125000_xtd_reproc/ directory\nFirst generate region files using ds9, viewing the image in DET coordinates with the command.\nds9 \"xa000125000xtd_p031100010_cl.evt.gz[bin=detx,dety]\"\n\n\n\n\n\n\n\nThe regions used.\n\n\nThree regions were selected and labelled as follows:\n\nWhite: 1_bottom.reg\nGreen: 1_src.reg\nCyan: 1_top.reg\n\npunlearn xtdpixclip\nxtdpixclip evtinfile=\"xa000125000xtd_p031100010_cl.evt.gz\" outroot=\"xa000125000xtd_p031100010_cl\" pmode=histo nhistbins=-1 incregionfiles=\"1_top.reg,1_bottom.reg,1_src.reg\" emax=24.575 chatter=2 clobber=yes\nThe above is used to determine the thresholds to use as cutoffs for anomolous pixels. The output histograms are shown below\n\n\n\n\n\n\n\n\n\n\nThe bottom region histogram\n\n\n\n\n\n\n\n\n\n\n\nThe source region histogram\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe top region histogram\n\n\n\n\n\nfrom these histograms it is possible to select the thresholds to cut off anomolous data. For the two non-source regions a threshold of 8 was selected, and for the source region 1000 was selected. With the regions selected run\npunlearn xtdpixclip\nxtdpixclip evtinfile=\"xa000125000xtd_p031100010_cl.evt.gz\" outroot=\"xa000125000xtd_p031100010_cl\" pmode=apply thresholds=\"20,20,600\" incregionfiles=\"1_top.reg,1_bottom.reg,1_src.reg\" emax=24.575 chatter=2 clobber=yes\n\n\n\n\n\n\n\n\n\n\nThe Raw image\n\n\n\n\n\n\n\n\n\n\n\nThe cleaned image\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe filtered out pixels",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Notes for the Reduction of XRISM Data</span>"
+    ]
+  },
+  {
+    "objectID": "XRISMReduction.html#proximity-and-rise-time-screening",
+    "href": "XRISMReduction.html#proximity-and-rise-time-screening",
+    "title": "7  Notes for the Reduction of XRISM Data",
+    "section": "7.3 Proximity and Rise time screening",
+    "text": "7.3 Proximity and Rise time screening\n\nProximity screening: Removing frame events based on the unlikelihood of events happening too close together in a given time interval. This must be balanced against the loss of counts.\nRise-time screening:\n\nThe effect of both can be previewed through the FITS files\nrsl000125000_clbr_prox_Hp_spectra.fits\nrsl000125000_clbr_rise_Hp_spectra.fits\nThese were examined using the following julia script\nusing FITSFiles\nusing Plots\n\nfile = fits(\"/home/brad/Downloads/000125000_rsl_reproc/rsl000125000_clbr_rise_Hp_spectra.fits\")\n\ndisplay(plot(file[3].data.PI, file[3].data.DIFF; xlabel=\"PI Channel\", ylabel=\"Difference (counts)\", title=\"Rise-Time Screening\", label=nothing))\n\nfile = fits(\"/home/brad/Downloads/000125000_rsl_reproc/rsl000125000_clbr_prox_Hp_spectra.fits\")\n\ndisplay(plot(file[3].data.PI, file[3].data.DIFF; xlabel=\"PI Channel\", ylabel=\"Difference (counts)\", title=\"Proximity Screening\", label=nothing))\n\n\n\n\n\n\n\n\n\n\nThe Rise-time filtering difference\n\n\n\n\n\n\n\n\n\n\n\nThe Proximity filtering difference\n\n\n\n\n\nThe losses for each were determined to be worth it for this dataset, thus the both filters were applied with the command:\nftcopy infile=\"xa000125000rsl_p0px1000_cl.evt[EVENTS][(PI&gt;=600) && (((((RISE_TIME+0.00075*DERIV_MAX)&gt;46)&&((RISE_TIME+0.00075*DERIV_MAX)&lt;58))&&ITYPE&lt;4)||(ITYPE==4))&&STATUS[4]==b0]\" outfile=xa000125000rsl_p0px1000_cl2.evt copyall=yes clobber=yes history=yes\nTo skip proximity filtering you can omit &&STATUS[4]==b0.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Notes for the Reduction of XRISM Data</span>"
+    ]
+  },
+  {
+    "objectID": "XRISMReduction.html#extract-broadband-images-and-establish-source-center-coordinates",
+    "href": "XRISMReduction.html#extract-broadband-images-and-establish-source-center-coordinates",
+    "title": "7  Notes for the Reduction of XRISM Data",
+    "section": "7.4 Extract Broadband Images and Establish Source Center Coordinates",
+    "text": "7.4 Extract Broadband Images and Establish Source Center Coordinates\n\nCheck the value of the EXPOSURE keyword in the cleaned event files, if the exposure time is unexpectedly low then consult section 9 of the XRISM QSG.\nYou should now have the following files\n\nxa000125000rsl_p0px1000_cl2.evt (Resolve) and\nxa000125000xtd_p031100010_cl.evt or xa000125000xtd_p031100010_xpc_clnevt.fits (Xtend)\n\n\nStart XSELECT and make a 2-10 keV resolve image in DET coordinates as:\nterminal&gt; xselect\nxselect&gt; read eve xa000125000rsl_p0px1000_cl2.evt .\nxselect&gt; set image DET\nxselect&gt; filter pha_cutoff 4000 20000\nxselect&gt; extr image\nxselect&gt; save image xa000125000rsl_p0px1000_detimg.fits\nThe centre should be close to (3.5, 3.5), we only need to estimate this approximately as it is used as a sanity check against the RA and DEC coordinates. For most standard observations we can simply assume this centre coordinate.\nNext copy over a resolve region file\ncp $HEADAS/refdata/region_RSL_det.reg .\nand make another region file exclude_calsource.reg containing\nphysical\n-circle(920.0,1530.0,92.0)\n-circle(919.0,271.0,91.0)\nNext make a 0.5-10 keV Xtend image in DET coordinates\nxselect&gt; clear all\nxselect&gt; read eve xa000125000xtd_p031100010_xpc_clnevt.fits.gz .\nxselect&gt; set image DET\nxselect&gt; filter region exclude_calsources.reg\nxselect&gt; filter pha_cutoff 83 1667\nxselect&gt; extr image\nxselect&gt; save image xa000125000xtd_p031100010_detimg.fits\nNow we can estimate the centroid of the source in DET coordinates using ds9, it is reccommended to use a rectangle of length 5 arcmin and width as wide as possible for 1/8 Window mode images. For full window mode it is reccommended to use a circle of radius 2.5 arcmin. The regions selected here are shown below\n\n\n\n\n\nand were saved as\nregion_000125000xtd_src.reg\nregion_000125000xtd_bgd.reg",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Notes for the Reduction of XRISM Data</span>"
+    ]
   }
 ]

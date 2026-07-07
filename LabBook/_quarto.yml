@@ -19,6 +19,7 @@ book:
     - Fitting.qmd
     - FittingData.qmd
     - TableModel.qmd
+    - XRISMReduction.qmd
     - references.qmd
 
 bibliography: references.bib

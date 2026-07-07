@@ -180,31 +180,11 @@
     ]
   },
   {
-    "objectID": "references.html",
-    "href": "references.html",
-    "title": "References",
-    "section": "",
-    "text": "[1] A. C. Fabian et al.,\nPublications of the Astronomical Society of the Pacific\n112, 1145 (2000).\n\n\n[2] F. A. Harrison et\nal., American Physical Journal 770, 103\n(2013).\n\n\n[3] T. Johannsen, Physical\nReview D 88, (2013).\n\n\n[4] K.\nA. Arnaud, The\nFile Format for XSPEC Table Models (NASA, Greenbelt, MD20771,\n2021).\n\n\n[5] F. Baker and A. Young,\nZenodo (2025).\n\n\n[6] A. Tripathi et\nal., Phys. Rev. D 99, 083001 (2019).",
-    "crumbs": [
-      "References"
-    ]
-  },
-  {
     "objectID": "XRISMReduction.html",
     "href": "XRISMReduction.html",
     "title": "7  Notes for the Reduction of XRISM Data",
     "section": "",
     "text": "7.1 Pipeline Scripts\nWith HEASOFT and CalDB installed and instantiated:\nFor all following commands replace 000125000 with the obsid for your data. All commands here are run starting from the 000125000/ directory.",
-    "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Notes for the Reduction of XRISM Data</span>"
-    ]
-  },
-  {
-    "objectID": "XRISMReduction.html#pipelines",
-    "href": "XRISMReduction.html#pipelines",
-    "title": "7  Notes for the Reduction of XRISM Data",
-    "section": "",
-    "text": "7.1.1 Reprocessing:\nIn the directory above data directory run the following for the resolve data\n# Run the pipeline\nxapipeline indir=000125000 outdir=000125000_rsl_reproc steminputs=xa000125000 stemoutputs=DEFAULT entry_stage=1 exit_stage=3 instrument=resolve verify_input=no create_ehkmkf=no calc_pointing=yes calc_optaxis=yes calc_gtilost=no calc_adrgti=no calc_mxsgti=no rsl_gainfile=CALDB calmethod=FE55 linetocorrect=MnKa seed=650504 numevent=1000 minevent=200 extraspread=40 spangti=no\n\n# Pack and cleanup logs\n7z a 000125000_rsl_logs.7z *.log\nrm *.log\n\n# Enter the directory, remove duplicate files and gzip\ncd 000125000_rsl_reproc\nrm *.hk\ngzip *\n\ncd ..\nThen for the Xtend data\n# Run the pipeline\nxapipeline indir=000125000 outdir=000125000_xtd_reproc steminputs=xa000125000 stemoutputs=DEFAULT entry_stage=1 exit_stage=3 instrument=xtend verify_input=no create_ehkmkf=no calc_pointing=yes calc_optaxis=yes seed=650504\n\n# Pack and cleanup logs\n7z a 000125000_xtd_logs.7z *.log\nrm *.log\n\n# Enter the directory, remove duplicate files and gzip\ncd 000125000_xtd_reproc\nrm *.hk\ngzip *\n\ncd ..\nThen make a directory for the analysis and copy the following files\nmkdir analysis\n\ncp 000125000_xtd_reproc/*_cl.evt.gz analysis/\ncp 000125000_rsl_reproc/*_cl.evt.gz analysis/\ncp 000125000_rsl_reproc/xa000125000.ehk.gz 000125000_rsl_reproc/xa000125000rsl_px1000_exp.gti.gz 000125000_xtd_reproc/xa000125000xtd_p031100010.bimg.gz analysis/\n\nRun PSP limit check to see if the unscreened count rate exceeds the psp limit\nrslbratios infile=xa000125000rsl_p0px1000_uf.evt.gz filetype=uf outroot=rsl000125000_ufbr\nThis gives a info on if quadrants exceed 50 cts s^-1, which makes the data unusable\nRun rslbratios on the cleaned resolve data\nrslbratios infile=xa000125000rsl_p0px1000_cl.evt.gz filetype=cl outroot=rsl000125000_clbr lcbin=128.0\nThis gives the same info but for the cleaned data\nrsl000125000_clbr_2keVto12keV_hist.fits: Observed vs. predicted branching ratios in the energy range specified by the “eband” parameter rsl000125000_clbr_full_lc.fits: Full array light curves by grade rsl000125000_clbr_pix_lc.fits: Per-pixel light curves by grade rsl000125000_clbr_gradeFrac_lc.fits: Grade fractions versus time rsl000125000_clbr_2keVto12keV_pixMap.img: 20 images of counts by grade, and grade fractions for two energy bands\nThen\n\nGenerate region files using ds9\n\npunlearn xtdpixclip xtdpixclip evtinfile=“xa000125000xtd_p031100010_cl.evt.gz” outroot=“xa000125000xtd_p031100010_cl” pmode=histo nhistbins=-1 incregionfiles=“1_top.reg,1_bottom.reg,1_src.reg” emax=24.575 chatter=2 clobber=yes",
     "crumbs": [
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Notes for the Reduction of XRISM Data</span>"
     ]
@@ -247,6 +227,16 @@
     "text": "7.4 Extract Broadband Images and Establish Source Center Coordinates\n\nCheck the value of the EXPOSURE keyword in the cleaned event files, if the exposure time is unexpectedly low then consult section 9 of the XRISM QSG.\nYou should now have the following files\n\nxa000125000rsl_p0px1000_cl2.evt (Resolve) and\nxa000125000xtd_p031100010_cl.evt or xa000125000xtd_p031100010_xpc_clnevt.fits (Xtend)\n\n\nStart XSELECT and make a 2-10 keV resolve image in DET coordinates as:\nterminal&gt; xselect\nxselect&gt; read eve xa000125000rsl_p0px1000_cl2.evt .\nxselect&gt; set image DET\nxselect&gt; filter pha_cutoff 4000 20000\nxselect&gt; extr image\nxselect&gt; save image xa000125000rsl_p0px1000_detimg.fits\nThe centre should be close to (3.5, 3.5), we only need to estimate this approximately as it is used as a sanity check against the RA and DEC coordinates. For most standard observations we can simply assume this centre coordinate.\nNext copy over a resolve region file\ncp $HEADAS/refdata/region_RSL_det.reg .\nand make another region file exclude_calsource.reg containing\nphysical\n-circle(920.0,1530.0,92.0)\n-circle(919.0,271.0,91.0)\nNext make a 0.5-10 keV Xtend image in DET coordinates\nxselect&gt; clear all\nxselect&gt; read eve xa000125000xtd_p031100010_xpc_clnevt.fits.gz .\nxselect&gt; set image DET\nxselect&gt; filter region exclude_calsources.reg\nxselect&gt; filter pha_cutoff 83 1667\nxselect&gt; extr image\nxselect&gt; save image xa000125000xtd_p031100010_detimg.fits\nNow we can estimate the centroid of the source in DET coordinates using ds9, it is reccommended to use a rectangle of length 5 arcmin and width as wide as possible for 1/8 Window mode images. For full window mode it is reccommended to use a circle of radius 2.5 arcmin. The regions selected here are shown below\n\n\n\n\n\nand were saved as\nregion_000125000xtd_src.reg\nregion_000125000xtd_bgd.reg",
     "crumbs": [
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Notes for the Reduction of XRISM Data</span>"
+    ]
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "[1] A. C. Fabian et al.,\nPublications of the Astronomical Society of the Pacific\n112, 1145 (2000).\n\n\n[2] F. A. Harrison et\nal., American Physical Journal 770, 103\n(2013).\n\n\n[3] T. Johannsen, Physical\nReview D 88, (2013).\n\n\n[4] K.\nA. Arnaud, The\nFile Format for XSPEC Table Models (NASA, Greenbelt, MD20771,\n2021).\n\n\n[5] F. Baker and A. Young,\nZenodo (2025).\n\n\n[6] A. Tripathi et\nal., Phys. Rev. D 99, 083001 (2019).",
+    "crumbs": [
+      "References"
     ]
   }
 ]

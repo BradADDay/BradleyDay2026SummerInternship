@@ -93,6 +93,14 @@ function BindParameters(modelA, modelB, dataA, dataB)
     return prob
 end
 
+function FitPowerLawLineProfile(data; kwargs...)
+    model = XS_LampPostJohannsen(;kwargs...) + PowerLaw()
+
+    prob = FittingProblem(model => data)
+
+    SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, maxIter=Int(1e4))
+end
+
 function FitPowerLawLineProfile(dataA, dataB; kwargs...)
     """Fit a composite model of a power law and line profile 
     from the Johannsen table model"""
@@ -248,7 +256,7 @@ function PlotResiduals(data, fit)
     fitPlot = PlotSpectrum(data, fit; ylabel=L"Flux (counts s$^{-1}$ keV$^{-1}$)")
 
     residuals = Residuals(fit, SpectralFitting.plotting_domain(data))
-    resPlot = scatter(residuals; markershape=:cross, markersize=3, c=:black, msw=0, xlabel="Energy (keV)", label=nothing, ylabel="Residuals")
+    resPlot = scatter(residuals; markershape=:circle, markersize=2, c=:black, msw=0, xlabel="Energy (keV)", label=nothing, ylabel="Residuals")
     vline!(resPlot, [6.4]; line=(:black, :dash), label=nothing)
     hline!(resPlot, [0]; c=:black, label=nothing)
 
@@ -263,7 +271,7 @@ end
 # ======================================================================================
 # Setup
 # ======================================================================================
-
+##
 # List of available datasets
 files = [
     "nu80402315002", 
@@ -335,3 +343,24 @@ for index in eachindex(files)
 end
 
 CompleteSound()
+
+##
+
+energy = FitParam(6.4, lower_limit=6.4, upper_limit=7, frozen=false)
+
+data = OGIPDataset(
+    "data/xa000125000xtd_src.pi"; 
+    background = "data/xa000125000xtd_bgd.pi", 
+    response = "data/xa000125000xtd_p031100010_src.rmf", 
+    ancillary = "data/xa000125000xtd_p031100010_ptsrc.arf"
+)
+
+# Regrouping, normalising, dropping bad channels and curtailing
+regroup!(data)
+normalize!(data)
+drop_bad_channels!(data)
+mask_energies!(data, 3, 10)
+
+result = FitPowerLawLineProfile(data; E=energy, α13=FitParam(0., frozen=true), ϵ3=FitParam(0., frozen=true))
+
+PlotResiduals(data, result[1])

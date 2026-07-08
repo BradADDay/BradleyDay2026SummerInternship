@@ -178,12 +178,11 @@ To skip proximity filtering you can omit `&&STATUS[4]==b0`.
 Start XSELECT and make a 2-10 keV resolve image in DET coordinates as:
 
 ```{.bash .code-overflow-wrap .eval-false}
-terminal> xselect
-xselect> read eve xa000125000rsl_p0px1000_cl2.evt .
-xselect> set image DET
-xselect> filter pha_cutoff 4000 20000
-xselect> extr image
-xselect> save image xa000125000rsl_p0px1000_detimg.fits
+read eve xa000125000rsl_p0px1000_cl2.evt .
+set image DET
+filter pha_cutoff 4000 20000
+extr image
+save image xa000125000rsl_p0px1000_detimg.fits
 ```
 
 The centre should be close to (3.5, 3.5), we only need to estimate this approximately as it is used as a sanity check against the RA and DEC coordinates. For most standard observations we can simply assume this centre coordinate.
@@ -204,13 +203,13 @@ physical
 Next make a 0.5-10 keV Xtend image in DET coordinates
 
 ```{.bash .code-overflow-wrap .eval-false}
-xselect> clear all
-xselect> read eve xa000125000xtd_p031100010_xpc_clnevt.fits.gz .
-xselect> set image DET
-xselect> filter region exclude_calsources.reg
-xselect> filter pha_cutoff 83 1667
-xselect> extr image
-xselect> save image xa000125000xtd_p031100010_detimg.fits
+clear all
+read eve xa000125000xtd_p031100010_xpc_clnevt.fits.gz .
+set image DET
+filter region exclude_calsources.reg
+filter pha_cutoff 83 1667
+extr image
+save image xa000125000xtd_p031100010_detimg.fits
 ```
 
 Now we can estimate the centroid of the source in DET coordinates using `ds9`, it is reccommended to use a rectangle of length 5 arcmin and width as wide as possible for 1/8 Window mode images. For full window mode it is reccommended to use a circle of radius 2.5 arcmin. The regions selected here are shown below
@@ -222,4 +221,165 @@ and were saved as
 ```
 region_000125000xtd_src.reg
 region_000125000xtd_bgd.reg
+```
+
+## Extract Lightcurves and Spectra
+
+In the `analysis/` directory start a new XSELECT session and read in the cleaned resolve event file:
+
+```{.bash .code-overflow-wrap .eval-false}
+read eve xa000125000rsl_p0px1000_cl2.evt .
+
+# Extract a resolve full-array lightcurve in the 2-10 keV band (time bin in seconds)
+set image det
+filter pha_cutoff 4000 20000
+set binsize 128.0
+extr curve exposure=0.8
+save curve xa000125000rsl_allpix_b128_lc.fits
+
+# If a time bin has less than a fraction "exposure" then you will get a warning about too many bins being cut, reduce the value of exposure to mitigate this
+
+# Extract a Resolve spectrum from the full array, for hi-res primary events only
+# The first command can be modified to exclude pixels or a group of pixels
+filter column "pixel=0:11,13:35"
+filter GRADE "0:0"
+extr spectrum
+save spectrum xa000125000rsl_allpix_Hp_src.pi
+
+# Read in the cleaned Xtend event file and extract 0.5-10 keV lightcurves and spectra from the background and source regions
+clear all
+read eve xa000125000xtd_p031100010_cl_xpc_clnevt.fits.gz .
+set image det
+filter region region_000125000_bgd.reg
+filter pha_cutoff 83 1667
+set binsize 128.0
+extr curve exposure=0.6
+save curve xa000125000xtd_0p5to10keV_b128_bgd_lc.fits
+clear pha_cutoff
+extr spectrum
+save spectrum xa000125000xtd_bgd.pi
+clear region
+filter region region_000125000_src.reg
+filter pha_cutoff 83 1667
+extr curve exposure=0.4
+save curve xa000125000xtd_0p5to10keV_b128_src_lc.fits
+clear pha_cutoff
+extr spectrum
+save spectrum xa000125000xtd_src.pi
+exit
+```
+
+## Check Attitude Stability
+
+Examine the attitude stability during the observation (e.g. by plotting ANG_DIST versus TIME for the "xa000125000_gtifiltered.ehk" file)
+
+If you need to extract products with stricter attitude stability, make an appropriate GTI file. You can also make ARFs that are based on more than one attitude bin. Read the help for xaexpmap and xaarfgen for guidance on how to do that.
+
+## Make Exposure Map/Attitude Histogram Files
+
+The following examples make histograms with one attitude bin, which should be good enough for the majority of cases. 
+
+:::{.callout-warning}
+Mitigation of a bug in CalDB 12 and HEASoft 6.36 If you are using CalDB 12 and HEASoft 6.36, there is a bug related to new optical axes offsets that affect the ARF calculation, which will be fixed in subsequent CalDB and software releases. Until then, a mitigation strategy is applied, as shown in commands below, that reverts creation of the ARF to be the same as if the previous CalDB and software versions were used.
+:::
+
+For Resolve:
+```{.bash .code-overflow-wrap .eval-false}
+punlearn xaexpmap
+
+xaexpmap ehkfile=xa000125000.ehk.gz gtifile=xa000125000rsl_p0px1000_cl2.evt.gz instrume=RESOLVE badimgfile=NONE pixgtifile=xa000125000rsl_px1000_exp.gti.gz outfile=xa000125000rsl_p0px1000.expo outmaptype=EXPOSURE delta=20.0 numphi=1 stopsys=SKY instmap=CALDB qefile=CALDB contamifile=CALDB vigfile=CALDB obffile=CALDB fwfile=CALDB gvfile=CALDB maskcalsrc=yes fwtype=FILE specmode=MONO specfile=spec.fits specform=FITS evperchan=DEFAULT abund=1 cols=0 covfac=1 clobber=yes chatter=1 logfile=make_expo_xa000125000rsl_p0px1000.log
+```
+
+For CalDB 12 and HEASoft 6.36 mitigation:
+```{.bash .code-overflow-wrap .eval-false}
+fparkey fitsfile=xa000125000rsl_p0px1000.expo keyword=OPTAOFFX value=0.0 comm="optical axis X offset reset to 0"
+fparkey fitsfile=xa000125000rsl_p0px1000.expo keyword=OPTAOFFY value=0.0 comm="optical axis Y offset reset to 0"
+```
+
+For Xtend:
+```{.bash .code-overflow-wrap .eval-false}
+xaexpmap ehkfile=xa000125000.ehk.gz gtifile=xa000125000xtd_p031100010_cl_xpc_clnevt.fits.gz instrume=XTEND badimgfile=xa000125000xtd_p031100010.bimg.gz pixgtifile=xa000125000xtd_p031100010_cl_xpc_rmvpix.fpix.gz outfile=xa000125000xtd_a031100010.expo outmaptype=EXPOSURE delta=20.0 numphi=1 stopsys=SKY instmap=CALDB qefile=CALDB contamifile=CALDB vigfile=CALDB obffile=CALDB fwfile=CALDB gvfile=CALDB maskcalsrc=yes fwtype=FILE specmode=MONO specfile=spec.fits specform=FITS evperchan=DEFAULT abund=1 cols=0 covfac=1 clobber=yes chatter=1 logfile=make_expo_xa000125000xtd_p031100010.log
+```
+
+For CalDB 12 and HEASoft 6.36:
+```{.bash .code-overflow-wrap .eval-false}
+fparkey fitsfile=xa000125000rsl_p0px1000.expo keyword=OPTAOFFX value=0.0 comm="optical axis X offset reset to 0"
+fparkey fitsfile=xa000125000rsl_p0px1000.expo keyword=OPTAOFFY value=0.0 comm="optical axis Y offset reset to 0"
+```
+
+## Making Spectral Response Files
+
+Two methods are listed in the QSG, for these notes I used the first. 
+
+### Checking Coordinates
+
+We first check the coordinates through `coordpnt` for each instrument
+
+```{.bash .code-overflow-wrap .eval-false}
+punlearn coordpnt
+coordpnt input="RDETX0,RDETY0" outfile=NONE telescop=XRISM instrume=RESOLVE teldeffile=CALDB startsys=DET stopsys=RADEC ra=RA_NOM dec=DEC_NOM roll=PA_NOM ranom=RA_NOM decnom=DEC_NOM clobber=yes
+
+punlearn coordpnt
+coordpnt input="XDETX0,XDETY0" outfile=NONE telescop=XRISM instrume=XTEND teldeffile=CALDB startsys=DET stopsys=RADEC ra=RA_NOM dec=DEC_NOM roll=PA_NOM ranom=RA_NOM decnom=DEC_NOM clobber=yes
+```
+
+The commands were generated with values extracted through julia, reading from the `xa000125000xtd_src.pi` file.
+```{.julia .eval-false}
+using FITSFiles
+
+function GetCoordCheckCommand(file, inpt, instr="RESOLVE")
+    RA_NOM = file[1].cards["RA_NOM"]
+    DEC_NOM = file[1].cards["DEC_NOM"]
+    PA_NOM = file[1].cards["PA_NOM"]
+
+    println("coordpnt input=$inpt outfile=NONE telescop=XRISM instrume=$instr teldeffile=CALDB startsys=DET stopsys=RADEC ra=$RA_NOM dec=$DEC_NOM roll=$PA_NOM ranom=$RA_NOM decnom=$DEC_NOM clobber=yes")
+end
+
+GetCoordCheckCommand(file, "3.5,3.5", "RESOLVE")
+GetCoordCheckCommand(file, "733,730", "XTEND")
+```
+
+The true coordinates were taken from [NASA](https://science.nasa.gov/asset/webb/ngc-4151-hubble-image/) as (12:10:32.6,+39:24:21) (RA,DEC) and the output from both commands above were within 10" of this.
+
+Before running xaarfgen or rslmkrsp, in order to avoid version conflicts, delete the parameter files for `xaarfgen` and `xaxmaarfgen` in your local `pfiles/` directory. For example:
+```{.bash .code-overflow-wrap .eval-false}
+rm $HOME/pfiles/xaarfgen.par
+rm $HOME/pfiles/xaxmaarfgen.par
+```
+
+### Make RMFs
+
+For the two Resolve commands in this section replace `NGC4151` with a label for the object you're using.
+
+We first make a special event file that removes all Low Secondary (Ls) events. We calculate the Hp fraction over a clean energy range for which we choose 3-10 keV.
+ 
+```{.bash .code-overflow-wrap .eval-false}
+ftcopy infile="xa000125000rsl_p0px1000_cl2.evt[EVENTS][(PI>=6000)&&(PI<=20000)&&(ITYPE<4)]" outfile=xa000125000rsl_p0px1000_UPR.evt copyall=yes
+```
+
+Make a large full-array Resolve RMF:
+```{.bash .code-overflow-wrap .eval-false}
+punlearn rslmkrmf
+rslmkrmf infile=xa000125000rsl_p0px1000_UPR.evt outfileroot=NGC4151_obs1_60k_60k_Hp_allpix_L regmode=DET whichrmf=L resolist=0 regionfile=ALLPIX eminin=0.0 dein=0.5 nchanin=60000 useingrd=no eminout=0.0 deout=0.5 nchanout=60000 pixeltest=CENTER
+```
+
+Make a small full-array Resolve RMF:
+```{.bash .code-overflow-wrap .eval-false}
+punlearn rslmkrmf
+rslmkrmf infile=xa000125000rsl_p0px1000_UPR.evt outfileroot=NGC4151_obs1_60k_60k_Hp_allpix_S regmode=DET whichrmf=S resolist=0 regionfile=ALLPIX pixeltest=CENTER
+```
+
+Neither of the above includes the electron-loss continuum which may make the source appear to have a soft excess. Section 14.6 of the QSG includes instructions on how to make an extra large Resolve response matrix.
+
+Make an Xtend RMF:
+```{.bash .code-overflow-wrap .eval-false}
+punlearn xtdrmf
+xtdrmf infile=xa000125000xtd_src.pi outfile=xa000125000xtd_p031100010_src.rmf rmfparam=CALDB eminin=200 dein="2,24" nchanin="5900,500" eminout=0 deout=6 nchanout=4096
+```
+
+### Make ARFs
+
+```{.bash .code-overflow-wrap .eval-false}
+punlearn xaarfgen
+xaarfgen xrtevtfile=raytrace_xa000125000xtd_p031100010_boxreg_ptsrc.fits source_ra=182.63409879 source_dec=39.40629018 telescop=XRISM instrume=XTEND emapfile=xa000125000xtd_a031100010.expo regmode=DET regionfile=region_000125000_src.reg sourcetype=POINT rmffile=xa000125000xtd_p031100010_src.rmf erange="0.3 18.0 2.0 8.0" outfile=xa000125000xtd_p031100010_ptsrc.arf numphoton=300000 minphoton=100 teldeffile=CALDB qefile=CALDB contamifile=CALDB obffile=CALDB fwfile=CALDB onaxisffile=CALDB onaxiscfile=CALDB mirrorfile=CALDB obstructfile=CALDB frontreffile=CALDB backreffile=CALDB pcolreffile=CALDB scatterfile=CALDB mode=h clobber=yes seed=7 imgfile=NONE
 ```

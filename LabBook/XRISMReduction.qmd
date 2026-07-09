@@ -8,43 +8,40 @@ With HEASOFT and CalDB installed and instantiated:
 
 ## Pipeline Scripts
 
-For all following commands replace `000125000` with the obsid for your data. All commands here are run starting from the `000125000/` directory.
+For all following commands replace `000125000` with the obsid for your data. The commands in this section have been streamlined with InitialPipeline.sh for `bash` based systems.
 
 ### Reprocessing:
 
 In the directory above data directory run the following for the resolve data
 ```{.bash .code-overflow-wrap .eval-false}
 # Run the pipeline
-xapipeline indir=000125000 outdir=000125000_rsl_reproc steminputs=xa000125000 stemoutputs=DEFAULT entry_stage=1 exit_stage=3 instrument=resolve verify_input=no create_ehkmkf=no calc_pointing=yes calc_optaxis=yes calc_gtilost=no calc_adrgti=no calc_mxsgti=no rsl_gainfile=CALDB calmethod=FE55 linetocorrect=MnKa seed=650504 numevent=1000 minevent=200 extraspread=40 spangti=no
-
+xapipeline indir="$OBSID" outdir="$OBSID"_rsl_reproc steminputs=xa"$OBSID" stemoutputs=DEFAULT entry_stage=1 exit_stage=3 instrument=resolve verify_input=no create_ehkmkf=no calc_pointing=yes calc_optaxis=yes calc_gtilost=no calc_adrgti=no calc_mxsgti=no rsl_gainfile=CALDB calmethod=FE55 linetocorrect=MnKa seed=650504 numevent=1000 minevent=200 extraspread=40 spangti=no
 # Pack and cleanup logs
-7z a 000125000_rsl_logs.7z *.log
+7z a "$OBSID"_rsl_logs.7z *.log
 rm *.log
 
 # Enter the directory, remove duplicate files and gzip
-cd 000125000_rsl_reproc
-rm *.hk
-gzip *
-
-cd ..
+rm "$OBSID"_rsl_reproc/*.hk
+gzip "$OBSID"_rsl_reproc/*
 ```
 
 Then for the Xtend data
 ```{.bash .code-overflow-wrap .eval-false}
 # Run the pipeline
-xapipeline indir=000125000 outdir=000125000_xtd_reproc steminputs=xa000125000 stemoutputs=DEFAULT entry_stage=1 exit_stage=3 instrument=xtend verify_input=no create_ehkmkf=no calc_pointing=yes calc_optaxis=yes seed=650504
+xapipeline indir="$OBSID" outdir="$OBSID"_xtd_reproc steminputs=xa"$OBSID" stemoutputs=DEFAULT entry_stage=1 exit_stage=3 instrument=xtend verify_input=no create_ehkmkf=no calc_pointing=yes calc_optaxis=yes seed=650504
 
 # Pack and cleanup logs
-7z a 000125000_xtd_logs.7z *.log
+7z a "$OBSID"_xtd_logs.7z *.log
 rm *.log
 
 # Enter the directory, remove duplicate files and gzip
-cd 000125000_xtd_reproc
-rm *.hk
-gzip *
+rm "$OBSID"_xtd_reproc/*.hk
+gzip "$OBSID"_xtd_reproc/*
 
 cd ..
 ```
+
+The `.hk` files can be removed as they are duplicates of the corresponding files in the original data. The files are gzipped for space efficiency.
 
 ### Analysis Setup
 
@@ -59,11 +56,11 @@ cp 000125000_rsl_reproc/xa000125000.ehk.gz 000125000_rsl_reproc/xa000125000rsl_p
 
 ### PSP Limit Checks
 
-Run PSP limit check to see if the unscreened count rate exceeds the psp limit.
+Run PSP limit check to see if the unscreened count rate exceeds the psp limit in the `000125000_rsl_reproc/` directory.
 ```{.bash .code-overflow-wrap .eval-false}
 rslbratios infile=xa000125000rsl_p0px1000_uf.evt.gz filetype=uf outroot=rsl000125000_ufbr
 ```
-This gives a info on if quadrants exceed 50 cts s^-1, which makes the data unusable. Next run rslbratios on the cleaned resolve data:
+This gives a info on if quadrants exceed 50 cts s^-1, which makes the data unusable. Next run rslbratios on the cleaned resolve data in the `analysis/` directory:
 ```{.bash .code-overflow-wrap .eval-false}
 rslbratios infile=xa000125000rsl_p0px1000_cl.evt.gz filetype=cl outroot=rsl000125000_clbr lcbin=128.0
 ```
@@ -77,7 +74,7 @@ This gives the same info but for the cleaned data and outputs the following whic
 
 ## Removing Anomalous Pixels from Xtend Data
 
-All following commands are run from the `000125000_xtd_reproc/` directory
+All following commands are run from the `analysis/` directory
 
 First generate region files using ds9, viewing the image in DET coordinates with the command. 
 ```{.bash .code-overflow-wrap .eval-false}

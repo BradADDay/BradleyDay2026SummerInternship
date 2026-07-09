@@ -25,3 +25,4 @@ profile = emissivity_profile(m, d, model)
 
 # Computing the line profile
 _, flux = lineprofile(m, x, d, profile; verbose=false, bins=bins, method=TransferFunctionMethod())
+

@@ -20,6 +20,7 @@ book:
     - FittingData.qmd
     - TableModel.qmd
     - XRISMReduction.qmd
+    - DeformConstraints.qmd
     - references.qmd
 
 bibliography: references.bib

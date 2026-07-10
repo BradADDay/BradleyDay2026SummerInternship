@@ -51,7 +51,7 @@ cp "$OBSID"_rsl_reproc/xa"$OBSID".ehk.gz "$OBSID"_rsl_reproc/xa"$OBSID"rsl_px100
 cd analysis
 
 # Getting Resolve RA, DEC, PA and storing in a file
-ftlist xa"$OBSID"rsl_p0px1000_cl.evt.gz K | grep -m 3 -e DEC_NOM -e RA_NOM -e PA_NOM > rsl_headers.txt
+ftlist xa"$OBSID"rsl_p0px1000_cl.evt.gz K | grep -m 3 -e DEC_NOM -e RA_NOM -e PA_NOM > rsl_coordinates.txt
 
 echo "Doing PSP limit checks"
 
@@ -63,6 +63,8 @@ rslbratios infile=xa"$OBSID"rsl_p0px1000_uf.evt.gz filetype=uf outroot=rsl"$OBSI
 cd ../analysis
 rslbratios infile=xa"$OBSID"rsl_p0px1000_cl.evt.gz filetype=cl outroot=rsl"$OBSID"_clbr lcbin=128.0
 
+
+# Opening the Xtend data in ds9 for anomolous pixel removal
 ds9 "xa"$OBSID"xtd_p031100010_cl.evt.gz[bin=detx,dety]"
 
 echo "Complete!"

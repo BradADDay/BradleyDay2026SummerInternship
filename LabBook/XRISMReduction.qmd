@@ -1,47 +1,34 @@
 
-# Notes for the Reduction of XRISM Data
+# XRISM Data Reduction
 
-With HEASOFT and CalDB installed and instantiated:
+These notes are significantly condensed and adapted from the XRISM Quick Start Guide @XRISMQSG. All key steps for the reduction are on this page, however some details and steps to deal with specific issues have been omitted for brevity. I have noted where applicable where to go for more information.
 
+:::{.callout-important title="Notes"}
+- All commands below assume that HEASOFT and CalDB are installed and instantiated, and that the CalDB installation has the [necessary files](https://heasarc.gsfc.nasa.gov/docs/xrism/calib/index.html) for XRISM data. 
 - Data will have observation ID as top directory, e.g. 000125000/
 - Pipeline scripts must be run in a directory that contains this directory
+- The [XRISM Data Analysis Guide](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide/xrism_abc.html) contains more information relevant to this process.
+:::
 
 ## Pipeline Scripts
 
-For all following commands replace `000125000` with the obsid for your data. The commands in this section have been streamlined with InitialPipeline.sh for `bash` based systems.
+For all following commands replace `000125000` with the observation id for your data. The commands in this section have been streamlined with InitialPipeline.sh for `bash` systems.
 
 ### Reprocessing:
 
 In the directory above data directory run the following for the resolve data
 ```{.bash .code-overflow-wrap .eval-false}
 # Run the pipeline
-xapipeline indir="$OBSID" outdir="$OBSID"_rsl_reproc steminputs=xa"$OBSID" stemoutputs=DEFAULT entry_stage=1 exit_stage=3 instrument=resolve verify_input=no create_ehkmkf=no calc_pointing=yes calc_optaxis=yes calc_gtilost=no calc_adrgti=no calc_mxsgti=no rsl_gainfile=CALDB calmethod=FE55 linetocorrect=MnKa seed=650504 numevent=1000 minevent=200 extraspread=40 spangti=no
-# Pack and cleanup logs
-7z a "$OBSID"_rsl_logs.7z *.log
-rm *.log
-
-# Enter the directory, remove duplicate files and gzip
-rm "$OBSID"_rsl_reproc/*.hk
-gzip "$OBSID"_rsl_reproc/*
+xapipeline indir=000125000 outdir=000125000_rsl_reproc steminputs=xa000125000 stemoutputs=DEFAULT entry_stage=1 exit_stage=3 instrument=resolve verify_input=no create_ehkmkf=no calc_pointing=yes calc_optaxis=yes calc_gtilost=no calc_adrgti=no calc_mxsgti=no rsl_gainfile=CALDB calmethod=FE55 linetocorrect=MnKa seed=650504 numevent=1000 minevent=200 extraspread=40 spangti=no
 ```
 
 Then for the Xtend data
 ```{.bash .code-overflow-wrap .eval-false}
 # Run the pipeline
-xapipeline indir="$OBSID" outdir="$OBSID"_xtd_reproc steminputs=xa"$OBSID" stemoutputs=DEFAULT entry_stage=1 exit_stage=3 instrument=xtend verify_input=no create_ehkmkf=no calc_pointing=yes calc_optaxis=yes seed=650504
-
-# Pack and cleanup logs
-7z a "$OBSID"_xtd_logs.7z *.log
-rm *.log
-
-# Enter the directory, remove duplicate files and gzip
-rm "$OBSID"_xtd_reproc/*.hk
-gzip "$OBSID"_xtd_reproc/*
-
-cd ..
+xapipeline indir=000125000 outdir=000125000_xtd_reproc steminputs=xa000125000 stemoutputs=DEFAULT entry_stage=1 exit_stage=3 instrument=xtend verify_input=no create_ehkmkf=no calc_pointing=yes calc_optaxis=yes seed=650504
 ```
 
-The `.hk` files can be removed as they are duplicates of the corresponding files in the original data. The files are gzipped for space efficiency.
+The `.hk` files can be removed as they are duplicates of the corresponding files in the original data. The remaining files can be gzipped for space efficiency. `InitialPipeline.sh` does this automatically.
 
 ### Analysis Setup
 
@@ -54,17 +41,27 @@ cp 000125000_rsl_reproc/*_cl.evt.gz analysis/
 cp 000125000_rsl_reproc/xa000125000.ehk.gz 000125000_rsl_reproc/xa000125000rsl_px1000_exp.gti.gz 000125000_xtd_reproc/xa000125000xtd_p031100010.bimg.gz analysis/
 ```
 
+You will also need the `RA_NOM`, `PA_NOM`, and `DEC_NOM` values from the Resolve header which can be obtained with
+```{.bash .code-overflow-wrap .eval-false}
+# Getting Resolve RA, DEC, PA and storing in a file
+ftlist xa"$OBSID"rsl_p0px1000_cl.evt.gz K | grep -m 3 -e DEC_NOM -e RA_NOM -e PA_NOM > rsl_coordinates.txt
+```
+
+This will write the three values to a text file
+
 ### PSP Limit Checks
 
-Run PSP limit check to see if the unscreened count rate exceeds the psp limit in the `000125000_rsl_reproc/` directory.
+Run PSP limit check to see if the unscreened count rate for Resolve exceeds the psp limit in the `000125000_rsl_reproc/` directory.
 ```{.bash .code-overflow-wrap .eval-false}
 rslbratios infile=xa000125000rsl_p0px1000_uf.evt.gz filetype=uf outroot=rsl000125000_ufbr
 ```
-This gives a info on if quadrants exceed 50 cts s^-1, which makes the data unusable. Next run rslbratios on the cleaned resolve data in the `analysis/` directory:
+This gives a info on if quadrants exceed 50 cts s^-1, which makes the data unusable. A log file is produced which lists the pixels that exceed the limit, these only apply to Resolve data, and these pixels will be unusable. 
+
+Next run rslbratios on the cleaned resolve data in the `analysis/` directory:
 ```{.bash .code-overflow-wrap .eval-false}
 rslbratios infile=xa000125000rsl_p0px1000_cl.evt.gz filetype=cl outroot=rsl000125000_clbr lcbin=128.0
 ```
-This gives the same info but for the cleaned data and outputs the following which will be used later
+This gives the same info but for the cleaned data and outputs the following files which will be used later
 
 - `rsl000125000_clbr_2keVto12keV_hist.fits`: Observed vs. predicted branching ratios in the energy range specified by the “eband” parameter
 - `rsl000125000_clbr_full_lc.fits`: Full array light curves by grade
@@ -74,7 +71,13 @@ This gives the same info but for the cleaned data and outputs the following whic
 
 ## Removing Anomalous Pixels from Xtend Data
 
+:::{.callout-important}
 All following commands are run from the `analysis/` directory
+:::
+
+:::{.callout-note}
+This section makes heavy use of `xtdpixclip`, and the usage is not documented in the XRISM QSG, see the `xtdpixclip` documentation @xtdpixclip for more information.
+:::
 
 First generate region files using ds9, viewing the image in DET coordinates with the command. 
 ```{.bash .code-overflow-wrap .eval-false}
@@ -89,12 +92,13 @@ Three regions were selected and labelled as follows:
 - Green: `1_src.reg`
 - Cyan: `1_top.reg`
 
+Next run xtdpixclip in histogram mode to generate histograms for the regions, including all of the region files just generated.
 ```{.bash .code-overflow-wrap .eval-false}
 punlearn xtdpixclip
 xtdpixclip evtinfile="xa000125000xtd_p031100010_cl.evt.gz" outroot="xa000125000xtd_p031100010_cl" pmode=histo nhistbins=-1 incregionfiles="1_top.reg,1_bottom.reg,1_src.reg" emax=24.575 chatter=2 clobber=yes
 ```
 
-The above is used to determine the thresholds to use as cutoffs for anomolous pixels. The output histograms are shown below
+These histograms can be used to determine the thresholds to use as cutoffs for anomolous pixels. The output histograms are shown below
 
 ::: {layout-ncol=2}
 
@@ -106,11 +110,11 @@ The above is used to determine the thresholds to use as cutoffs for anomolous pi
 
 :::
 
-from these histograms it is possible to select the thresholds to cut off anomolous data. For the two non-source regions a threshold of 8 was selected, and for the source region 1000 was selected. With the regions selected run
+For the two non-source regions a threshold of 8 was selected, and for the source region 1000 was selected. With the regions selected run xtdpixclip again but in apply mode, entering the thresholds selected
 
 ```{.bash .code-overflow-wrap .eval-false}
 punlearn xtdpixclip
-xtdpixclip evtinfile="xa000125000xtd_p031100010_cl.evt.gz" outroot="xa000125000xtd_p031100010_cl" pmode=apply thresholds="20,20,600" incregionfiles="1_top.reg,1_bottom.reg,1_src.reg" emax=24.575 chatter=2 clobber=yes
+xtdpixclip evtinfile="xa000125000xtd_p031100010_cl.evt.gz" outroot="xa000125000xtd_p031100010_cl" pmode=apply thresholds="8,8,1000" incregionfiles="1_top.reg,1_bottom.reg,1_src.reg" emax=24.575 chatter=2 clobber=yes
 ```
 
 ::: {layout-ncol=2}
@@ -126,27 +130,21 @@ xtdpixclip evtinfile="xa000125000xtd_p031100010_cl.evt.gz" outroot="xa000125000x
 ## Proximity and Rise time screening
 
 - Proximity screening: Removing frame events based on the unlikelihood of events happening too close together in a given time interval. This must be balanced against the loss of counts.
-- Rise-time screening: 
 
-The effect of both can be previewed through the FITS files 
+The effect of both can be previewed through the files:
 ```
 rsl000125000_clbr_prox_Hp_spectra.fits
 rsl000125000_clbr_rise_Hp_spectra.fits
 ```
 
-These were examined using the following julia script
+These can be examined by plotting the difference after proximity and rise-screening to observe the losses. This can be done with fplot:
 
-```{.julia .eval-false}
-using FITSFiles
-using Plots
+```{.bash .code-overflow-wrap .eval-false}
+# For Proximity Screening
+fplot rsl000125000_clbr_prox_Hp_spectra.fits[DIFFERENCE] PI DIFF - /PS Q
 
-file = fits("/home/brad/Downloads/000125000_rsl_reproc/rsl000125000_clbr_rise_Hp_spectra.fits")
-
-display(plot(file[3].data.PI, file[3].data.DIFF; xlabel="PI Channel", ylabel="Difference (counts)", title="Rise-Time Screening", label=nothing))
-
-file = fits("/home/brad/Downloads/000125000_rsl_reproc/rsl000125000_clbr_prox_Hp_spectra.fits")
-
-display(plot(file[3].data.PI, file[3].data.DIFF; xlabel="PI Channel", ylabel="Difference (counts)", title="Proximity Screening", label=nothing))
+# For Rise-Time Screening
+fplot rsl000125000_clbr_rise_Hp_spectra.fits[DIFFERENCE] PI DIFF - /PS Q
 ```
 
 ::: {layout-ncol=2}
@@ -157,7 +155,7 @@ display(plot(file[3].data.PI, file[3].data.DIFF; xlabel="PI Channel", ylabel="Di
 
 :::
 
-The losses for each were determined to be worth it for this dataset, thus the both filters were applied with the command:
+The losses for each were determined to be acceptable for this dataset, thus the both filters were applied with the command:
 
 ```{.bash .code-overflow-wrap .eval-false}
 ftcopy infile="xa000125000rsl_p0px1000_cl.evt[EVENTS][(PI>=600) && (((((RISE_TIME+0.00075*DERIV_MAX)>46)&&((RISE_TIME+0.00075*DERIV_MAX)<58))&&ITYPE<4)||(ITYPE==4))&&STATUS[4]==b0]" outfile=xa000125000rsl_p0px1000_cl2.evt copyall=yes clobber=yes history=yes
@@ -165,9 +163,13 @@ ftcopy infile="xa000125000rsl_p0px1000_cl.evt[EVENTS][(PI>=600) && (((((RISE_TIM
 
 To skip proximity filtering you can omit `&&STATUS[4]==b0`.
 
+:::{.callout-note}
+The QSG includes a section here on the `xaspecratios` tool which is not available until HEASoft 6.37 and is therefore omitted from these notes.
+:::
+
 ## Extract Broadband Images and Establish Source Center Coordinates
 
-- Check the value of the EXPOSURE keyword in the cleaned event files, if the exposure time is unexpectedly low then consult section 9 of the [XRISM QSG](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/quickstart/xrism_quick_start_guide_v3p2_251204a.pdf).
+- Check the value of the EXPOSURE keyword in the cleaned event files, if the exposure time is unexpectedly low then consult section 9 of the QSG @XRISMQSG.
 - You should now have the following files
     - `xa000125000rsl_p0px1000_cl2.evt` (Resolve) and
     - `xa000125000xtd_p031100010_cl.evt` or `xa000125000xtd_p031100010_xpc_clnevt.fits` (Xtend)
@@ -182,10 +184,9 @@ extr image
 save image xa000125000rsl_p0px1000_detimg.fits
 ```
 
-The centre should be close to (3.5, 3.5), we only need to estimate this approximately as it is used as a sanity check against the RA and DEC coordinates. For most standard observations we can simply assume this centre coordinate.
+Observing this image in `ds9` or otherwise, *the centre of the source in the Resolve data should be noted down*. This should be close to (3.5, 3.5), however we only need to estimate this approximately as it is used as a sanity check against the RA and DEC coordinates. For most standard observations we can simply assume this centre coordinate.
 
-Next copy over a resolve region file 
-
+Next copy over a resolve region file from the `$HEADAS` directory.
 ```{.bash .code-overflow-wrap .eval-false}
 cp $HEADAS/refdata/region_RSL_det.reg .
 ```
@@ -198,7 +199,6 @@ physical
 ```
 
 Next make a 0.5-10 keV Xtend image in DET coordinates
-
 ```{.bash .code-overflow-wrap .eval-false}
 clear all
 read eve xa000125000xtd_p031100010_xpc_clnevt.fits.gz .
@@ -209,7 +209,10 @@ extr image
 save image xa000125000xtd_p031100010_detimg.fits
 ```
 
-Now we can estimate the centroid of the source in DET coordinates using `ds9`, it is reccommended to use a rectangle of length 5 arcmin and width as wide as possible for 1/8 Window mode images. For full window mode it is reccommended to use a circle of radius 2.5 arcmin. The regions selected here are shown below
+Now we can estimate the centroid of the source in DET coordinates in the Xtend data using `ds9`. *Note this coordinate down as it will also be useful later*.
+
+
+Next make region files for the source and background lightcurves and spectra. It is reccommended to use a rectangle of length 5 arcmin and width as wide as possible for 1/8 Window mode images. The region should not extend beyond the chip boundary as this will result in an incorrect ARF. For full window mode it is reccommended to use a circle of radius 2.5 arcmin. The regions selected for the data used here are shown below
 
 ![](images/SourceBgdRegions.png){fig-align="center"}
 
@@ -276,8 +279,8 @@ If you need to extract products with stricter attitude stability, make an approp
 
 The following examples make histograms with one attitude bin, which should be good enough for the majority of cases. 
 
-:::{.callout-warning}
-Mitigation of a bug in CalDB 12 and HEASoft 6.36 If you are using CalDB 12 and HEASoft 6.36, there is a bug related to new optical axes offsets that affect the ARF calculation, which will be fixed in subsequent CalDB and software releases. Until then, a mitigation strategy is applied, as shown in commands below, that reverts creation of the ARF to be the same as if the previous CalDB and software versions were used.
+:::{.callout-warning title="Mitigation of a bug in CalDB 12 and HEASoft 6.36"}
+If you are using CalDB 12 and HEASoft 6.36, there is a bug related to new optical axes offsets that affect the ARF calculation, which will be fixed in subsequent CalDB and software releases. Until then, a mitigation strategy is applied, as shown in commands below, that reverts creation of the ARF to be the same as if the previous CalDB and software versions were used.
 :::
 
 For Resolve:
@@ -300,8 +303,8 @@ xaexpmap ehkfile=xa000125000.ehk.gz gtifile=xa000125000xtd_p031100010_cl_xpc_cln
 
 For CalDB 12 and HEASoft 6.36:
 ```{.bash .code-overflow-wrap .eval-false}
-fparkey fitsfile=xa000125000rsl_p0px1000.expo keyword=OPTAOFFX value=0.0 comm="optical axis X offset reset to 0"
-fparkey fitsfile=xa000125000rsl_p0px1000.expo keyword=OPTAOFFY value=0.0 comm="optical axis Y offset reset to 0"
+fparkey fitsfile=xa000125000xtd_a031100010.expo keyword=OPTAOFFX value=0.0 comm="optical axis X offset reset to 0"
+fparkey fitsfile=xa000125000xtd_a031100010.expo keyword=OPTAOFFY value=0.0 comm="optical axis Y offset reset to 0"
 ```
 
 ## Making Spectral Response Files
@@ -310,7 +313,7 @@ Two methods are listed in the QSG, for these notes I used the first.
 
 ### Checking Coordinates
 
-We first check the coordinates through `coordpnt` for each instrument
+We first check the coordinates through `coordpnt` for each instrument. Replace `"RDETX0, RDETY0"`, and `"XDETX0, XDETY0"` with the coordinates relevant to the Resolve and Xtend data noted down earlier. `RA_NOM`, `DEC_NOM`, and `PA_NOM` can be taken from the `rsl_coordinates.txt` file generated earlier.
 
 ```{.bash .code-overflow-wrap .eval-false}
 punlearn coordpnt
@@ -320,21 +323,7 @@ punlearn coordpnt
 coordpnt input="XDETX0,XDETY0" outfile=NONE telescop=XRISM instrume=XTEND teldeffile=CALDB startsys=DET stopsys=RADEC ra=RA_NOM dec=DEC_NOM roll=PA_NOM ranom=RA_NOM decnom=DEC_NOM clobber=yes
 ```
 
-The commands were generated with values extracted through julia, reading from the `xa000125000xtd_src.pi` file.
-```{.julia .eval-false}
-using FITSFiles
-
-function GetCoordCheckCommand(file, inpt, instr="RESOLVE")
-    RA_NOM = file[1].cards["RA_NOM"]
-    DEC_NOM = file[1].cards["DEC_NOM"]
-    PA_NOM = file[1].cards["PA_NOM"]
-
-    println("coordpnt input=$inpt outfile=NONE telescop=XRISM instrume=$instr teldeffile=CALDB startsys=DET stopsys=RADEC ra=$RA_NOM dec=$DEC_NOM roll=$PA_NOM ranom=$RA_NOM decnom=$DEC_NOM clobber=yes")
-end
-
-GetCoordCheckCommand(file, "3.5,3.5", "RESOLVE")
-GetCoordCheckCommand(file, "733,730", "XTEND")
-```
+The output from these commands are in degrees and should be compared against a trustworthy catalogue for the object you are looking at. If they are within 10" or so of the expected coordinates then continue to the next step, otherwise use the outputs from these commands to generate the ARFs with `xaarfgen` (see later).
 
 The true coordinates were taken from [NASA](https://science.nasa.gov/asset/webb/ngc-4151-hubble-image/) as (12:10:32.6,+39:24:21) (RA,DEC) and the output from both commands above were within 10" of this.
 
@@ -348,7 +337,7 @@ rm $HOME/pfiles/xaxmaarfgen.par
 
 For the two Resolve commands in this section replace `NGC4151` with a label for the object you're using.
 
-We first make a special event file that removes all Low Secondary (Ls) events. We calculate the Hp fraction over a clean energy range for which we choose 3-10 keV.
+We first make a special event file that removes all Low Secondary (Ls) events. We calculate the Hp fraction over a clean energy range for which we choose 3-10 keV to maximise accuracy.
  
 ```{.bash .code-overflow-wrap .eval-false}
 ftcopy infile="xa000125000rsl_p0px1000_cl2.evt[EVENTS][(PI>=6000)&&(PI<=20000)&&(ITYPE<4)]" outfile=xa000125000rsl_p0px1000_UPR.evt copyall=yes
@@ -376,6 +365,21 @@ xtdrmf infile=xa000125000xtd_src.pi outfile=xa000125000xtd_p031100010_src.rmf rm
 
 ### Make ARFs
 
+For Resolve data:
+
+If the resolve data has Hp fractions that vary significantly from pixel to pixel see the QSG to make spectral responses (combined RMF and ARF files). 
+
+:::{.callout-note}
+If you excluded any pixels from the spectrum then replace `region_RSL_det.reg` with an appropriate region file excluding these pixels.
+:::
+
+To make a full-array point source ARF for Resolve, run
+```{.bash .code-overflow-wrap .eval-false}
+punlearn xaarfgen
+xaarfgen xrtevtfile=raytrace_xa000125000rsl_p0px1000_ptsrc.fits source_ra=rslsrc_ra source_dec=rslsrc_dec telescop=XRISM instrume=RESOLVE emapfile=xa000125000rsl_p0px1000.expo regmode=DET regionfile=region_RSL_det.reg sourcetype=POINT rmffile=NGC4151_obs1_60k_60k_Hp_allpix_S.rmf erange="0.3 18.0 2.0 8.0" outfile=xa000125000rsl_p0px1000_ptsrc.arf numphoton=300000 minphoton=100 teldeffile=CALDB qefile=CALDB contamifile=CALDB obffile=CALDB fwfile=CALDB gatevalvefile=CALDB onaxisffile=CALDB onaxiscfile=CALDB mirrorfile=CALDB obstructfile=CALDB frontreffile=CALDB backreffile=CALDB pcolreffile=CALDB scatterfile=CALDB mode=h clobber=yes seed=7 imgfile=NONE
+```
+
+For Xtend:
 ```{.bash .code-overflow-wrap .eval-false}
 punlearn xaarfgen
 xaarfgen xrtevtfile=raytrace_xa000125000xtd_p031100010_boxreg_ptsrc.fits source_ra=182.63409879 source_dec=39.40629018 telescop=XRISM instrume=XTEND emapfile=xa000125000xtd_a031100010.expo regmode=DET regionfile=region_000125000_src.reg sourcetype=POINT rmffile=xa000125000xtd_p031100010_src.rmf erange="0.3 18.0 2.0 8.0" outfile=xa000125000xtd_p031100010_ptsrc.arf numphoton=300000 minphoton=100 teldeffile=CALDB qefile=CALDB contamifile=CALDB obffile=CALDB fwfile=CALDB onaxisffile=CALDB onaxiscfile=CALDB mirrorfile=CALDB obstructfile=CALDB frontreffile=CALDB backreffile=CALDB pcolreffile=CALDB scatterfile=CALDB mode=h clobber=yes seed=7 imgfile=NONE

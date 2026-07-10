@@ -369,7 +369,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./XRISMReduction.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Notes for the Reduction of XRISM Data</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">XRISM Data Reduction</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -418,10 +418,49 @@ window.Quarto = {
 <p>Following a discussion with my supervisors it was found that the issues with negative deformation parameters were not an issue with Gradus but a quirk of the metric. To explore this, a heatmap was plotted of the ISCO for combinations of <span class="math inline">\(\alpha_{13}\)</span> and <span class="math inline">\(\epsilon_{3}\)</span></p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/DeformParameterSpace.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="The valid deformation parameters for a maximally spinning (a=0.998) black hole. The unshaded regions show where a naked singularity would be present, and the black regions show where there is not an ISCO."><img src="images/DeformParameterSpace.png" class="img-fluid figure-img" alt="The valid deformation parameters for a maximally spinning (a=0.998) black hole. The unshaded regions show where a naked singularity would be present, and the black regions show where there is not an ISCO."></a></p>
-<figcaption>The valid deformation parameters for a maximally spinning (<span class="math inline">\(a=0.998\)</span>) black hole. The unshaded regions show where a naked singularity would be present, and the black regions show where there is not an ISCO.</figcaption>
+<p><a href="images/DeformParameterSpace_a=0.0.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="The valid deformation parameters for a Schwarszchild black hole. The black regions show invalid configurations, and the red contours denote regions where there is a naked singularity."><img src="images/DeformParameterSpace_a=0.0.png" class="img-fluid figure-img" alt="The valid deformation parameters for a Schwarszchild black hole. The black regions show invalid configurations, and the red contours denote regions where there is a naked singularity."></a></p>
+<figcaption>The valid deformation parameters for a Schwarszchild black hole. The black regions show invalid configurations, and the red contours denote regions where there is a naked singularity.</figcaption>
 </figure>
 </div>
+<p>Doing several of these plots for different values of the spin parameter may permit rigorous constraints of the allowed values of the deformation parameters. This may be done in two ways:</p>
+<ol type="1">
+<li>Fitting the data with the Kerr metric to constrain the value of <span class="math inline">\(a\)</span> such that bounds can be determined for the deformation parameters in advance.</li>
+<li>Somehow dynamically setting constraints on the parameters by selecting from a pre-computed table of allowed combinations for all values of <span class="math inline">\(a\)</span> (permitted by interpolation).</li>
+<li>Checking the configuration upon each iteration of the fit, and either rejecting the configuration, or manually setting it to an acceptable configuration if it lies within an unphysical region.</li>
+</ol>
+<p>The first method would allow for an exploration as to whether the deformation parameters can independently improve the fit of the model, but may reduce the accuracy of the overall fit through forbidding the spin parameter to change. This may be overcome by using the method to obtain a “best guess” for the parameters and then using the result of this for a third and final fit, however this may require implementing the second method also.</p>
+<p>The second method would likely be more computationally complex and introduce an increased amount of uncertainty due to the reliance on interpolation.</p>
+<p>The third method is potentially the least complex and introduces the least error as it allows the fit to freely explore the parameter space while guiding it through the process to ensure the results remain physical.</p>
+<p>To gather more data on the allowed parameter space, the above image was replicated for 5 spin values as shown below:</p>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="images/DeformParameterSpace_a=0.0.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/DeformParameterSpace_a=0.0.png" class="img-fluid"></a></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="images/DeformParameterSpace_a=0.2495.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="images/DeformParameterSpace_a=0.2495.png" class="img-fluid"></a></p>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="images/DeformParameterSpace_a=0.499.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="images/DeformParameterSpace_a=0.499.png" class="img-fluid"></a></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="images/DeformParameterSpace_a=0.7485.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="images/DeformParameterSpace_a=0.7485.png" class="img-fluid"></a></p>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="images/DeformParameterSpace_a=0.998.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="images/DeformParameterSpace_a=0.998.png" class="img-fluid"></a></p>
+</div>
+</div>
+</div>
+<p>From these plots it seems that it may be possible to empirically parameterise the invalid regions with 5 linear equations: one for the wedge in the bottom right first 3 figures, and two for each of the triangles visible in all cases.</p>
+<p>It may be practical to run a selection of cases to find the vertices of these regions such that their position can be plotted as a function of <span class="math inline">\(a\)</span> and then fit to find an empirical expression for the allowed values for any <span class="math inline">\(a\)</span>.</p>
+<p>To test this hypothesis a quick plot was made with 10 samples of the lower vertex of the triangular region seen in all plots at the top. The result of this is shown below</p>
+<p><a href="images/ParamBounds.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="images/ParamBounds.png" class="img-fluid"></a></p>
+<p>These example coordinates were found manually inspecting the heatmap with plotly. To find them more precisely, several high definition heatmaps could be produced and the resulting matrix iterated through to find the extrema of each of the shapes. The parameter space could then be constrained by either interpolating the values within a table, or by fitting some function to the data and finding the vertices of these major shapes.</p>
+<p>The vertices can then be used to define bounded exclusion regions, within which the model is invalid. During fitting these exclusion regions can then be used to “reject” a fit and force the parameters into an acceptable range.</p>
 
 
 
@@ -841,8 +880,8 @@ window.Quarto = {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./XRISMReduction.html" class="pagination-link" aria-label="Notes for the Reduction of XRISM Data">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Notes for the Reduction of XRISM Data</span></span>
+      <a href="./XRISMReduction.html" class="pagination-link" aria-label="XRISM Data Reduction">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">XRISM Data Reduction</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

@@ -2,9 +2,8 @@ using Gradus
 using Plots
 using ProgressBars
 using LaTeXStrings
-using BSON: @save
 
-pyplot()
+plotly()
 
 cm2in(x) = 0.3937008x
 cm2px(x) = Int(round(cm2in(x) * 100))
@@ -14,21 +13,11 @@ default(titlefont = (12, "serif"),
     legendfont = (8, "serif"), 
     tickfont = (8, "serif"), 
     colorbar_titlefont = (10, "serif"),
-    gridalpha=0.5,
+    gridalpha=1.,
     minorticks=true,
     dpi=300,
-    size=cm2px.((12,9)),
-    framestyle=:box,
-    minorgridalpha=0.2,
-    minorgrid=true
+    size=cm2px.((12,9))
 )
-#= 
-α13 = [4.9,4.8,4.3,3.9,3.2,2.6,2,1.2, 0.5, 0.1]
-ϵ3 = [-1,-1,-1.1,-1.2,-1.3,-1.5,-1.5,-1.6, -1.4, -0.5]
-a = range(0,0.998,10)
-
-scatter(a, α13, label="α13", xlabel="a", ylabel="Deformation Parameter", c=:black, msw=0)
-scatter!(a, ϵ3, label="ϵ3", c=:red, msw=0) =#
 
 function ValidityCheck(m)
 
@@ -79,7 +68,29 @@ function ParameterRegions(αmax, ϵmax; a=0.998, step=0.1)
         end
     end
 
-    return regions, αs, ϵs
+    hmp = heatmap(
+        ϵs,
+        αs,
+        regions;
+        xlabel = "epsilon_3",
+        ylabel = "alpha_13",
+        clims=(0, maximum(regions)),
+        ylims=(minimum(αs), maximum(αs)),
+        xlims=(minimum(ϵs), maximum(ϵs)),
+        colorbar_title="ISCO (R_g)",
+        framestyle=:box,
+        title="a = $a",
+        minorticks=4,
+        minorgrid=true,
+        minorgridalpha=0.5,
+        aspect_ratio=:equal,
+        xticks=ticks[ticks.>minVal],
+        yticks=ticks[ticks.>minVal]
+    )
+
+    display(hmp)
+
+    return regions, αs, ϵs, hmp
 end
 
 function DrawHorizon(p, m)
@@ -90,41 +101,10 @@ function DrawHorizon(p, m)
     y = @. radius * cos(θs)
     plot!(p, x, y, label = "a = $(m.a)")
 end
-
-function PlotRegion(regions, αs, ϵs)
-
-    hmp = heatmap(
-        ϵs,
-        αs,
-        regions;
-        xlabel = L"\epsilon_3",
-        ylabel = L"\alpha_{13}",
-        clims=(0, maximum(regions)),
-        ylims=(minimum(αs), maximum(αs)),
-        xlims=(minimum(ϵs), maximum(ϵs)),
-        colorbar_title=L"ISCO $(R_g)$",
-        title="a = $a",
-        minorticks=4,
-        minorgrid=true,
-        minorgridalpha=0.5,
-        aspect_ratio=:equal,
-        xticks=ticks[ticks.>minVal],
-        yticks=ticks[ticks.>minVal]
-    )
-
-    contour!(ϵs, αs, regions, levels=[-2], c=[:red], lw=1)
-
-    display(hmp)
-
-    return hmp
-end
-
 #range(0, 0.998, 5)
 
-for a in range(0, 0.998, 20)
-    ϵs, αs, regions = ParameterRegions(10., 10.; step=1, a=a)
-    @save "outBin/a=$a.bson" regions
-    GC.gc()
+for a in range(0, 0.998, 10)
+    ParameterRegions(10., 10.; step=0.1, a=a)
 end
 
 

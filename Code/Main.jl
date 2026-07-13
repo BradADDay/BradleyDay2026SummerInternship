@@ -1,29 +1,7 @@
 ## ======================================================================
-
-using Gradus
-using Plots
-using SpectralFitting
-using Colors
 using Dates
 
-pyplot()
-
-include("FittingModels.jl")
-include("ParameterVariations.jl")
-include("Defaults.jl")
-
-cm2in(x) = 0.3937008x
-cm2px(x) = Int(round(cm2in(x) * 100))
-
-default(titlefont = (12, "serif"), 
-    guidefont = (10, "serif"), 
-    legendfont = (8, "serif"), 
-    tickfont = (8, "serif"), 
-    gridalpha=0.,
-    minorticks=true,
-    dpi=300,
-    size=cm2px.((12,9))
-)
+include("utils/UTILS.jl")
 
 E = 6.4
 a = 0.998

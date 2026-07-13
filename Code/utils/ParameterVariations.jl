@@ -1,10 +1,29 @@
 using Gradus
-using Plots
-using ColorSchemes
-using SpectralFitting
 using Colors
 using Measures
-using OrdinaryDiffEq: AutoTsit5, Rosenbrock23
+
+include("PlottingDefaults.jl")
+
+# =======================================================================
+# Defaults
+# =======================================================================
+
+# Metric Defaults
+M = 1.0     # Mass
+a = 0.998   # Spin
+
+# Perturbation Defaults
+α13 = 0.
+α22 = 0.
+α52 = 0.
+ϵ3  = 0.
+
+# BH Defaults
+θ = 60. # Inclination, degrees
+h = 10. # Corona height
+
+# Dictionary for easy access and modification of the model parameters
+defaultSetupDict = Dict((["θ", θ], ["α13", α13], ["M", M], ["α22", α22], ["ϵ3", ϵ3], ["a", a], ["h", h], ["α52", α52]))
 
 # =======================================================================
 # Functions
@@ -62,7 +81,7 @@ function ComputeLineProfile(m, x; height, bins = range(0.0, 1.5, 180), minrₑ=-
 
     # Computing the line profile
     _, flux = lineprofile(m, x, d, profile; verbose=false, bins=bins, 
-            method=TransferFunctionMethod(), minrₑ=minrₑ, maxrₑ=maxrₑ, numrₑ=30, maxiters=10000, abstol=1e-7, reltol=1e-7)
+            method=TransferFunctionMethod(), minrₑ=minrₑ, maxrₑ=maxrₑ, numrₑ=30)
 
     return flux
 end

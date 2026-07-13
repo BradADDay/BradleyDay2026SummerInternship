@@ -43,3 +43,7 @@ To test this hypothesis a quick plot was made with 10 samples of the lower verte
 These example coordinates were found manually inspecting the heatmap with plotly. To find them more precisely, several high definition heatmaps could be produced and the resulting matrix iterated through to find the extrema of each of the shapes. The parameter space could then be constrained by either interpolating the values within a table, or by fitting some function to the data and finding the vertices of these major shapes. 
 
 The vertices can then be used to define bounded exclusion regions, within which the model is invalid. During fitting these exclusion regions can then be used to "reject" a fit and force the parameters into an acceptable range.
+
+![The valid values for $\epsilon_{3}$ to take for a range of spin values. The black hatched region marks the constraints placed by @eq-Alpha13Constraint. Contours of constant ISCO are marked in red. The shaded red region marks where a naked singularity occurs.](images/alpha13Allowed.png)
+
+![The valid values for $\epsilon_{3}$ to take for a range of spin values. The black hatched region marks the constraints placed by @eq-Epsilon3Constraint. Contours of constant ISCO are marked in red.](images/epsilon3Allowed.png){}

@@ -5,6 +5,8 @@ data/
 testimages/
 bsonFiles/
 output/
-Code/utils/
+Code/models/
 outBin/
 tabledata/
+XRISMReduction/
+OldFiles/

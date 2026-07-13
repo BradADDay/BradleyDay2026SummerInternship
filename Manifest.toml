@@ -2,7 +2,7 @@
 
 julia_version = "1.12.6"
 manifest_format = "2.0"
-project_hash = "0729a31522519c3d27ab2440114a27e87181b81b"
+project_hash = "90edd4c6e4445b09270d82eb12f1cdf47a977b52"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "bbc22a9a08a0ef6460041086d8a7b27940ed4ffd"
@@ -1161,6 +1161,11 @@ deps = ["Artifacts", "GettextRuntime_jll", "JLLWrappers", "Libdl", "Libffi_jll",
 git-tree-sha1 = "24f6def62397474a297bfcec22384101609142ed"
 uuid = "7746bdde-850d-59dc-9ae8-88ece973131d"
 version = "2.86.3+0"
+
+[[deps.Glob]]
+git-tree-sha1 = "246c628cec062230b7d183aab88841fa94fcabe9"
+uuid = "c27321d9-0574-5035-807b-f59d2c89b15c"
+version = "1.5.0"
 
 [[deps.Gradus]]
 deps = ["Buckets", "DataInterpolations", "DiffEqBase", "DiffEqCallbacks", "EnumX", "FFTW", "ForwardDiff", "GeometryBasics", "LinearAlgebra", "MuladdMacro", "MultiLinearInterpolations", "Optim", "OrdinaryDiffEq", "Parameters", "ProgressMeter", "QuadGK", "RecipesBase", "Roots", "SciMLBase", "SimpleNonlinearSolve", "StaticArrays", "Symbolics", "Tullio"]

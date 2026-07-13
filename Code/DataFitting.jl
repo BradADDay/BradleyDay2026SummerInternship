@@ -18,7 +18,7 @@ const OUTPUT = joinpath(ROOT, "output/")
 # ======================================================================================
 # Setup
 # ======================================================================================
-##
+
 # List of available datasets
 files = [
     "nu80402315002", 
@@ -34,60 +34,57 @@ files = [
 
 dataRange = (3,10)
 index = 2
-
-for index in eachindex(files)
     
-    # Reading the data
-    pathA = joinpath(DATADIR, "$(files[index])A01$(NUSTAR_EXTENSION)")
-    dataA = LoadData(pathA; dataRange)
-    domainA = SpectralFitting.plotting_domain(dataA)
+# Reading the data
+pathA = joinpath(DATADIR, "$(files[index])A01$(NUSTAR_EXTENSION)")
+dataA = LoadData(pathA; dataRange)
+domainA = SpectralFitting.plotting_domain(dataA)
 
-    pathB = joinpath(DATADIR, "$(files[index])B01$(NUSTAR_EXTENSION)")
-    dataB = LoadData(pathB; dataRange)
-    domainB = SpectralFitting.plotting_domain(dataB)
+pathB = joinpath(DATADIR, "$(files[index])B01$(NUSTAR_EXTENSION)")
+dataB = LoadData(pathB; dataRange)
+domainB = SpectralFitting.plotting_domain(dataB)
 
-    # Allowing the energy to vary between 6.4 keV (neutral/weakly ionised) and 7 (H-like iron)
-    energy = FitParam(6.4, lower_limit=6.4, upper_limit=7, frozen=false)
+# Allowing the energy to vary between 6.4 keV (neutral/weakly ionised) and 7 (H-like iron)
+energy = FitParam(6.4, lower_limit=6.4, upper_limit=7, frozen=false)
 
-    # ======================================================================================
-    # Kerr metric
-    # ======================================================================================
+# ======================================================================================
+# Kerr metric
+# ======================================================================================
 
-    println("Fitting Kerr...")
+println("Fitting Kerr...")
 
-    # Fitting the table model with the deformation parameters set to 0
-    kerrResult = FitPowerLawLineProfile(dataA, dataB; E=copy(energy), α13=FitParam(0.0, frozen=true), ϵ3=FitParam(0.0, frozen=true))
+# Fitting the table model with the deformation parameters set to 0
+kerrResult = FitPowerLawLineProfile(dataA, dataB; E=copy(energy), α13=FitParam(0.0, frozen=true), ϵ3=FitParam(0.0, frozen=true))
 
-    # Plotting
-    PlotFits(dataA, kerrResult[1], dataB, kerrResult[2]; title="Kerr Fit")
-    PlotResiduals(dataA, kerrResult[1])
+# Plotting
+PlotFits(dataA, kerrResult[1], dataB, kerrResult[2]; title="Kerr Fit")
+PlotResiduals(dataA, kerrResult[1])
 
-    LP, PL = GetParams(kerrResult; model="K")
+LP, PL = GetParams(kerrResult; model="K")
 
-    # ======================================================================================
-    # Johannsen metric
-    # ======================================================================================
+# ======================================================================================
+# Johannsen metric
+# ======================================================================================
 
-    println("Fitting Johannsen...")
+println("Fitting Johannsen...")
 
-    # Fitting the table model
-    johannsenResult = FitPowerLawLineProfile(dataA, dataB; E=energy)
+# Fitting the table model
+johannsenResult = FitPowerLawLineProfile(dataA, dataB; E=energy)
 
-    # Plotting
-    PlotFits(dataA, johannsenResult[1], dataB, johannsenResult[2]; title="Johannsen Fit")
-    PlotResiduals(dataA, johannsenResult[1])
+# Plotting
+PlotFits(dataA, johannsenResult[1], dataB, johannsenResult[2]; title="Johannsen Fit")
+PlotResiduals(dataA, johannsenResult[1])
 
-    # ======================================================================================
-    # Saving
-    # ======================================================================================
+## =====================================================================================
+# Saving
+# ======================================================================================
 
-    savefig(joinpath(OUTPUT, "TableKerr$(files[index]).png"))
-    @save joinpath(OUTPUT, "TableKerrResult$(files[index]).bson") kerrResult
-    savefig(joinpath(OUTPUT, "TableJohannsen$(files[index]).png"))
-    @save joinpath(OUTPUT, "TableJohannsenResult$(files[index]).bson") johannsenResult
+savefig(joinpath(OUTPUT, "TableKerr$(files[index]).png"))
+@save joinpath(OUTPUT, "TableKerrResult$(files[index]).bson") kerrResult
+savefig(joinpath(OUTPUT, "TableJohannsen$(files[index]).png"))
+@save joinpath(OUTPUT, "TableJohannsenResult$(files[index]).bson") johannsenResult
 
-    close("all")
-end
+close("all")
 
 CompleteSound()
 

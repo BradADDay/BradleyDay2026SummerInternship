@@ -16,6 +16,8 @@ The second method would likely be more computationally complex and introduce an 
 
 The third method is potentially the least complex and introduces the least error as it allows the fit to freely explore the parameter space while guiding it through the process to ensure the results remain physical.
 
+## The Behaviour of the Unphysical Regions
+
 To gather more data on the allowed parameter space, the above image was replicated for 5 spin values as shown below:
 
 :::{layout-ncol=2}
@@ -44,6 +46,18 @@ These example coordinates were found manually inspecting the heatmap with plotly
 
 The vertices can then be used to define bounded exclusion regions, within which the model is invalid. During fitting these exclusion regions can then be used to "reject" a fit and force the parameters into an acceptable range.
 
+## Allowed Values of the Deformation Parameters for Varying Spin
+
+As another investigative route, Figure 6 from @JohannsenMetric was reproduced as below. It was found that the results held consistent between Gradus, and Johannsen's original calculations. The $\alpha_{13}$ parameter space showed an additional region (shown in red) where a naked singularity is present. This was not considered previously, however removes a significant region from the parameter space and will thus be considered here.
+
 ![The valid values for $\epsilon_{3}$ to take for a range of spin values. The black hatched region marks the constraints placed by @eq-Alpha13Constraint. Contours of constant ISCO are marked in red. The shaded red region marks where a naked singularity occurs.](images/alpha13Allowed.png)
 
 ![The valid values for $\epsilon_{3}$ to take for a range of spin values. The black hatched region marks the constraints placed by @eq-Epsilon3Constraint. Contours of constant ISCO are marked in red.](images/epsilon3Allowed.png){}
+
+## Implementation
+
+The current plan for excluding these unphysical regions of the parameter space from the fitting is as follows. The unphysical regions will be defined by a set of equations for a given spin, and within these regions the fit will be setup to check if the combination is valid. To ensure no invalid combinations are mistakenly used, some padding will be added to these equations such that all invalid combinations are contained within. When the fitting iterator enters an invalid region, the combination will be explicitly checked for naked singularities, or the absence of a valid ISCO. 
+
+If the region is found to be invalid, then the `invoke!` function will return an array of zeros, which will signal to the fitting iterator that the parameter combination is not allowed for fitting. 
+
+A potential roadblock to this process is the unpredictable region in the bottom left corner of the high spin case. This will be dealt with by defining a circular region around this area to catch all of these cases. This will lead to a decrease in efficiency, but will increase the accuracy and thoroughness of the model.

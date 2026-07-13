@@ -2,19 +2,19 @@ using Gradus
 using ProgressBars
 using LaTeXStrings
 
-include("utils/PlottingDefaults.jl")
+include("PlottingDefaults.jl")
 
 function ValidityCheck(m)
 
-    if is_no_isco(m)
-        # No ISCO
-        return -1
+    if is_naked_singularity(m)
+        # Naked singularity
+        return -3
     elseif ((m.α13 < Constraints(m.a)) | (m.ϵ3 < Constraints(m.a)))
         # Abnormal exterior region
         return -2
-    elseif is_naked_singularity(m)
-        # Naked singularity
-        return -3
+    elseif is_no_isco(m)
+        # No ISCO
+        return -1
     else
         # No Abnormalities
         return Gradus.isco(m)
@@ -70,9 +70,7 @@ function DrawHorizon(p, m)
     plot!(p, x, y, label = "a = $(m.a)")
 end
 
-function PlotRegion(regions, αs, ϵs; title="")
-
-    ticks = -10:2:10
+function PlotRegion(regions, αs, ϵs, minVal; ticks = -10:2:10, title="")
 
     hmp = heatmap(
         ϵs,
@@ -80,7 +78,7 @@ function PlotRegion(regions, αs, ϵs; title="")
         regions;
         xlabel = L"\epsilon_3",
         ylabel = L"\alpha_{13}",
-        clims=(0, maximum(regions)),
+        clims=(-3, 0),
         ylims=(minimum(αs), maximum(αs)),
         xlims=(minimum(ϵs), maximum(ϵs)),
         colorbar_title=L"ISCO $(R_g)$",
@@ -93,9 +91,7 @@ function PlotRegion(regions, αs, ϵs; title="")
         yticks=ticks[ticks.>minVal]
     )
 
-    contour!(ϵs, αs, regions, levels=[-2], c=[:red], lw=1)
-
-    display(hmp)
+    contour!(ϵs, αs, regions, levels=[-3], c=[:red], lw=1)
 
     return hmp
 end

@@ -178,7 +178,7 @@ function FitPowerLawLineProfile(dataA, dataB; kwargs...)
     prob = BindParameters(modelA, modelB, dataA, dataB)
 
     # Fitting the model to the data
-    SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, maxIter=Int(1e4))
+    SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, maxIter=Int(1e3))
 end
 
 function FitPowerLawLineProfile(dataA, dataB, modelA, modelB)

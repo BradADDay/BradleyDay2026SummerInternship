@@ -21,6 +21,35 @@ function ValidityCheck(m)
     end
 end
 
+function IsValid(ϵ3, α13, a)
+
+    m = JohannsenMetric(a=a, ϵ3=ϵ3, α13=α13)
+
+    if is_naked_singularity(m) | is_no_isco(m) | ((m.α13 < Constraints(m.a)) | (m.ϵ3 < Constraints(m.a)))
+        return false
+    else 
+        return true
+    end
+
+end
+
+function QuickIsValid(ϵ3, α13, a, df; sgns=[1,1,-1,-1,-1,-1])
+    lines = GetLines(a, df)
+    conds = fill(true, length(lines))
+
+    for i in eachindex(lines)
+        if !isnothing(lines[i])
+            conds[i] = sgns[i]*α13 > sgns[i]*(LineEquation(ϵ3, lines[i]))
+        end
+    end
+    
+    if (conds[1] & conds[2]) | (conds[3] & conds[4]) | conds[5] | conds[6]
+        return false
+    else
+        return true
+    end
+end
+
 function is_no_isco(m)
     try 
         Gradus.isco(m)
@@ -58,7 +87,7 @@ function ParameterRegions(αmax, ϵmax; a=0.998, step=0.1)
         end
     end
 
-    return regions, αs, ϵs
+    return regions, αs, ϵs, minVal
 end
 
 function DrawHorizon(p, m)
@@ -70,7 +99,7 @@ function DrawHorizon(p, m)
     plot!(p, x, y, label = "a = $(m.a)")
 end
 
-function PlotRegion(regions, αs, ϵs, minVal; ticks = -10:2:10, title="")
+function PlotRegion(regions, αs, ϵs, minVal; ticks = -10:2:10, title="", contour=false)
 
     hmp = heatmap(
         ϵs,
@@ -90,8 +119,9 @@ function PlotRegion(regions, αs, ϵs, minVal; ticks = -10:2:10, title="")
         xticks=ticks[ticks.>minVal],
         yticks=ticks[ticks.>minVal]
     )
-
-    contour!(ϵs, αs, regions, levels=[-3], c=[:red], lw=1)
+    if contour
+        contour!(ϵs, αs, regions, levels=[-3], c=[:red], lw=1)
+    end
 
     return hmp
 end

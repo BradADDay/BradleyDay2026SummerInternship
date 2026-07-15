@@ -3,32 +3,17 @@ using MultiLinearInterpolations
 using Interpolations
 using Gradus
 
+include("Deformations.jl")
+
 # ===============================================================
 # Lamp post table model
 # ===============================================================
-
-function CheckValid(m)
-
-    if is_no_isco(m)
-        # No ISCO
-        return false
-    elseif ((m.α13 < Constraints(m.a)) | (m.ϵ3 < Constraints(m.a)))
-        # Abnormal exterior region
-        return false
-    elseif is_naked_singularity(m)
-        # Naked singularity
-        return false
-    else
-        # No Abnormalities
-        return true
-    end
-end
 
 # The number of parameters the model has
 const ModelNumParams = 5
 
 # The path to the model
-MODELDATAFILE = "/home/brad/Documents/SummerInternship/Code/models/model2.FITS"
+MODELDATAFILE = "/home/brad/Documents/SummerInternship/Code/models/ModelWithNegatives.FITS"
 
 # Reading in the table model and setting it up as an interpolation object
 data = TableModelData(Val(ModelNumParams), MODELDATAFILE)
@@ -57,7 +42,7 @@ end
 function XS_LampPostJohannsen(;
     K = FitParam(1.),
     E = FitParam(1., lower_limit=1., upper_limit=10., frozen=false),
-    a = FitParam(0.998, lower_limit=0, upper_limit=0.998, frozen=false),
+    a = FitParam(0.5, lower_limit=-0.998, upper_limit=0.998, frozen=false),
     h = FitParam(10., lower_limit=3., upper_limit=15., frozen=false),
     θ = FitParam(60., lower_limit=5., upper_limit=85., frozen=false),
     α13 = FitParam(0., lower_limit=-0.4, upper_limit=10., frozen=false),
@@ -72,15 +57,16 @@ function SpectralFitting.invoke!(output, input, model::XS_LampPostJohannsen)
 
     # Pulling the necessary parameters
     let table = model.table, E = model.E, a = model.a, h = model.h, θ = model.θ, α13 = model.α13, ϵ3 = model.ϵ3
-        
-        println("$α13, $ϵ3, $a")
 
         m = JohannsenMetric(a=a, α13=α13, ϵ3=ϵ3)
 
-        if !CheckValid(m)
-            println("Bad Combo!")
-            output = zeros(length(input)-1)
-            return output
+        # Reading from table for a quick check of parameter validity
+        if !QuickIsValid(ϵ3, α13, a)
+            # Doing a finer check if the quick check fails
+            if !IsValid(ϵ3, α13, a)
+                output = fill(NaN, length(input)-1)
+                return output
+            end
         end
 
         # Scaling for energy

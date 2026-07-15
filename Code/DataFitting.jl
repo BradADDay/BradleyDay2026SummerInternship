@@ -7,13 +7,7 @@ using BSON: @save, @load
 using BenchmarkTools
 
 # Loading in files
-include("utils/UTILS.jl")
-
-# Setting Filepaths
-const ROOT = "/home/brad/Documents/SummerInternship/"
-const DATADIR = joinpath(ROOT, "data")
-const NUSTAR_EXTENSION = "_sr_1000.pha"
-const OUTPUT = joinpath(ROOT, "output/")
+include("utils/FittingUtils.jl")
 
 # ======================================================================================
 # Setup
@@ -32,61 +26,9 @@ files = [
     "nu80502304006"
 ]
 
-dataRange = (3,10)
-index = 2
-    
-# Reading the data
-pathA = joinpath(DATADIR, "$(files[index])A01$(NUSTAR_EXTENSION)")
-dataA = LoadData(pathA; dataRange)
-domainA = SpectralFitting.plotting_domain(dataA)
-
-pathB = joinpath(DATADIR, "$(files[index])B01$(NUSTAR_EXTENSION)")
-dataB = LoadData(pathB; dataRange)
-domainB = SpectralFitting.plotting_domain(dataB)
-
-# Allowing the energy to vary between 6.4 keV (neutral/weakly ionised) and 7 (H-like iron)
-energy = FitParam(6.4, lower_limit=6.4, upper_limit=7, frozen=false)
-
-# ======================================================================================
-# Kerr metric
-# ======================================================================================
-
-println("Fitting Kerr...")
-
-# Fitting the table model with the deformation parameters set to 0
-kerrResult = FitPowerLawLineProfile(dataA, dataB; E=copy(energy), α13=FitParam(0.0, frozen=true), ϵ3=FitParam(0.0, frozen=true))
-
-# Plotting
-PlotFits(dataA, kerrResult[1], dataB, kerrResult[2]; title="Kerr Fit")
-PlotResiduals(dataA, kerrResult[1])
-
-LP, PL = GetParams(kerrResult; model="K")
-
-# ======================================================================================
-# Johannsen metric
-# ======================================================================================
-
-println("Fitting Johannsen...")
-
-# Fitting the table model
-johannsenResult = FitPowerLawLineProfile(dataA, dataB; E=energy)
-
-# Plotting
-PlotFits(dataA, johannsenResult[1], dataB, johannsenResult[2]; title="Johannsen Fit")
-PlotResiduals(dataA, johannsenResult[1])
-
-## =====================================================================================
-# Saving
-# ======================================================================================
-
-savefig(joinpath(OUTPUT, "TableKerr$(files[index]).png"))
-@save joinpath(OUTPUT, "TableKerrResult$(files[index]).bson") kerrResult
-savefig(joinpath(OUTPUT, "TableJohannsen$(files[index]).png"))
-@save joinpath(OUTPUT, "TableJohannsenResult$(files[index]).bson") johannsenResult
+FitNUStar(files[2]; kerr=false)
 
 close("all")
-
-CompleteSound()
 
 ##
 

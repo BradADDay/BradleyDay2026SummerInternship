@@ -2,6 +2,11 @@ using SpectralFitting
 using LaTeXStrings
 using Measures
 
+# Setting Filepaths
+const ROOT = "/home/brad/Documents/SummerInternship/"
+const DATADIR = joinpath(ROOT, "data")
+const OUTPUT = joinpath(ROOT, "output/")
+
 include("PlottingDefaults.jl")
 include("FittingModels.jl")
 include("GeneralUtils.jl")
@@ -225,5 +230,64 @@ function PlotFits(dataA, fitA, dataB, fitB; bounds=(3, 10), title="")
     plotB = PlotSpectrum(dataB, fitB; xlabel="Energy (keV)")
 
     DualSpectrumPlot(plotA, plotB; bounds=bounds, title=title)
+
+end
+
+function NUStarFitJohannsen(dataA, dataB, energy)
+    println("Fitting Johannsen...")
+
+    # Fitting the table model
+    johannsenResult = FitPowerLawLineProfile(dataA, dataB; E=copy(energy))
+
+    for (i, data) in enumerate([dataA, dataB])
+        PlotResiduals(data, johannsenResult[i])
+    end
+
+    # Plotting
+    PlotFits(dataA, johannsenResult[1], dataB, johannsenResult[2]; title="Johannsen Fit")
+
+    return johannsenResult
+end
+
+function NUStarFitKerr(dataA, dataB, energy)
+
+    println("Fitting Kerr...")
+
+    # Fitting the table model with the deformation parameters set to 0
+    kerrResult = FitPowerLawLineProfile(dataA, dataB; E=copy(energy), α13=FitParam(0.0, frozen=true), ϵ3=FitParam(0.0, frozen=true))
+    
+    for (i, data) in enumerate([dataA, dataB])
+        PlotResiduals(data, kerrResult[i])
+    end
+    
+    # Plotting
+    PlotFits(dataA, kerrResult[1], dataB, kerrResult[2]; title="Kerr Fit")
+
+    return kerrResult
+
+end
+
+function FitNUStar(file; extension="_sr_1000.pha", dataRange=(3,10),
+    energy=FitParam(6.4, lower_limit=6.4, upper_limit=7, frozen=false),
+    kerr=true, johannsen=true)
+        
+    kerrResult, johannsenResult = nothing, nothing
+
+    # Reading the data
+    pathA = joinpath(DATADIR, "$(file)A01$(extension)")
+    dataA = LoadData(pathA; dataRange)
+
+    pathB = joinpath(DATADIR, "$(file)B01$(extension)")
+    dataB = LoadData(pathB; dataRange)
+
+    if kerr
+        kerrResult = NUStarFitKerr(dataA, dataB, energy)
+    end
+
+    if johannsen
+        johannsenResult = NUStarFitJohannsen(dataA, dataB, energy)
+    end
+
+    kerrResult, johannsenResult
 
 end

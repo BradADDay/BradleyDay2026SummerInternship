@@ -61,3 +61,9 @@ The current plan for excluding these unphysical regions of the parameter space f
 If the region is found to be invalid, then the `invoke!` function will return an array of zeros, which will signal to the fitting iterator that the parameter combination is not allowed for fitting. 
 
 A potential roadblock to this process is the unpredictable region in the bottom left corner of the high spin case. This will be dealt with by defining a circular region around this area to catch all of these cases. This will lead to a decrease in efficiency, but will increase the accuracy and thoroughness of the model.
+
+### Notes Following Implementation
+
+The boundary lines were successfully defined by finding the vertices, and a csv of gradients and intercepts was defined for quick reading of the lines. Padding was added manually to these lines by taking a random sample of the parameter space and checking if the bounds caught every invalid combination (checked by explicitly checking the metric for each point). The bounds were designed to be overzealous such that no valid combinations are missed. To avoid removing valid combinations, the fitting process will involve first a quick check with the boundaries, followed by a thorough check with the metric if the first check fails.
+
+The unpredictable region in the lower left corner was instead defined with a line with slope -1 for convenience.

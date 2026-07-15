@@ -29,14 +29,35 @@ end
 function LoadData(path; dataRange=(3,12))
     """Load in an OGIP dataset from a given path and 
     curtail it to an energy range"""
+
     # Reading the dataset
     data = OGIPDataset(path)
+
+    CleanData(data, dataRange)
+end
+
+function LoadData(spectrum, background, response, ancillary; dataRange=(3,10))
+
+    data = OGIPDataset(
+        spectrum; 
+        background = background, 
+        response = response, 
+        ancillary = ancillary
+    )
+
+    CleanData(data, dataRange)
+end
+
+function CleanData(data::SpectralData, dataRange)
 
     # Regrouping, normalising, dropping bad channels and curtailing
     regroup!(data)
     normalize!(data)
     drop_bad_channels!(data)
     mask_energies!(data,dataRange...)
+
+    data
+
 end
 
 function PlotSpectrum(data; xlabel=nothing, ylabel=nothing)
@@ -144,12 +165,12 @@ function PlotResiduals(data, fit)
     
 end
 
-function FitPowerLawLineProfile(data; kwargs...)
+function FitPowerLawLineProfile(data; maxIter, kwargs...)
     model = XS_LampPostJohannsen(;kwargs...) + PowerLaw()
 
     prob = FittingProblem(model => data)
 
-    SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, maxIter=Int(1e4))
+    SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, maxIter=maxIter)
 end
 
 # =================================================================================
@@ -171,7 +192,7 @@ function BindParameters(modelA, modelB, dataA, dataB)
     return prob
 end
 
-function FitPowerLawLineProfile(dataA, dataB; kwargs...)
+function FitPowerLawLineProfile(dataA, dataB; maxIter, kwargs...)
     """Fit a composite model of a power law and line profile 
     from the Johannsen table model"""
 
@@ -183,10 +204,10 @@ function FitPowerLawLineProfile(dataA, dataB; kwargs...)
     prob = BindParameters(modelA, modelB, dataA, dataB)
 
     # Fitting the model to the data
-    SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, maxIter=Int(1e3))
+    SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, maxIter=maxIter)
 end
 
-function FitPowerLawLineProfile(dataA, dataB, modelA, modelB)
+function FitPowerLawLineProfile(dataA, dataB, modelA, modelB; maxIter)
     """Fit a composite model of a power law and line profile 
     from the Johannsen table model"""
 
@@ -194,7 +215,7 @@ function FitPowerLawLineProfile(dataA, dataB, modelA, modelB)
     prob = BindParameters(modelA, modelB, dataA, dataB)
 
     # Fitting the model to the data
-    SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, maxIter=Int(1e4))
+    SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, maxIter=maxIter)
 end
 
 function DualSpectrumPlot(plotA, plotB; bounds=(5,7.5), title="", kwargs...)
@@ -286,6 +307,47 @@ function FitNUStar(file; extension="_sr_1000.pha", dataRange=(3,10),
 
     if johannsen
         johannsenResult = NUStarFitJohannsen(dataA, dataB, energy)
+    end
+
+    kerrResult, johannsenResult
+
+end
+
+# =================================================================================
+# XRISM data
+# =================================================================================
+
+function FitXRISM(spectrum, background, response, ancillary; 
+    dataRange=(3,10), energy=FitParam(6.4, lower_limit=6.4, upper_limit=7, frozen=false),
+    kerr=true, johannsen=true, kwargs...)
+
+    kerrResult, johannsenResult = nothing, nothing
+
+    data = LoadData(
+        spectrum, 
+        background, 
+        response, 
+        ancillary;
+        dataRange=dataRange
+    )
+
+    if kerr
+
+        println("Fitting Kerr...")
+
+        kerrResult = FitPowerLawLineProfile(
+            data; maxIter=Int(1e3), E=energy, 
+            α13=FitParam(0.0, frozen=true), 
+            ϵ3=FitParam(0.0, frozen=true), kwargs...)
+        PlotResiduals(data, kerrResult[1])
+    end
+
+    if johannsen
+
+        println("Fitting Johannsen...")
+
+        johannsenResult = FitPowerLawLineProfile(data; maxIter=Int(1e3), E=energy, kwargs...)
+        PlotResiduals(data, johannsenResult[1])
     end
 
     kerrResult, johannsenResult

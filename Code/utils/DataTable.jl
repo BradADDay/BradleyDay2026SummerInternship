@@ -22,7 +22,7 @@ function Generate(as, pbar, bins, OUTDIR, hs, θs, α13s, ϵ3s)
             for θ in θs
                 for α13 in α13s
                     for ϵ3 in ϵ3s
-                        
+
                         combination = "$a, $h, $θ, $α13, $ϵ3"
                         update(pbar)
                         flux= fill(NaN, length(bins))
@@ -93,6 +93,14 @@ function MultiGenerate(as, pbar, bins, OUTDIR, hs, θs, α13s, ϵ3s)
 
 end
 
+function GetVars(as, hs, θs, α13s, ϵ3s)
+    for i in [as, hs, θs, α13s, ϵ3s]
+        open("vars.txt", "a") do io
+            write(io, "$(collect(i)),\n")
+        end
+    end
+end
+
 # Defining the parameter space
 as   = range(-0.998, 0.998, 12)
 hs   = range( 3  , 15.   , 8)
@@ -100,11 +108,7 @@ hs   = range( 3  , 15.   , 8)
 α13s = range(-8., 10., 12)
 ϵ3s  = range(-8., 10., 12)
 
-for i in [as, hs, θs, α13s, ϵ3s]
-    open("vars.txt", "a") do io
-        write(io, "$(collect(i)),\n")
-    end
-end
+
 
 OUTDIR = "tabledata/"
 

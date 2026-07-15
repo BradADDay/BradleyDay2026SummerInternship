@@ -198,10 +198,17 @@ physical
 -circle(919.0,271.0,91.0)
 ```
 
+using
+```{.bash .code-overflow-wrap .eval-false}
+echo "physical" > exclude_calsources.reg
+echo "-circle(920.0,1530.0,92.0)" >> exclude_calsources.reg
+echo "-circle(919.0,271.0,91.0)" >> exclude_calsources.reg
+```
+
 Next make a 0.5-10 keV Xtend image in DET coordinates
 ```{.bash .code-overflow-wrap .eval-false}
 clear all
-read eve xa000125000xtd_p031100010_xpc_clnevt.fits.gz .
+read eve xa000125000xtd_p031100010_cl_xpc_clnevt.fits .
 set image DET
 filter region exclude_calsources.reg
 filter pha_cutoff 83 1667
@@ -248,18 +255,18 @@ save spectrum xa000125000rsl_allpix_Hp_src.pi
 
 # Read in the cleaned Xtend event file and extract 0.5-10 keV lightcurves and spectra from the background and source regions
 clear all
-read eve xa000125000xtd_p031100010_cl_xpc_clnevt.fits.gz .
+read eve xa000125000xtd_p031100010_cl_xpc_clnevt.fits .
 set image det
-filter region region_000125000_bgd.reg
+filter region region_000125000xtd_bgd.reg
 filter pha_cutoff 83 1667
 set binsize 128.0
-extr curve exposure=0.6
+extr curve exposure=0.4
 save curve xa000125000xtd_0p5to10keV_b128_bgd_lc.fits
 clear pha_cutoff
 extr spectrum
 save spectrum xa000125000xtd_bgd.pi
 clear region
-filter region region_000125000_src.reg
+filter region region_000125000xtd_src.reg
 filter pha_cutoff 83 1667
 extr curve exposure=0.4
 save curve xa000125000xtd_0p5to10keV_b128_src_lc.fits
@@ -270,6 +277,14 @@ exit
 ```
 
 ## Check Attitude Stability
+
+```{.bash .code-overflow-wrap .eval-false}
+ftselect infile=xa000125000.ehk outfile=xa000125000_gtifiltered.ehk 
+# Using the expression:
+gtifilter("xa000125000rsl_p0px1000_cl2.evt[GTI]")
+
+fplot xa000125000_gtifiltered.ehk TIME ANG_DIST - /PS Q outfile=attitudestability.ps
+```
 
 Examine the attitude stability during the observation (e.g. by plotting ANG_DIST versus TIME for the "xa000125000_gtifiltered.ehk" file)
 
@@ -287,7 +302,7 @@ For Resolve:
 ```{.bash .code-overflow-wrap .eval-false}
 punlearn xaexpmap
 
-xaexpmap ehkfile=xa000125000.ehk.gz gtifile=xa000125000rsl_p0px1000_cl2.evt.gz instrume=RESOLVE badimgfile=NONE pixgtifile=xa000125000rsl_px1000_exp.gti.gz outfile=xa000125000rsl_p0px1000.expo outmaptype=EXPOSURE delta=20.0 numphi=1 stopsys=SKY instmap=CALDB qefile=CALDB contamifile=CALDB vigfile=CALDB obffile=CALDB fwfile=CALDB gvfile=CALDB maskcalsrc=yes fwtype=FILE specmode=MONO specfile=spec.fits specform=FITS evperchan=DEFAULT abund=1 cols=0 covfac=1 clobber=yes chatter=1 logfile=make_expo_xa000125000rsl_p0px1000.log
+xaexpmap ehkfile=xa000125000.ehk.gz gtifile=xa000125000rsl_p0px1000_cl2.evt instrume=RESOLVE badimgfile=NONE pixgtifile=xa000125000rsl_px1000_exp.gti.gz outfile=xa000125000rsl_p0px1000.expo outmaptype=EXPOSURE delta=20.0 numphi=1 stopsys=SKY instmap=CALDB qefile=CALDB contamifile=CALDB vigfile=CALDB obffile=CALDB fwfile=CALDB gvfile=CALDB maskcalsrc=yes fwtype=FILE specmode=MONO specfile=spec.fits specform=FITS evperchan=DEFAULT abund=1 cols=0 covfac=1 clobber=yes chatter=1 logfile=make_expo_xa000125000rsl_p0px1000.log
 ```
 
 For CalDB 12 and HEASoft 6.36 mitigation:
@@ -298,7 +313,7 @@ fparkey fitsfile=xa000125000rsl_p0px1000.expo keyword=OPTAOFFY value=0.0 comm="o
 
 For Xtend:
 ```{.bash .code-overflow-wrap .eval-false}
-xaexpmap ehkfile=xa000125000.ehk.gz gtifile=xa000125000xtd_p031100010_cl_xpc_clnevt.fits.gz instrume=XTEND badimgfile=xa000125000xtd_p031100010.bimg.gz pixgtifile=xa000125000xtd_p031100010_cl_xpc_rmvpix.fpix.gz outfile=xa000125000xtd_a031100010.expo outmaptype=EXPOSURE delta=20.0 numphi=1 stopsys=SKY instmap=CALDB qefile=CALDB contamifile=CALDB vigfile=CALDB obffile=CALDB fwfile=CALDB gvfile=CALDB maskcalsrc=yes fwtype=FILE specmode=MONO specfile=spec.fits specform=FITS evperchan=DEFAULT abund=1 cols=0 covfac=1 clobber=yes chatter=1 logfile=make_expo_xa000125000xtd_p031100010.log
+xaexpmap ehkfile=xa000125000.ehk.gz gtifile=xa000125000xtd_p031100010_cl_xpc_clnevt.fits instrume=XTEND badimgfile=xa000125000xtd_p031100010.bimg.gz pixgtifile=xa000125000xtd_p031100010_cl_xpc_rmvpix.fpix outfile=xa000125000xtd_a031100010.expo outmaptype=EXPOSURE delta=20.0 numphi=1 stopsys=SKY instmap=CALDB qefile=CALDB contamifile=CALDB vigfile=CALDB obffile=CALDB fwfile=CALDB gvfile=CALDB maskcalsrc=yes fwtype=FILE specmode=MONO specfile=spec.fits specform=FITS evperchan=DEFAULT abund=1 cols=0 covfac=1 clobber=yes chatter=1 logfile=make_expo_xa000125000xtd_p031100010.log
 ```
 
 For CalDB 12 and HEASoft 6.36:
@@ -338,6 +353,10 @@ rm $HOME/pfiles/xaxmaarfgen.par
 For the two Resolve commands in this section replace `NGC4151` with a label for the object you're using.
 
 We first make a special event file that removes all Low Secondary (Ls) events. We calculate the Hp fraction over a clean energy range for which we choose 3-10 keV to maximise accuracy.
+
+:::{.callout-note}
+All of the following commands can be automatically run sequentially using `RMFARF.sh`. Note that this will only work for a non-bright point source as the pipeline differs slightly for other sources.
+:::
  
 ```{.bash .code-overflow-wrap .eval-false}
 ftcopy infile="xa000125000rsl_p0px1000_cl2.evt[EVENTS][(PI>=6000)&&(PI<=20000)&&(ITYPE<4)]" outfile=xa000125000rsl_p0px1000_UPR.evt copyall=yes
@@ -367,7 +386,7 @@ xtdrmf infile=xa000125000xtd_src.pi outfile=xa000125000xtd_p031100010_src.rmf rm
 
 For Resolve data:
 
-If the resolve data has Hp fractions that vary significantly from pixel to pixel see the QSG to make spectral responses (combined RMF and ARF files). 
+If the resolve data has Hp fractions that vary significantly from pixel to pixel see the QSG to make spectral responses (combined RMF and ARF files). In the following commands replace `RA` and `DEC` with the values determined earlier from `coordpnt`, for the dataset used here 182.63409879 and 39.40629018 were used
 
 :::{.callout-note}
 If you excluded any pixels from the spectrum then replace `region_RSL_det.reg` with an appropriate region file excluding these pixels.
@@ -376,11 +395,11 @@ If you excluded any pixels from the spectrum then replace `region_RSL_det.reg` w
 To make a full-array point source ARF for Resolve, run
 ```{.bash .code-overflow-wrap .eval-false}
 punlearn xaarfgen
-xaarfgen xrtevtfile=raytrace_xa000125000rsl_p0px1000_ptsrc.fits source_ra=rslsrc_ra source_dec=rslsrc_dec telescop=XRISM instrume=RESOLVE emapfile=xa000125000rsl_p0px1000.expo regmode=DET regionfile=region_RSL_det.reg sourcetype=POINT rmffile=NGC4151_obs1_60k_60k_Hp_allpix_S.rmf erange="0.3 18.0 2.0 8.0" outfile=xa000125000rsl_p0px1000_ptsrc.arf numphoton=300000 minphoton=100 teldeffile=CALDB qefile=CALDB contamifile=CALDB obffile=CALDB fwfile=CALDB gatevalvefile=CALDB onaxisffile=CALDB onaxiscfile=CALDB mirrorfile=CALDB obstructfile=CALDB frontreffile=CALDB backreffile=CALDB pcolreffile=CALDB scatterfile=CALDB mode=h clobber=yes seed=7 imgfile=NONE
+xaarfgen xrtevtfile=raytrace_xa000125000rsl_p0px1000_ptsrc.fits source_ra=RA source_dec=DEC telescop=XRISM instrume=RESOLVE emapfile=xa000125000rsl_p0px1000.expo regmode=DET regionfile=region_RSL_det.reg sourcetype=POINT rmffile=NGC4151_obs1_60k_60k_Hp_allpix_S.rmf erange="0.3 18.0 2.0 8.0" outfile=xa000125000rsl_p0px1000_ptsrc.arf numphoton=300000 minphoton=100 teldeffile=CALDB qefile=CALDB contamifile=CALDB obffile=CALDB fwfile=CALDB gatevalvefile=CALDB onaxisffile=CALDB onaxiscfile=CALDB mirrorfile=CALDB obstructfile=CALDB frontreffile=CALDB backreffile=CALDB pcolreffile=CALDB scatterfile=CALDB mode=h clobber=yes seed=7 imgfile=NONE
 ```
 
 For Xtend:
 ```{.bash .code-overflow-wrap .eval-false}
 punlearn xaarfgen
-xaarfgen xrtevtfile=raytrace_xa000125000xtd_p031100010_boxreg_ptsrc.fits source_ra=182.63409879 source_dec=39.40629018 telescop=XRISM instrume=XTEND emapfile=xa000125000xtd_a031100010.expo regmode=DET regionfile=region_000125000_src.reg sourcetype=POINT rmffile=xa000125000xtd_p031100010_src.rmf erange="0.3 18.0 2.0 8.0" outfile=xa000125000xtd_p031100010_ptsrc.arf numphoton=300000 minphoton=100 teldeffile=CALDB qefile=CALDB contamifile=CALDB obffile=CALDB fwfile=CALDB onaxisffile=CALDB onaxiscfile=CALDB mirrorfile=CALDB obstructfile=CALDB frontreffile=CALDB backreffile=CALDB pcolreffile=CALDB scatterfile=CALDB mode=h clobber=yes seed=7 imgfile=NONE
+xaarfgen xrtevtfile=raytrace_xa000125000xtd_p031100010_boxreg_ptsrc.fits source_ra=RA source_dec=DEC telescop=XRISM instrume=XTEND emapfile=xa000125000xtd_a031100010.expo regmode=DET regionfile=region_000125000_src.reg sourcetype=POINT rmffile=xa000125000xtd_p031100010_src.rmf erange="0.3 18.0 2.0 8.0" outfile=xa000125000xtd_p031100010_ptsrc.arf numphoton=300000 minphoton=100 teldeffile=CALDB qefile=CALDB contamifile=CALDB obffile=CALDB fwfile=CALDB onaxisffile=CALDB onaxiscfile=CALDB mirrorfile=CALDB obstructfile=CALDB frontreffile=CALDB backreffile=CALDB pcolreffile=CALDB scatterfile=CALDB mode=h clobber=yes seed=7 imgfile=NONE
 ```

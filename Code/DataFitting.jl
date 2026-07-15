@@ -9,8 +9,8 @@ using BenchmarkTools
 # Loading in files
 include("utils/FittingUtils.jl")
 
-# ======================================================================================
-# Setup
+## =====================================================================================
+# NUStar
 # ======================================================================================
 
 # List of available datasets
@@ -30,23 +30,15 @@ FitNUStar(files[2]; kerr=false)
 
 close("all")
 
-##
+## =====================================================================================
+# XRISM
+# ======================================================================================
 
-energy = FitParam(6.4, lower_limit=6.4, upper_limit=7, frozen=false)
-
-data = OGIPDataset(
-    "data/xa000125000xtd_src.pi"; 
-    background = "data/xa000125000xtd_bgd.pi", 
-    response = "data/xa000125000xtd_p031100010_src.rmf", 
-    ancillary = "data/xa000125000xtd_p031100010_ptsrc.arf"
+kerrResult, johannsenResult = FitXRISM(
+    "data/xa000125000xtd_src.pi", 
+    "data/xa000125000xtd_bgd.pi", 
+    "data/xa000125000xtd_p031100010_src.rmf", 
+    "data/xa000125000xtd_p031100010_ptsrc.arf";
+    johannsen=false,
+    K=FitParam(10.)
 )
-
-# Regrouping, normalising, dropping bad channels and curtailing
-regroup!(data)
-normalize!(data)
-drop_bad_channels!(data)
-mask_energies!(data, 3, 10)
-
-result = FitPowerLawLineProfile(data; E=energy, α13=FitParam(0., frozen=true), ϵ3=FitParam(0., frozen=true))
-
-PlotResiduals(data, result[1])

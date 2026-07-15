@@ -746,14 +746,18 @@ Note
 <pre><code>physical
 -circle(920.0,1530.0,92.0)
 -circle(919.0,271.0,91.0)</code></pre>
+<p>using</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"physical"</span> <span class="op">&gt;</span> exclude_calsources.reg</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"-circle(920.0,1530.0,92.0)"</span> <span class="op">&gt;&gt;</span> exclude_calsources.reg</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"-circle(919.0,271.0,91.0)"</span> <span class="op">&gt;&gt;</span> exclude_calsources.reg</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Next make a 0.5-10 keV Xtend image in DET coordinates</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clear</span> all</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">read</span> <span class="va">eve</span> <span class="va">xa000125000xtd_p031100010_xpc_clnevt</span>.fits.gz .</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> image DET</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="ex">filter</span> region exclude_calsources.reg</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="ex">filter</span> pha_cutoff 83 1667</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="ex">extr</span> image</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="ex">save</span> image xa000125000xtd_p031100010_detimg.fits</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clear</span> all</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">read</span> <span class="va">eve</span> <span class="va">xa000125000xtd_p031100010_cl_xpc_clnevt</span>.fits .</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> image DET</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="ex">filter</span> region exclude_calsources.reg</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="ex">filter</span> pha_cutoff 83 1667</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="ex">extr</span> image</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="ex">save</span> image xa000125000xtd_p031100010_detimg.fits</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Now we can estimate the centroid of the source in DET coordinates in the Xtend data using <code>ds9</code>. <em>Note this coordinate down as it will also be useful later</em>.</p>
 <p>Next make region files for the source and background lightcurves and spectra. It is reccommended to use a rectangle of length 5 arcmin and width as wide as possible for 1/8 Window mode images. The region should not extend beyond the chip boundary as this will result in an incorrect ARF. For full window mode it is reccommended to use a circle of radius 2.5 arcmin. The regions selected for the data used here are shown below</p>
 <div class="quarto-figure quarto-figure-center">
@@ -768,48 +772,53 @@ region_000125000xtd_bgd.reg</code></pre>
 <section id="extract-lightcurves-and-spectra" class="level2" data-number="7.5">
 <h2 data-number="7.5" class="anchored" data-anchor-id="extract-lightcurves-and-spectra"><span class="header-section-number">7.5</span> Extract Lightcurves and Spectra</h2>
 <p>In the <code>analysis/</code> directory start a new XSELECT session and read in the cleaned resolve event file:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">read</span> <span class="va">eve</span> <span class="va">xa000125000rsl_p0px1000_cl2</span>.evt .</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract a resolve full-array lightcurve in the 2-10 keV band (time bin in seconds)</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> image det</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="ex">filter</span> pha_cutoff 4000 20000</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> binsize 128.0</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="ex">extr</span> curve exposure=0.8</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="ex">save</span> curve xa000125000rsl_allpix_b128_lc.fits</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># If a time bin has less than a fraction "exposure" then you will get a warning about too many bins being cut, reduce the value of exposure to mitigate this</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract a Resolve spectrum from the full array, for hi-res primary events only</span></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co"># The first command can be modified to exclude pixels or a group of pixels</span></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="ex">filter</span> column <span class="st">"pixel=0:11,13:35"</span></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="ex">filter</span> GRADE <span class="st">"0:0"</span></span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="ex">extr</span> spectrum</span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="ex">save</span> spectrum xa000125000rsl_allpix_Hp_src.pi</span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in the cleaned Xtend event file and extract 0.5-10 keV lightcurves and spectra from the background and source regions</span></span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="fu">clear</span> all</span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="bu">read</span> <span class="va">eve</span> <span class="va">xa000125000xtd_p031100010_cl_xpc_clnevt</span>.fits.gz .</span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> image det</span>
-<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a><span class="ex">filter</span> region region_000125000_bgd.reg</span>
-<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="ex">filter</span> pha_cutoff 83 1667</span>
-<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> binsize 128.0</span>
-<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a><span class="ex">extr</span> curve exposure=0.6</span>
-<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a><span class="ex">save</span> curve xa000125000xtd_0p5to10keV_b128_bgd_lc.fits</span>
-<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a><span class="fu">clear</span> pha_cutoff</span>
-<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a><span class="ex">extr</span> spectrum</span>
-<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a><span class="ex">save</span> spectrum xa000125000xtd_bgd.pi</span>
-<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a><span class="fu">clear</span> region</span>
-<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a><span class="ex">filter</span> region region_000125000_src.reg</span>
-<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a><span class="ex">filter</span> pha_cutoff 83 1667</span>
-<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a><span class="ex">extr</span> curve exposure=0.4</span>
-<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a><span class="ex">save</span> curve xa000125000xtd_0p5to10keV_b128_src_lc.fits</span>
-<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a><span class="fu">clear</span> pha_cutoff</span>
-<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a><span class="ex">extr</span> spectrum</span>
-<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a><span class="ex">save</span> spectrum xa000125000xtd_src.pi</span>
-<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a><span class="bu">exit</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">read</span> <span class="va">eve</span> <span class="va">xa000125000rsl_p0px1000_cl2</span>.evt .</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract a resolve full-array lightcurve in the 2-10 keV band (time bin in seconds)</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> image det</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="ex">filter</span> pha_cutoff 4000 20000</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> binsize 128.0</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="ex">extr</span> curve exposure=0.8</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="ex">save</span> curve xa000125000rsl_allpix_b128_lc.fits</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co"># If a time bin has less than a fraction "exposure" then you will get a warning about too many bins being cut, reduce the value of exposure to mitigate this</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract a Resolve spectrum from the full array, for hi-res primary events only</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co"># The first command can be modified to exclude pixels or a group of pixels</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="ex">filter</span> column <span class="st">"pixel=0:11,13:35"</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="ex">filter</span> GRADE <span class="st">"0:0"</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="ex">extr</span> spectrum</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="ex">save</span> spectrum xa000125000rsl_allpix_Hp_src.pi</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in the cleaned Xtend event file and extract 0.5-10 keV lightcurves and spectra from the background and source regions</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="fu">clear</span> all</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="bu">read</span> <span class="va">eve</span> <span class="va">xa000125000xtd_p031100010_cl_xpc_clnevt</span>.fits .</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> image det</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="ex">filter</span> region region_000125000xtd_bgd.reg</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="ex">filter</span> pha_cutoff 83 1667</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> binsize 128.0</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a><span class="ex">extr</span> curve exposure=0.4</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a><span class="ex">save</span> curve xa000125000xtd_0p5to10keV_b128_bgd_lc.fits</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a><span class="fu">clear</span> pha_cutoff</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a><span class="ex">extr</span> spectrum</span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a><span class="ex">save</span> spectrum xa000125000xtd_bgd.pi</span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a><span class="fu">clear</span> region</span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a><span class="ex">filter</span> region region_000125000xtd_src.reg</span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a><span class="ex">filter</span> pha_cutoff 83 1667</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a><span class="ex">extr</span> curve exposure=0.4</span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a><span class="ex">save</span> curve xa000125000xtd_0p5to10keV_b128_src_lc.fits</span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a><span class="fu">clear</span> pha_cutoff</span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a><span class="ex">extr</span> spectrum</span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a><span class="ex">save</span> spectrum xa000125000xtd_src.pi</span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a><span class="bu">exit</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="check-attitude-stability" class="level2" data-number="7.6">
 <h2 data-number="7.6" class="anchored" data-anchor-id="check-attitude-stability"><span class="header-section-number">7.6</span> Check Attitude Stability</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ftselect</span> infile=xa000125000.ehk outfile=xa000125000_gtifiltered.ehk </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Using the expression:</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="ex">gtifilter</span><span class="er">(</span><span class="st">"xa000125000rsl_p0px1000_cl2.evt[GTI]"</span><span class="kw">)</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="ex">fplot</span> xa000125000_gtifiltered.ehk TIME ANG_DIST <span class="at">-</span> /PS Q outfile=attitudestability.ps</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Examine the attitude stability during the observation (e.g.&nbsp;by plotting ANG_DIST versus TIME for the “xa000125000_gtifiltered.ehk” file)</p>
 <p>If you need to extract products with stricter attitude stability, make an appropriate GTI file. You can also make ARFs that are based on more than one attitude bin. Read the help for xaexpmap and xaarfgen for guidance on how to do that.</p>
 </section>
@@ -830,17 +839,17 @@ region_000125000xtd_bgd.reg</code></pre>
 </div>
 </div>
 <p>For Resolve:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">punlearn</span> xaexpmap</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">xaexpmap</span> ehkfile=xa000125000.ehk.gz gtifile=xa000125000rsl_p0px1000_cl2.evt.gz instrume=RESOLVE badimgfile=NONE pixgtifile=xa000125000rsl_px1000_exp.gti.gz outfile=xa000125000rsl_p0px1000.expo outmaptype=EXPOSURE delta=20.0 numphi=1 stopsys=SKY instmap=CALDB qefile=CALDB contamifile=CALDB vigfile=CALDB obffile=CALDB fwfile=CALDB gvfile=CALDB maskcalsrc=yes fwtype=FILE specmode=MONO specfile=spec.fits specform=FITS evperchan=DEFAULT abund=1 cols=0 covfac=1 clobber=yes chatter=1 logfile=make_expo_xa000125000rsl_p0px1000.log</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">punlearn</span> xaexpmap</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="ex">xaexpmap</span> ehkfile=xa000125000.ehk.gz gtifile=xa000125000rsl_p0px1000_cl2.evt instrume=RESOLVE badimgfile=NONE pixgtifile=xa000125000rsl_px1000_exp.gti.gz outfile=xa000125000rsl_p0px1000.expo outmaptype=EXPOSURE delta=20.0 numphi=1 stopsys=SKY instmap=CALDB qefile=CALDB contamifile=CALDB vigfile=CALDB obffile=CALDB fwfile=CALDB gvfile=CALDB maskcalsrc=yes fwtype=FILE specmode=MONO specfile=spec.fits specform=FITS evperchan=DEFAULT abund=1 cols=0 covfac=1 clobber=yes chatter=1 logfile=make_expo_xa000125000rsl_p0px1000.log</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For CalDB 12 and HEASoft 6.36 mitigation:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fparkey</span> fitsfile=xa000125000rsl_p0px1000.expo keyword=OPTAOFFX value=0.0 comm=<span class="st">"optical axis X offset reset to 0"</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="ex">fparkey</span> fitsfile=xa000125000rsl_p0px1000.expo keyword=OPTAOFFY value=0.0 comm=<span class="st">"optical axis Y offset reset to 0"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fparkey</span> fitsfile=xa000125000rsl_p0px1000.expo keyword=OPTAOFFX value=0.0 comm=<span class="st">"optical axis X offset reset to 0"</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">fparkey</span> fitsfile=xa000125000rsl_p0px1000.expo keyword=OPTAOFFY value=0.0 comm=<span class="st">"optical axis Y offset reset to 0"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For Xtend:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xaexpmap</span> ehkfile=xa000125000.ehk.gz gtifile=xa000125000xtd_p031100010_cl_xpc_clnevt.fits.gz instrume=XTEND badimgfile=xa000125000xtd_p031100010.bimg.gz pixgtifile=xa000125000xtd_p031100010_cl_xpc_rmvpix.fpix.gz outfile=xa000125000xtd_a031100010.expo outmaptype=EXPOSURE delta=20.0 numphi=1 stopsys=SKY instmap=CALDB qefile=CALDB contamifile=CALDB vigfile=CALDB obffile=CALDB fwfile=CALDB gvfile=CALDB maskcalsrc=yes fwtype=FILE specmode=MONO specfile=spec.fits specform=FITS evperchan=DEFAULT abund=1 cols=0 covfac=1 clobber=yes chatter=1 logfile=make_expo_xa000125000xtd_p031100010.log</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xaexpmap</span> ehkfile=xa000125000.ehk.gz gtifile=xa000125000xtd_p031100010_cl_xpc_clnevt.fits instrume=XTEND badimgfile=xa000125000xtd_p031100010.bimg.gz pixgtifile=xa000125000xtd_p031100010_cl_xpc_rmvpix.fpix outfile=xa000125000xtd_a031100010.expo outmaptype=EXPOSURE delta=20.0 numphi=1 stopsys=SKY instmap=CALDB qefile=CALDB contamifile=CALDB vigfile=CALDB obffile=CALDB fwfile=CALDB gvfile=CALDB maskcalsrc=yes fwtype=FILE specmode=MONO specfile=spec.fits specform=FITS evperchan=DEFAULT abund=1 cols=0 covfac=1 clobber=yes chatter=1 logfile=make_expo_xa000125000xtd_p031100010.log</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For CalDB 12 and HEASoft 6.36:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fparkey</span> fitsfile=xa000125000xtd_a031100010.expo keyword=OPTAOFFX value=0.0 comm=<span class="st">"optical axis X offset reset to 0"</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">fparkey</span> fitsfile=xa000125000xtd_a031100010.expo keyword=OPTAOFFY value=0.0 comm=<span class="st">"optical axis Y offset reset to 0"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fparkey</span> fitsfile=xa000125000xtd_a031100010.expo keyword=OPTAOFFX value=0.0 comm=<span class="st">"optical axis X offset reset to 0"</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="ex">fparkey</span> fitsfile=xa000125000xtd_a031100010.expo keyword=OPTAOFFY value=0.0 comm=<span class="st">"optical axis Y offset reset to 0"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="making-spectral-response-files" class="level2" data-number="7.8">
 <h2 data-number="7.8" class="anchored" data-anchor-id="making-spectral-response-files"><span class="header-section-number">7.8</span> Making Spectral Response Files</h2>
@@ -848,37 +857,50 @@ region_000125000xtd_bgd.reg</code></pre>
 <section id="checking-coordinates" class="level3" data-number="7.8.1">
 <h3 data-number="7.8.1" class="anchored" data-anchor-id="checking-coordinates"><span class="header-section-number">7.8.1</span> Checking Coordinates</h3>
 <p>We first check the coordinates through <code>coordpnt</code> for each instrument. Replace <code>"RDETX0, RDETY0"</code>, and <code>"XDETX0, XDETY0"</code> with the coordinates relevant to the Resolve and Xtend data noted down earlier. <code>RA_NOM</code>, <code>DEC_NOM</code>, and <code>PA_NOM</code> can be taken from the <code>rsl_coordinates.txt</code> file generated earlier.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">punlearn</span> coordpnt</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="ex">coordpnt</span> input=<span class="st">"RDETX0,RDETY0"</span> outfile=NONE telescop=XRISM instrume=RESOLVE teldeffile=CALDB startsys=DET stopsys=RADEC ra=RA_NOM dec=DEC_NOM roll=PA_NOM ranom=RA_NOM decnom=DEC_NOM clobber=yes</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="ex">punlearn</span> coordpnt</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="ex">coordpnt</span> input=<span class="st">"XDETX0,XDETY0"</span> outfile=NONE telescop=XRISM instrume=XTEND teldeffile=CALDB startsys=DET stopsys=RADEC ra=RA_NOM dec=DEC_NOM roll=PA_NOM ranom=RA_NOM decnom=DEC_NOM clobber=yes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">punlearn</span> coordpnt</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="ex">coordpnt</span> input=<span class="st">"RDETX0,RDETY0"</span> outfile=NONE telescop=XRISM instrume=RESOLVE teldeffile=CALDB startsys=DET stopsys=RADEC ra=RA_NOM dec=DEC_NOM roll=PA_NOM ranom=RA_NOM decnom=DEC_NOM clobber=yes</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="ex">punlearn</span> coordpnt</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="ex">coordpnt</span> input=<span class="st">"XDETX0,XDETY0"</span> outfile=NONE telescop=XRISM instrume=XTEND teldeffile=CALDB startsys=DET stopsys=RADEC ra=RA_NOM dec=DEC_NOM roll=PA_NOM ranom=RA_NOM decnom=DEC_NOM clobber=yes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The output from these commands are in degrees and should be compared against a trustworthy catalogue for the object you are looking at. If they are within 10” or so of the expected coordinates then continue to the next step, otherwise use the outputs from these commands to generate the ARFs with <code>xaarfgen</code> (see later).</p>
 <p>The true coordinates were taken from <a href="https://science.nasa.gov/asset/webb/ngc-4151-hubble-image/">NASA</a> as (12:10:32.6,+39:24:21) (RA,DEC) and the output from both commands above were within 10” of this.</p>
 <p>Before running xaarfgen or rslmkrsp, in order to avoid version conflicts, delete the parameter files for <code>xaarfgen</code> and <code>xaxmaarfgen</code> in your local <code>pfiles/</code> directory. For example:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="va">$HOME</span>/pfiles/xaarfgen.par</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="va">$HOME</span>/pfiles/xaxmaarfgen.par</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="va">$HOME</span>/pfiles/xaarfgen.par</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="va">$HOME</span>/pfiles/xaxmaarfgen.par</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="make-rmfs" class="level3" data-number="7.8.2">
 <h3 data-number="7.8.2" class="anchored" data-anchor-id="make-rmfs"><span class="header-section-number">7.8.2</span> Make RMFs</h3>
 <p>For the two Resolve commands in this section replace <code>NGC4151</code> with a label for the object you’re using.</p>
 <p>We first make a special event file that removes all Low Secondary (Ls) events. We calculate the Hp fraction over a clean energy range for which we choose 3-10 keV to maximise accuracy.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ftcopy</span> infile=<span class="st">"xa000125000rsl_p0px1000_cl2.evt[EVENTS][(PI&gt;=6000)&amp;&amp;(PI&lt;=20000)&amp;&amp;(ITYPE&lt;4)]"</span> outfile=xa000125000rsl_p0px1000_UPR.evt copyall=yes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>All of the following commands can be automatically run sequentially using <code>RMFARF.sh</code>. Note that this will only work for a non-bright point source as the pipeline differs slightly for other sources.</p>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ftcopy</span> infile=<span class="st">"xa000125000rsl_p0px1000_cl2.evt[EVENTS][(PI&gt;=6000)&amp;&amp;(PI&lt;=20000)&amp;&amp;(ITYPE&lt;4)]"</span> outfile=xa000125000rsl_p0px1000_UPR.evt copyall=yes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Make a large full-array Resolve RMF:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">punlearn</span> rslmkrmf</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">rslmkrmf</span> infile=xa000125000rsl_p0px1000_UPR.evt outfileroot=NGC4151_obs1_60k_60k_Hp_allpix_L regmode=DET whichrmf=L resolist=0 regionfile=ALLPIX eminin=0.0 dein=0.5 nchanin=60000 useingrd=no eminout=0.0 deout=0.5 nchanout=60000 pixeltest=CENTER</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">punlearn</span> rslmkrmf</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="ex">rslmkrmf</span> infile=xa000125000rsl_p0px1000_UPR.evt outfileroot=NGC4151_obs1_60k_60k_Hp_allpix_L regmode=DET whichrmf=L resolist=0 regionfile=ALLPIX eminin=0.0 dein=0.5 nchanin=60000 useingrd=no eminout=0.0 deout=0.5 nchanout=60000 pixeltest=CENTER</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Make a small full-array Resolve RMF:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">punlearn</span> rslmkrmf</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="ex">rslmkrmf</span> infile=xa000125000rsl_p0px1000_UPR.evt outfileroot=NGC4151_obs1_60k_60k_Hp_allpix_S regmode=DET whichrmf=S resolist=0 regionfile=ALLPIX pixeltest=CENTER</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="ex">punlearn</span> rslmkrmf</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="ex">rslmkrmf</span> infile=xa000125000rsl_p0px1000_UPR.evt outfileroot=NGC4151_obs1_60k_60k_Hp_allpix_S regmode=DET whichrmf=S resolist=0 regionfile=ALLPIX pixeltest=CENTER</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Neither of the above includes the electron-loss continuum which may make the source appear to have a soft excess. Section 14.6 of the QSG includes instructions on how to make an extra large Resolve response matrix.</p>
 <p>Make an Xtend RMF:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">punlearn</span> xtdrmf</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="ex">xtdrmf</span> infile=xa000125000xtd_src.pi outfile=xa000125000xtd_p031100010_src.rmf rmfparam=CALDB eminin=200 dein=<span class="st">"2,24"</span> nchanin=<span class="st">"5900,500"</span> eminout=0 deout=6 nchanout=4096</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="ex">punlearn</span> xtdrmf</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="ex">xtdrmf</span> infile=xa000125000xtd_src.pi outfile=xa000125000xtd_p031100010_src.rmf rmfparam=CALDB eminin=200 dein=<span class="st">"2,24"</span> nchanin=<span class="st">"5900,500"</span> eminout=0 deout=6 nchanout=4096</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="make-arfs" class="level3" data-number="7.8.3">
 <h3 data-number="7.8.3" class="anchored" data-anchor-id="make-arfs"><span class="header-section-number">7.8.3</span> Make ARFs</h3>
 <p>For Resolve data:</p>
-<p>If the resolve data has Hp fractions that vary significantly from pixel to pixel see the QSG to make spectral responses (combined RMF and ARF files).</p>
+<p>If the resolve data has Hp fractions that vary significantly from pixel to pixel see the QSG to make spectral responses (combined RMF and ARF files). In the following commands replace <code>RA</code> and <code>DEC</code> with the values determined earlier from <code>coordpnt</code>, for the dataset used here 182.63409879 and 39.40629018 were used</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -893,11 +915,11 @@ Note
 </div>
 </div>
 <p>To make a full-array point source ARF for Resolve, run</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="ex">punlearn</span> xaarfgen</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="ex">xaarfgen</span> xrtevtfile=raytrace_xa000125000rsl_p0px1000_ptsrc.fits source_ra=rslsrc_ra source_dec=rslsrc_dec telescop=XRISM instrume=RESOLVE emapfile=xa000125000rsl_p0px1000.expo regmode=DET regionfile=region_RSL_det.reg sourcetype=POINT rmffile=NGC4151_obs1_60k_60k_Hp_allpix_S.rmf erange=<span class="st">"0.3 18.0 2.0 8.0"</span> outfile=xa000125000rsl_p0px1000_ptsrc.arf numphoton=300000 minphoton=100 teldeffile=CALDB qefile=CALDB contamifile=CALDB obffile=CALDB fwfile=CALDB gatevalvefile=CALDB onaxisffile=CALDB onaxiscfile=CALDB mirrorfile=CALDB obstructfile=CALDB frontreffile=CALDB backreffile=CALDB pcolreffile=CALDB scatterfile=CALDB mode=h clobber=yes seed=7 imgfile=NONE</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">punlearn</span> xaarfgen</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="ex">xaarfgen</span> xrtevtfile=raytrace_xa000125000rsl_p0px1000_ptsrc.fits source_ra=RA source_dec=DEC telescop=XRISM instrume=RESOLVE emapfile=xa000125000rsl_p0px1000.expo regmode=DET regionfile=region_RSL_det.reg sourcetype=POINT rmffile=NGC4151_obs1_60k_60k_Hp_allpix_S.rmf erange=<span class="st">"0.3 18.0 2.0 8.0"</span> outfile=xa000125000rsl_p0px1000_ptsrc.arf numphoton=300000 minphoton=100 teldeffile=CALDB qefile=CALDB contamifile=CALDB obffile=CALDB fwfile=CALDB gatevalvefile=CALDB onaxisffile=CALDB onaxiscfile=CALDB mirrorfile=CALDB obstructfile=CALDB frontreffile=CALDB backreffile=CALDB pcolreffile=CALDB scatterfile=CALDB mode=h clobber=yes seed=7 imgfile=NONE</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For Xtend:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="ex">punlearn</span> xaarfgen</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="ex">xaarfgen</span> xrtevtfile=raytrace_xa000125000xtd_p031100010_boxreg_ptsrc.fits source_ra=182.63409879 source_dec=39.40629018 telescop=XRISM instrume=XTEND emapfile=xa000125000xtd_a031100010.expo regmode=DET regionfile=region_000125000_src.reg sourcetype=POINT rmffile=xa000125000xtd_p031100010_src.rmf erange=<span class="st">"0.3 18.0 2.0 8.0"</span> outfile=xa000125000xtd_p031100010_ptsrc.arf numphoton=300000 minphoton=100 teldeffile=CALDB qefile=CALDB contamifile=CALDB obffile=CALDB fwfile=CALDB onaxisffile=CALDB onaxiscfile=CALDB mirrorfile=CALDB obstructfile=CALDB frontreffile=CALDB backreffile=CALDB pcolreffile=CALDB scatterfile=CALDB mode=h clobber=yes seed=7 imgfile=NONE</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode bash code-overflow-wrap eval-false code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="ex">punlearn</span> xaarfgen</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="ex">xaarfgen</span> xrtevtfile=raytrace_xa000125000xtd_p031100010_boxreg_ptsrc.fits source_ra=RA source_dec=DEC telescop=XRISM instrume=XTEND emapfile=xa000125000xtd_a031100010.expo regmode=DET regionfile=region_000125000_src.reg sourcetype=POINT rmffile=xa000125000xtd_p031100010_src.rmf erange=<span class="st">"0.3 18.0 2.0 8.0"</span> outfile=xa000125000xtd_p031100010_ptsrc.arf numphoton=300000 minphoton=100 teldeffile=CALDB qefile=CALDB contamifile=CALDB obffile=CALDB fwfile=CALDB onaxisffile=CALDB onaxiscfile=CALDB mirrorfile=CALDB obstructfile=CALDB frontreffile=CALDB backreffile=CALDB pcolreffile=CALDB scatterfile=CALDB mode=h clobber=yes seed=7 imgfile=NONE</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">

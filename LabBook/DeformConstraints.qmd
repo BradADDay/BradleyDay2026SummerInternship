@@ -56,6 +56,8 @@ As another investigative route, Figure 6 from @JohannsenMetric was reproduced as
 
 ## Implementation
 
+### Plan 2026/07/10
+
 The current plan for excluding these unphysical regions of the parameter space from the fitting is as follows. The unphysical regions will be defined by a set of equations for a given spin, and within these regions the fit will be setup to check if the combination is valid. To ensure no invalid combinations are mistakenly used, some padding will be added to these equations such that all invalid combinations are contained within. When the fitting iterator enters an invalid region, the combination will be explicitly checked for naked singularities, or the absence of a valid ISCO. 
 
 If the region is found to be invalid, then the `invoke!` function will return an array of zeros, which will signal to the fitting iterator that the parameter combination is not allowed for fitting. 
@@ -64,6 +66,32 @@ A potential roadblock to this process is the unpredictable region in the bottom 
 
 ### Notes Following Implementation
 
-The boundary lines were successfully defined by finding the vertices, and a csv of gradients and intercepts was defined for quick reading of the lines. Padding was added manually to these lines by taking a random sample of the parameter space and checking if the bounds caught every invalid combination (checked by explicitly checking the metric for each point). The bounds were designed to be overzealous such that no valid combinations are missed. To avoid removing valid combinations, the fitting process will involve first a quick check with the boundaries, followed by a thorough check with the metric if the first check fails.
+The boundary lines were successfully defined by finding the vertices through a grid search defined in `Code/utils/DeformUtils.jl`, and a csv of gradients and intercepts was defined for quick reading of the lines. Padding was added manually to these lines by randomly sampling the parameter space and checking the validity of the combination both using the bounds and explicitly checking the metric. Whenever the bounds missed an invalid point in the parameter space they were adjusted slightly and the process repeated until $10^6$ consecutive random samples could be taken without a point being missed. The bounds were designed to be overzealous such that no valid combinations are missed. 
 
-The unpredictable region in the lower left corner was instead defined with a line with slope -1 for convenience.
+To avoid removing valid combinations, the fitting process will involve first a quick check with the boundaries, followed by a thorough check with the metric if the first check fails.
+
+The "unpredictable region" noted in the lower left corner was bounded with a line rather than a circle for simplicity.
+
+The call to the bounds within the fitting iterator is shown below
+
+```{.julia .eval-false}
+# Reading from table for a quick check of parameter validity
+if !QuickIsValid(ϵ3, α13, a)
+    # Doing a finer check if the quick check fails
+    if !IsValid(ϵ3, α13, a)
+        output = fill(NaN, length(input)-1)
+        return output
+    end
+end
+```
+
+Here `QuickIsValid` checks the combination using the defined bounds and `IsValid` checks it thoroughly using the metric through `Gradus.jl`. If both checks find the parameter combination to be invalid then the model returns an array of `NaN` for that iteration, such that the iterator will calculate a bad fit and move out of the region. The conditions that are checked through these functions are:
+
+- The presence of a valid ISCO: Checked by defining a metric through `Gradus.jl` and attempting to calculate the isco using `Gradus.ISCO`
+- The presence of a naked singularity: Checked using `Gradus.is_naked_singularity`
+- If the combination satisfies @eq-Alpha13Constraint and @eq-Epsilon3Constraint
+- If the magnitude of the spin is below 0.998
+
+The final check is done as the fitting iterator sometimes exceeds the upper limit, causing the interpolation for the bound definitions to try to extrapolate which causes errors.
+
+The next step is to create a final table model to use for the fit that covers the entire allowed parameter space. In the construction of this, each combination will be checked for a valid ISCO and if @eq-Alpha13Constraint and @eq-Epsilon3Constraint are satisfied. If any of these are not satisfied then that point in the table will be an array of `NaN` to ensure that it does not get used.

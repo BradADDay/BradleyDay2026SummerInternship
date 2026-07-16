@@ -11,7 +11,7 @@ include("PlottingDefaults.jl")
 include("FittingModels.jl")
 include("GeneralUtils.jl")
 
-function Residuals(result, domain; bounds = (3, 10))
+function Residuals(result, domain; dataRange = (3, 10))
     # select which result we want (only have one, but for generalisation to multi-model fits)
     r = result
     y = calculate_objective!(r, r.u)
@@ -19,14 +19,14 @@ function Residuals(result, domain; bounds = (3, 10))
     residuals = @. (obj - y) / sqrt(var)
 
     # Filtering to include interesting region
-    residuals = residuals[(domain .> bounds[1]) .& (domain .< bounds[2])]
-    domain = domain[(domain .> bounds[1]) .& (domain .< bounds[2])]
+    residuals = residuals[(domain .> dataRange[1]) .& (domain .< dataRange[2])]
+    domain = domain[(domain .> dataRange[1]) .& (domain .< dataRange[2])]
 
     # Putting into a data object
     InjectiveData(domain, residuals, name="Residuals")
 end
 
-function LoadData(path; dataRange=(3,12))
+function LoadData(path; dataRange=(3,10))
     """Load in an OGIP dataset from a given path and 
     curtail it to an energy range"""
 
@@ -148,16 +148,16 @@ function FitContour(result, params, param1, param2)
     scatter!([result.u[params[1]]], [result.u[params[2]]])
 end
 
-function PlotResiduals(data, fit)
+function PlotResiduals(data, fit; dataRange=(3,10))
 
     fitPlot = PlotSpectrum(data, fit; ylabel=L"Flux (counts s$^{-1}$ keV$^{-1}$)")
 
-    residuals = Residuals(fit, SpectralFitting.plotting_domain(data))
+    residuals = Residuals(fit, SpectralFitting.plotting_domain(data); dataRange=(3,10))
     resPlot = scatter(residuals; markershape=:circle, markersize=2, c=:black, msw=0, xlabel="Energy (keV)", label=nothing, ylabel="Residuals")
     vline!(resPlot, [6.4]; line=(:black, :dash), label=nothing)
     hline!(resPlot, [0]; c=:black, label=nothing)
 
-    layout = @layout [a{0.75h}; b{0.25h}]
+    layout = @layout [a{0.85h}; b{0.15h}]
 
     figure = plot(fitPlot, resPlot; layout = layout)
 
@@ -171,6 +171,14 @@ function FitPowerLawLineProfile(data; maxIter, kwargs...)
     prob = FittingProblem(model => data)
 
     SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, maxIter=maxIter)
+end
+
+function FitPowerLawLineProfile(data::SpectralData, model::CompositeModel; maxIter, kwargs...)
+
+    prob = FittingProblem(model => data)
+
+    SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, maxIter=maxIter)
+
 end
 
 # =================================================================================
@@ -339,6 +347,7 @@ function FitXRISM(spectrum, background, response, ancillary;
             data; maxIter=Int(1e3), E=energy, 
             α13=FitParam(0.0, frozen=true), 
             ϵ3=FitParam(0.0, frozen=true), kwargs...)
+            
         PlotResiduals(data, kerrResult[1])
     end
 
@@ -347,6 +356,7 @@ function FitXRISM(spectrum, background, response, ancillary;
         println("Fitting Johannsen...")
 
         johannsenResult = FitPowerLawLineProfile(data; maxIter=Int(1e3), E=energy, kwargs...)
+
         PlotResiduals(data, johannsenResult[1])
     end
 

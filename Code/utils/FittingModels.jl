@@ -13,7 +13,7 @@ include("Deformations.jl")
 const ModelNumParams = 5
 
 # The path to the model
-MODELDATAFILE = "/home/brad/Documents/SummerInternship/Code/models/ModelWithNegatives.FITS"
+MODELDATAFILE = "/home/brad/Documents/SummerInternship/Code/models/FinalModel.FITS"
 
 # Reading in the table model and setting it up as an interpolation object
 data = TableModelData(Val(ModelNumParams), MODELDATAFILE)
@@ -56,9 +56,7 @@ end
 function SpectralFitting.invoke!(output, input, model::XS_LampPostJohannsen)
 
     # Pulling the necessary parameters
-    let table = model.table, E = model.E, a = model.a, h = model.h, θ = model.θ, α13 = model.α13, ϵ3 = model.ϵ3
-
-        m = JohannsenMetric(a=a, α13=α13, ϵ3=ϵ3)
+    let table = model.table, K = model.K, E = model.E, a = model.a, h = model.h, θ = model.θ, α13 = model.α13, ϵ3 = model.ϵ3
 
         # Reading from table for a quick check of parameter validity
         if !QuickIsValid(ϵ3, α13, a)
@@ -76,14 +74,16 @@ function SpectralFitting.invoke!(output, input, model::XS_LampPostJohannsen)
         profile = SpectralFitting.interpolate_table!(table, a, h, θ, α13, ϵ3)
 
         # Interpolating the profile to get the result for the input domain
-        interp = linear_interpolation(table.data.energy_bins[1:end-1], profile, extrapolation_bc=Line())
+        interp = linear_interpolation(table.data.energy_bins[1:end-1], profile)
         flux = interp.(domain)
 
-        output .= flux[1:end-1]
+        output .= K * flux[1:end-1]
     end
 end
 
 function SpectralFitting.invokemodel!(input, model::XS_LampPostJohannsen)
+
+    println("$(model.a), $(model.α13), $(model.ϵ3)")
 
     output = zeros(length(input)-1)
 

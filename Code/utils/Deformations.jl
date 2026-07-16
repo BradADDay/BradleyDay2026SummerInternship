@@ -4,10 +4,8 @@ using CSV, DataFrames, Interpolations, Gradus
 
 const DeformationBoundsTable = DataFrame(CSV.File("Code/utils/DeformationBounds.csv"))
 
-function GetLines(a, df=DeformationBoundsTable)
-    """
-    Read the boundary line definitions, interpolate and return line objects for each of them
-    """
+function GetLineParams(a, df=DeformationBoundsTable)
+
     # Read the file and separate the spins
     df = copy(df)
     as = df.a
@@ -17,13 +15,25 @@ function GetLines(a, df=DeformationBoundsTable)
 
     # Empty array for storage
     out = Array{Float64}(undef, len)
-    returns = Array{BoundLine}(undef, Int(round(len/2)))
 
     # Interpolating the boundary table to get the line parameters
     for (i,name) in enumerate(String.(names(data)))
         interp = linear_interpolation(as, data[!, name])
         out[i] = interp(a)
     end
+
+    out, len
+
+end
+
+function GetLines(a, df=DeformationBoundsTable)
+    """
+    Read the boundary line definitions, interpolate and return line objects for each of them
+    """
+    
+    out, len = GetLineParams(a, df)
+
+    returns = Array{BoundLine}(undef, Int(round(len/2)))
 
     # Creating the line objects
     for i in 1:Int(round(len/2))

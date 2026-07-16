@@ -384,9 +384,7 @@ xtdrmf infile=xa000125000xtd_src.pi outfile=xa000125000xtd_p031100010_src.rmf rm
 
 ### Make ARFs
 
-For Resolve data:
-
-If the resolve data has Hp fractions that vary significantly from pixel to pixel see the QSG to make spectral responses (combined RMF and ARF files). In the following commands replace `RA` and `DEC` with the values determined earlier from `coordpnt`, for the dataset used here 182.63409879 and 39.40629018 were used
+If the resolve data has Hp fractions that vary significantly from pixel to pixel see the QSG to make spectral responses (combined RMF and ARF files). In the following commands replace `RA` and `DEC` with the values determined earlier from `coordpnt`, for the dataset used here 182.63409879 and 39.40629018 were used. [`xaarfgen` Documentation](https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/help/xaarfgen.html).
 
 :::{.callout-note}
 If you excluded any pixels from the spectrum then replace `region_RSL_det.reg` with an appropriate region file excluding these pixels.
@@ -401,5 +399,5 @@ xaarfgen xrtevtfile=raytrace_xa000125000rsl_p0px1000_ptsrc.fits source_ra=RA sou
 For Xtend:
 ```{.bash .code-overflow-wrap .eval-false}
 punlearn xaarfgen
-xaarfgen xrtevtfile=raytrace_xa000125000xtd_p031100010_boxreg_ptsrc.fits source_ra=RA source_dec=DEC telescop=XRISM instrume=XTEND emapfile=xa000125000xtd_a031100010.expo regmode=DET regionfile=region_000125000_src.reg sourcetype=POINT rmffile=xa000125000xtd_p031100010_src.rmf erange="0.3 18.0 2.0 8.0" outfile=xa000125000xtd_p031100010_ptsrc.arf numphoton=300000 minphoton=100 teldeffile=CALDB qefile=CALDB contamifile=CALDB obffile=CALDB fwfile=CALDB onaxisffile=CALDB onaxiscfile=CALDB mirrorfile=CALDB obstructfile=CALDB frontreffile=CALDB backreffile=CALDB pcolreffile=CALDB scatterfile=CALDB mode=h clobber=yes seed=7 imgfile=NONE
+xaarfgen xrtevtfile=raytrace_xa000125000xtd_p031100010_boxreg_ptsrc.fits source_ra=RA source_dec=DEC telescop=XRISM instrume=XTEND emapfile=xa000125000xtd_a031100010.expo regmode=DET regionfile=region_000125000xtd_src.reg sourcetype=POINT rmffile=xa000125000xtd_p031100010_src.rmf erange="0.3 18.0 2.0 8.0" outfile=xa000125000xtd_p031100010_ptsrc.arf numphoton=300000 minphoton=100 teldeffile=CALDB qefile=CALDB contamifile=CALDB obffile=CALDB fwfile=CALDB onaxisffile=CALDB onaxiscfile=CALDB mirrorfile=CALDB obstructfile=CALDB frontreffile=CALDB backreffile=CALDB pcolreffile=CALDB scatterfile=CALDB mode=h clobber=yes seed=7 imgfile=NONE
 ```

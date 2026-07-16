@@ -34,11 +34,32 @@ close("all")
 # XRISM
 # ======================================================================================
 
-kerrResult, johannsenResult = FitXRISM(
+energy = FitParam(6.4, lower_limit=5.5, upper_limit=7, frozen=false)
+
+data = LoadData(
     "data/xa000125000xtd_src.pi", 
     "data/xa000125000xtd_bgd.pi", 
     "data/xa000125000xtd_p031100010_src.rmf", 
     "data/xa000125000xtd_p031100010_ptsrc.arf";
-    johannsen=false,
-    K=FitParam(10.)
+    dataRange=(3,10)
 )
+
+LPModel = XS_LampPostJohannsen(;
+    K = FitParam(1.),
+    E = FitParam(6.4, lower_limit=6., upper_limit=7., frozen=false),
+    a = FitParam(0.98, lower_limit=0, upper_limit=0.998, frozen=false),
+    h = FitParam(3., lower_limit=3., upper_limit=15., frozen=false),
+    θ = FitParam(25., lower_limit=5., upper_limit=85., frozen=false),
+    α13 = FitParam(0., lower_limit=-0.4, upper_limit=10., frozen=true),
+    ϵ3 = FitParam(0., lower_limit=-0.4, upper_limit=10., frozen=true)
+) 
+
+model = LPModel + PowerLaw()
+
+kerrResult = FitPowerLawLineProfile(
+    data, 
+    model; 
+    maxIter=Int(1e3)
+)
+    
+PlotResiduals(data, kerrResult[1])

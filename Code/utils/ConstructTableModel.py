@@ -16,12 +16,15 @@ See https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/headas/heasp/node1.html
 for more information.
 """
 
+0.8165454545454546
+0.8165454545454546
+
 spins, heights, inclinations, alphas, epsilons = [
-    [0.0, 0.2495, 0.499, 0.7485, 0.998],
-    [3.0, 5.0, 7.0, 9.0, 11.0, 13.0, 15.0],
-    [5.0, 18.333333333333332, 31.666666666666668, 45.0, 58.333333333333336, 71.66666666666667, 85.0],
-    [-0.4, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0],
-    [-0.4, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0]
+    [-0.998, -0.8165454545454546, -0.635090909090909, -0.4536363636363636, -0.2721818181818182, -0.09072727272727273, 0.09072727272727273, 0.2721818181818182, 0.4536363636363636, 0.635090909090909, 0.8165454545454546, 0.998],
+    [3.0, 4.5, 6.0, 7.5, 9.0, 10.5, 12.0, 13.5, 15.0],
+    [5.0, 15.0, 25.0, 35.0, 45.0, 55.0, 65.0, 75.0, 85.0],
+    [-8.0, -6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0],
+    [-8.0, -6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0],
 ]
 
 tbl = table()
@@ -58,7 +61,7 @@ tbl.setNumAddParams(0)
 # Spin
 # ---------------------------------------------------------------
 
-spin = tableParameter("SPIN", 0, 0.998, 0.001, -0.998, -0.998, 0.998, 0.998)
+spin = tableParameter("SPIN", 0, 0.998, 0.001, min(spins), min(spins), max(spins), max(spins))
 spin.setTabulatedValues(spins)
 
 tbl.pushParameter(spin)
@@ -67,7 +70,7 @@ tbl.pushParameter(spin)
 # Height
 # ---------------------------------------------------------------
 
-height = tableParameter("HEIGHT", 0, 10.0, 0.1, 3.0, 3.0, 15.0, 15.0) 
+height = tableParameter("HEIGHT", 0, 10.0, 0.1, min(heights), min(heights), max(heights), max(heights)) 
 height.setTabulatedValues(heights)
 
 tbl.pushParameter(height)
@@ -76,7 +79,7 @@ tbl.pushParameter(height)
 # Inclination
 # ---------------------------------------------------------------
 
-inclination = tableParameter("INCLINATION", 0, 60.0, 0.1, 5.0, 5.0, 85.0, 85.0) 
+inclination = tableParameter("INCLINATION", 0, 60.0, 0.1, min(inclinations), min(inclinations), max(inclinations), max(inclinations)) 
 inclination.setTabulatedValues(inclinations)
 
 tbl.pushParameter(inclination)
@@ -85,7 +88,7 @@ tbl.pushParameter(inclination)
 # Alpha13
 # ---------------------------------------------------------------
 
-alpha13 = tableParameter("ALPHA13", 0, 0.0, 0.1, -0.4, -0.4, 10.0, 10.0) 
+alpha13 = tableParameter("ALPHA13", 0, 0.0, 0.1, min(alphas), min(alphas), max(alphas), max(alphas)) 
 alpha13.setTabulatedValues(alphas)
 
 tbl.pushParameter(alpha13)
@@ -94,7 +97,7 @@ tbl.pushParameter(alpha13)
 # Epsilon3
 # ---------------------------------------------------------------
 
-epsilon3 = tableParameter("EPSILON3", 0, 0.0, 0.1, -0.4, -0.4, 10.0, 10.0)
+epsilon3 = tableParameter("EPSILON3", 0, 0.0, 0.1, min(epsilons), min(epsilons), max(epsilons), max(epsilons))
 epsilon3.setTabulatedValues(epsilons)
 
 tbl.pushParameter(epsilon3)
@@ -105,17 +108,19 @@ tbl.pushParameter(epsilon3)
 
 # Reading the CSV
 print("Loading CSVs...")
-DIR = "tabledata/"
-df0 = pd.read_csv(DIR + "0")
-df1 = pd.read_csv(DIR + "1")
-df2 = pd.read_csv(DIR + "2")
-df3 = pd.read_csv(DIR + "3")
-df4 = pd.read_csv(DIR + "4")
-df5 = pd.read_csv(DIR + "5")
+DIR = "tabledata3/"
 
-files = [df0, df1, df2, df3, df4, df5]
+files = []
+
+for i in os.listdir(DIR):
+    print(i)
+    files.append(pd.read_csv(DIR + i))
+
+
 
 i=0
+j=0
+k=0
 
 # Looping through the parameters in the same order as for generation
 print("Parameter loop...")
@@ -126,6 +131,7 @@ for a in spins:
                 for epsilon in epsilons:
 
                     flux=None
+                    j+=1
 
                     for file in files:
                         # Pulling the flux from the CSV 
@@ -134,10 +140,12 @@ for a in spins:
                         except:
                             pass
                     
-                    if type(flux) == None:
-                        flux = np.zeros(1000)
+                    if flux is None:
+                        flux = np.full(1000, np.nan)
                         i+=1
-                    
+                    if flux[0] == NaN:
+                        k+=1
+
                     # Storing the spectrum and pushing it to the table alongside its parameter combination
                     spec = tableSpectrum()
                     spec.setParameterValues(np.array([a, h, theta, alpha, epsilon]))
@@ -145,7 +153,7 @@ for a in spins:
                     tbl.pushSpectrum(spec)
 
 # Saving the file
-tablefile = "tabledata/model.FITS"
+tablefile = DIR + "model.FITS"
 if (os.path.exists(tablefile)): 
     os.remove(tablefile)
 status = tbl.write(tablefile)
@@ -153,4 +161,5 @@ if status != 0:
     print("Failed to write test.mod: status = ", status)
 
 # Printing the number of failed spectra to compare against the logs
-print(i)
+print(f"{100*(i/j)}% Failure")
+print(f"{100*(k/j)}% NaN")

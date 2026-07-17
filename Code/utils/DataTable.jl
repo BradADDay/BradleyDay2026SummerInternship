@@ -28,23 +28,11 @@ function GetLineProfile(bins, a, h, θ, α13, ϵ3)
     profile = emissivity_profile(m, d, model)
 
     # Computing the line profile
-    _, flux = lineprofile(m, x, d, profile; verbose=false, bins=bins/E, 
+    _, flux = lineprofile(m, x, d, profile; verbose=false, bins=bins, 
             method=TransferFunctionMethod()
     )
 
     return flux
-
-end
-
-function FixISCO(ϵ3, α13, a)
-
-    while is_no_isco(ϵ3, α13, a)
-
-        α13 += 0.1
-
-    end
-
-    return α13
 
 end
 
@@ -59,53 +47,16 @@ function Generate(as, pbar, bins, OUTDIR, hs, θs, α13s, ϵ3s)
                 for α13 in α13s
                     strα13 = copy(α13)
                     for ϵ3 in ϵ3s
-
                         α13 = strα13
-
                         combination = "$h, $θ, $strα13, $ϵ3"
-                        update(pbar)
-
                         try
-                            
-                            if (ϵ3 < Constraints(a))
-
-                                ϵ3 = Constraints(a)
-
-                                open(joinpath(OUTDIR, "log.txt"), "a") do io
-                                    write(io, "$(now()): WARNING: Combination ($a, $h, $θ, $α13, $ϵ3) out of bounds!\n")
-                                end
-
-                            end
-                            if (α13 < Constraints(a))
-
-                                # Setting α13 to the lowest possible value
-                                α13 = Constraints(a)
-
-                                open(joinpath(OUTDIR, "log.txt"), "a") do io
-                                    write(io, "$(now()): WARNING: Combination ($a, $h, $θ, $α13, $ϵ3) out of bounds!\n")
-                                end
-
-                            end
-                            if is_no_isco(ϵ3, α13, a)
-
-                                # Shifting α13 up until valid ISCO
-                                α13 = FixISCO(ϵ3, α13, a)
-
-                                open(joinpath(OUTDIR, "log.txt"), "a") do io
-                                    write(io, "$(now()): WARNING: Combination ($a, $h, $θ, $α13, $ϵ3) has no ISCO! Setting α13=$α13\n")
-                                end
-
-                            end
-
-                            open(joinpath(OUTDIR, "test.txt"), "a") do io
-                                write(io, "$a, $h, $θ, $α13, $ϵ3\n")
+                            if !IsValid(ϵ3, α13, a)
+                                ϵ3, α13 = FindNearestSafePoint([ϵ3, α13], a)
                             end
 
                             # Calculating the spectrum and storing it in df
                             flux = GetLineProfile(bins, a, h, θ, α13, ϵ3)
-
                         catch err
-
                             # If the parameter combination fails, noting this in a log file
                             open(joinpath(OUTDIR, "log.txt"), "a") do io
                                 write(io, "$(now()): Combination ($a, $h, $θ, $α13, $ϵ3) failed!\n")
@@ -115,10 +66,13 @@ function Generate(as, pbar, bins, OUTDIR, hs, θs, α13s, ϵ3s)
                                 write(io, "$(now()): $err\n")
                             end
 
+                            flux = zeros(1000)
                         end
 
                         insertcols!(df, j, combination => flux)
                         j+=1
+                        update(pbar)
+
                     end
                 end
             end
@@ -149,19 +103,19 @@ function GetVars(path::String, as, hs, θs, α13s, ϵ3s)
 end
 
 # Defining the parameter space
-# as   = range(-0.998, 0.998, 12)
-# hs   = range( 3  , 15.   , 9)
-# θs   = range( 5.   , 85.   , 9)
-# α13s = range(-8., 10., 10)
-# ϵ3s  = range(-8., 10., 10)
-
-as = [-0.998, 0., 0.998]
-hs = [3., 9., 15.]
-θs = [5., 45., 85.]
+as   = range(-0.998, 0.998, 12)
+hs   = range( 3  , 15.   , 9)
+θs   = range( 5.   , 85.   , 9)
 α13s = range(-8., 10., 10)
 ϵ3s  = range(-8., 10., 10)
 
-OUTDIR = "tabledata4/"
+# as = [-0.998, 0., 0.998]
+# hs = [3., 9., 15.]
+# θs = [5., 45., 85.]
+# α13s = range(-8., 10., 10)
+# ϵ3s  = range(-8., 10., 10)
+
+OUTDIR = "FinalTableData/"
 
 try
     mkdir(OUTDIR)
@@ -177,4 +131,4 @@ pbar = ProgressBar(total=length(hs)*length(as)*length(θs)*length(α13s)*length(
 
 MultiGenerate(as, pbar, bins, OUTDIR, hs, θs, α13s, ϵ3s)
 
-# cp(OUTDIR, "/home/brad/OneDrive/$OUTDIR", force=true)
+cp(OUTDIR, "/home/brad/OneDrive/$OUTDIR", force=true)

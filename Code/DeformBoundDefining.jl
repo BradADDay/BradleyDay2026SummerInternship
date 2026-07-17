@@ -1,30 +1,70 @@
 include("utils/GeneralUtils.jl")
 include("utils/DeformUtils.jl")
 include("utils/PlottingDefaults.jl")
-##
+
 df = DataFrame(CSV.File("Code/utils/NewDeformationBounds.csv"))
 
-open("Code/utils/NewDeformationBounds.csv", "w") do io
+as = range(-0.998, 0.998, 500)
+
+#= open("Code/utils/NewDeformationBounds.csv", "w") do io
     write(io, "a,m1,c1,m2,c2,m3,c3,m4,c4,m5,c5,m6,c6\n")
 end
 
-for a in range(-0.998, 0.998, 500)
+for a in as
     GetLineParams(a, df)
 
     open("Code/utils/NewDeformationBounds.csv", "a") do io
         write(io, "$(round(a; digits=3)), $(round.(GetLineParams(a, df)[1]; digits=3))\n")
     end
-end
+end =#
 
-##
+pbar = ProgressBar(total=10)
 
-df = DataFrame(CSV.File("Code/utils/NewDeformationBounds.csv"))
+for a in range(0.12, 0.16, 10)[1]
 
-for a in range(-0.998, 0.998, 500)[0:50]
-    plot = PlotBounds(a, df)
+    update(pbar)
+
+    plot = PlotBounds(a, df; verbose=false)
+    display(plot)
 
     savefig(plot, "outBin/$a.png")
 
     GC.gc()
     close("all")
+
+end
+
+
+ϵ3, α13, a = CheckBounds(100000; as=-0.96:0.0001:-0.92)
+
+df = DataFrame(CSV.File("Code/utils/NewDeformationBounds.csv"))
+
+ϵ3=1.239810678917241
+α13=-0.712189321082759
+a=-0.9443
+
+PlotError(ϵ3, α13, a; df)
+##
+
+include("utils/GeneralUtils.jl")
+include("utils/DeformUtils.jl")
+include("utils/PlottingDefaults.jl")
+
+as = range(-0.998, 0.998, 10)
+ϵs = range(-8, 10, 50)
+αs = range(-8, 10, 50)
+
+for a in as
+
+    plot = PlotBounds(a)
+
+    for ϵ in ϵs, α in αs
+        if !QuickIsValid(ϵ, α, a)
+            ϵ, α = FindNearestSafePoint([ϵ, α], a)
+        end
+        scatter!(plot, [ϵ], [α]; c=:red, msw=0, label=nothing, markersize=2)
+    end
+    xlims!(-9, 15)
+    ylims!(-9, 11)
+    display(plot)
 end

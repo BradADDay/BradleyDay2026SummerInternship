@@ -96,7 +96,7 @@ function GetLineProfile(bins, a, h, θ, α13, ϵ3)
     profile = emissivity_profile(m, d, model)
 
     # Computing the line profile
-    _, flux = lineprofile(m, x, d, profile; verbose=false, bins=bins, 
+    _, flux = lineprofile(m, x, d, profile; verbose=true, bins=bins, 
             method=TransferFunctionMethod()
     )
 
@@ -130,3 +130,49 @@ plot(bins[1:end-1], flux2/maximum(flux2))
 m = JohannsenMetric(M=1., a=a, ϵ3=ϵ3, α13=α13)
 is_no_isco(m)
 is_naked_singularity(m)
+
+##
+
+include("utils/FittingModels.jl")
+include("utils/PlottingDefaults.jl")
+include("utils/ParameterVariations.jl")
+
+
+function GetLineProfile(bins, a, h, θ, α13, ϵ3)
+
+    # Position of the observer
+    x = SVector(0.0, 10000.0, deg2rad(θ), 0.0)
+
+    # Instantiating the metric
+    m = JohannsenMetric(M=1., a=a, α13=α13, ϵ3=ϵ3)
+
+    if !IsValid(ϵ3, α13, a)
+        open(joinpath(OUTDIR, "notes.txt"), "a") do io
+            write(io, "$(now()): Combination ($a, $h, $θ, $α13, $ϵ3) failed!\n")
+        end
+    end
+
+    # Disk
+    d = ThinDisc(0., Inf)
+
+    # Setting up the model and emissivity profile
+    model = LampPostModel(h = h)
+    profile = emissivity_profile(m, d, model)
+
+    # Computing the line profile
+    println("($a, $h, $θ, $α13, $ϵ3)")
+    println()
+    println()
+    _, flux = lineprofile(m, x, d, profile; bins=bins, 
+            method=TransferFunctionMethod()
+    )
+
+    return flux
+
+end
+
+##
+
+flux = GetLineProfile(range(0, 3, 1000), -0.998, 3.0, 5.0, -0.9943501629247667, 1.0005468052697828)
+
+plot(range(0, 3, 1000), flux)

@@ -7,7 +7,6 @@ const DeformationBoundsTable = DataFrame(CSV.File("Code/utils/DeformationBounds.
 function GetLineParams(a, df=DeformationBoundsTable)
 
     # Read the file and separate the spins
-    df = copy(df)
     as = df.a
     data = select!(copy(df), Not(:a))
 
@@ -83,10 +82,23 @@ function QuickIsValid(ϵ3, α13, a, df=DeformationBoundsTable; sgns=[1,1,-1,-1,-
     """
     Checking if a parameter combination is valid by checking if it falls within the pre-defined bounds
     """
-    
+
     if (ϵ3 < Constraints(a)) | (α13 < Constraints(a)) | (abs(a) > 0.998)
         return false
     end
+    
+    conds = GetValidityConditions(ϵ3, α13, a, df; sgns=[1,1,-1,-1,-1,-1])
+    
+    # Checking if the parameter combination is within any of the 4 forbidden regions
+    if conds[1] | conds[2] | conds[3] | conds[4]
+        return false
+    else
+        return true
+    end
+
+end
+
+function GetValidityConditions(ϵ3, α13, a, df=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1])
 
     # Getting the boundary lines and defining conditions
     lines = GetLines(a, df)
@@ -94,17 +106,12 @@ function QuickIsValid(ϵ3, α13, a, df=DeformationBoundsTable; sgns=[1,1,-1,-1,-
 
     # Checking if the parameter combination is within the forbidden region for every line
     for i in eachindex(lines)
-        if !isnothing(lines[i])
-            conds[i] = sgns[i]*α13 > sgns[i]*(LineEquation(ϵ3, lines[i]))
-        end
+        conds[i] = sgns[i]*α13 > sgns[i]*(LineEquation(ϵ3, lines[i]))
     end
-    
-    # Checking if the parameter combination is within any of the 4 forbidden regions
-    if (conds[1] & conds[2]) | (conds[3] & conds[4]) | conds[5] | conds[6]
-        return false
-    else
-        return true
-    end
+
+    conds = ((conds[1] & conds[2]), (conds[3] & conds[4]), conds[5], conds[6])
+
+    return conds
 
 end
 
@@ -163,3 +170,120 @@ function IsValidFit(fit)
     u=fit.u
     IsValid(u[7], u[6], u[3])
 end
+
+function FindNearestSafePoint(point, a)
+
+    # Moving the coordinate to be within valid parameter space
+    ReturnToConstraints.(point, a)
+
+    # Getting the boundary lines
+    lines = GetLines(a)
+
+    iter = 0
+
+    while true
+
+        # A catch for if the point gets stuck between the top and bottom triangle
+        if iter > 3
+            point = (point[1] + 0.1, point[2])
+        end
+
+        # Finding which of the 4 regions the point is in
+        conds = GetValidityConditions(point..., a)
+
+        if conds[1] & conds[2]
+            # If the point is in both the top and bottom triangle, 
+            # moving it to the top one and finding the nearest line
+            point = (point[1], point[2] + 1)
+            line=NearestLine(point, lines[1:4], a)
+        elseif conds[1] | conds[2]
+            # If the point is in either the top or bottom triangle,
+            # finding the nearest line
+            point = (point[1], point[2])
+            line=NearestLine(point, lines[1:4], a)
+            iter +=1
+        elseif conds[3]
+            # Bottom wedge
+            line = lines[5]
+        elseif conds[4]
+            # Unpredictable region in lower left
+            line = lines[6]
+        elseif point[1] > 10
+            # Checking the point doesn't exceed the set region
+            point = (point[1]-0.1, point[2])
+            line = lines[2]
+        elseif (any(point .< Constraints(a)))
+            ReturnToConstraints.(point, [a])
+        else
+            # Breaking the loop if the point is now in a safe region
+            break
+        end
+
+        # Moving the point to the closest point on the closest boundary it is breaching
+        point = GetNewPoint(point, line)
+ 
+    end
+
+    return point
+
+end
+
+function GetNewPoint(point, line)
+
+    # Finding the gradient and intercept of the perpendicular line from the point to the boundary
+    perpGrad = -1/line.m
+    perpIntercept = -perpGrad * point[1] + point[2]
+
+    # Defining the perpendicular line
+    perpLine = BoundLine(perpGrad, perpIntercept)
+
+    # Getting the coordinates
+    x = (line.c - perpLine.c) / (perpLine.m - line.m)
+    y = LineEquation(x, line)
+
+    point = [x,y]
+
+end
+
+function NearestLine(point, lines, a)
+
+    # Finding the points at which the top and bottom triangle bounds intersect eachother
+
+    # Top triangle vertex
+    xi1 = (lines[2].c - lines[1].c) / (lines[1].m - lines[2].m)
+    yi1 = LineEquation(xi1, lines[1])
+
+    # Bottom triangle vertex
+    xi2 = (lines[4].c - lines[3].c) / (lines[3].m - lines[4].m)
+    yi2 = LineEquation(xi2, lines[3])
+    
+    # Returning the closest boundary line that the point is violating
+    if point[2] > yi1
+        # Checking that the new point will not be in breach of the constraints
+        if (point[1] < xi1) & (GetNewPoint(point, lines[1])[1] > Constraints(a))
+            # println("1")
+            return lines[1]
+        else
+            # println("b")
+            return lines[2]
+        end
+    elseif point[2] < yi2
+        if (point[1] < xi2) & (LineEquation(point[1], lines[3]) > Constraints(a))
+            return lines[3]
+        else
+            return lines[4]
+        end
+    end
+
+end
+
+function ReturnToConstraints(param, a)
+
+    bound = Constraints(a)
+
+    if param < a
+        param = a
+    end
+
+end
+

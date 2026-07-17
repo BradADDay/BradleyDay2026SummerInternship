@@ -3,7 +3,7 @@ include("PlottingDefaults.jl")
 
 using DataFrames, CSV, ProgressBars, Gradus, LaTeXStrings
 
-const DeformationBoundsTable = DataFrame(CSV.File("Code/utils/DeformationBounds.csv"))
+const DeformationBoundsTable = DataFrame(CSV.File("Code/utils/NewDeformationBounds.csv"))
 
 export FindTopVertices, FindBottomVertices, FindWedgeVertices, FindVertices, FindShape, FindShapes, PlotBounds, CheckBounds, GenerateBoundsCSV, GenerateRegionFiles, PlotError, ParameterRegions, PlotRegion, DeformationSpinPlot, DeformationSpin
 
@@ -236,10 +236,11 @@ function GenerateRegionFiles(as=range(-0.998, 0.998, 20))
 
 end
 
-function PlotBounds(a, df=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1])
+function PlotBounds(a, df=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1], verbose=true)
 
-    plts = ParameterRegions(10, 10; a=a, step=0.4)
-    hmp = PlotRegion(plts...; title="$a")
+    plts = ParameterRegions(10, 10; a=a, step=0.4, verbose=verbose)
+    plts[1][plts[1] .== -3] .+= 1
+    hmp = PlotRegion(plts...; title="a=$(round(a; digits=3))", c=:grays)
 
     lines = GetLines(a, df)
 
@@ -251,24 +252,31 @@ function PlotBounds(a, df=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1])
     ys = Array{Array{Float64}}(undef, 4)
 
     fill = 10*ones(length(x))
-    fillranges = (fill, -fill, -fill, -fill)
+    fillranges = (-fill, -fill, fill, -fill)
+    fillstyles = (:..., :..., :..., :...)
 
-    ys[1] = append!(LineEquation(x[x.<=tri1Int], lines[1]), LineEquation(x[x.>=tri1Int], lines[2]))
-    ys[2] = append!(LineEquation(x[x.<=tri2Int], lines[3]), LineEquation(x[x.>=tri2Int], lines[4]))
-    ys[3] = LineEquation(x, lines[5])
-    ys[4] = LineEquation(x, lines[6])
-
-    colours = [:black, :black, :red, :red]
+    ys[1] = LineEquation(x, lines[5])
+    ys[2] = LineEquation(x, lines[6])
+    ys[3] = append!(LineEquation(x[x.<=tri1Int], lines[1]), LineEquation(x[x.>=tri1Int], lines[2]))
+    ys[4] = append!(LineEquation(x[x.<=tri2Int], lines[3]), LineEquation(x[x.>=tri2Int], lines[4]))
+    
+    colours = [:gray, :gray, :black, :black]
 
     for (i, y) in enumerate(ys)
-        plot!(x, y, label="$i", c=colours[i], fillrange=fillranges[i], fillalpha=0.2)
+        plot!(
+            x, y, 
+            label=nothing, 
+            c=colours[i], 
+            fillrange=fillranges[i],
+            fillstyle=fillstyles[i],
+            cbar=false
+        )
     end
 
-    display(hmp)
     return hmp
 end
 
-function CheckBounds(N; df=DeformationBoundsTable, as=-0.998:0.001:0.998)
+function CheckBounds(N; df=DeformationBoundsTable, as=-0.998:0.0001:0.998)
 
     out = nothing
 
@@ -278,8 +286,8 @@ function CheckBounds(N; df=DeformationBoundsTable, as=-0.998:0.001:0.998)
 
         update(pbar)
         
-        α13 = rand(Constraints(a):0.001:10)
-        ϵ3 = rand(Constraints(a):0.001:10)
+        α13 = rand(Constraints(a):0.0001:10)
+        ϵ3 = rand(Constraints(a):0.0001:10)
 
         m = JohannsenMetric(a=a, α13 = α13, ϵ3 = ϵ3)
 
@@ -308,7 +316,7 @@ function PlotError(ϵ3, α13, a; df=DeformationBoundsTable)
     display(hmp)
 end
 
-function ParameterRegions(αmax, ϵmax; a=0.998, step=0.1)
+function ParameterRegions(αmax, ϵmax; a=0.998, step=0.1, verbose=true)
     """
     Checking the validity for a grid of points in the parameter space for a given spin value and producing a heatmap
     """
@@ -318,14 +326,18 @@ function ParameterRegions(αmax, ϵmax; a=0.998, step=0.1)
     ϵs = minVal:step:ϵmax
 
     regions = zeros(Float64, (length(αs), length(ϵs)))
-
-    pbar = ProgressBar(total=length(αs)*length(ϵs), printing_delay=0.1)
+    
+    if verbose
+        pbar = ProgressBar(total=length(αs)*length(ϵs), printing_delay=0.1)
+    end
 
     for i in eachindex(αs)
         α = αs[i]
         for (j, ϵ) in enumerate(ϵs)
 
-            update(pbar)
+            if verbose
+                update(pbar)
+            end
             
             m = JohannsenMetric(M=1., a=a, ϵ3=ϵ, α13=α)
             
@@ -337,7 +349,7 @@ function ParameterRegions(αmax, ϵmax; a=0.998, step=0.1)
     return regions, αs, ϵs, minVal
 end
 
-function PlotRegion(regions, αs, ϵs, minVal; ticks = -10:2:10, title="", contour=false)
+function PlotRegion(regions, αs, ϵs, minVal; ticks = -10:2:10, title="", contour=false, c=:default)
     """
     Plotting the output from ParameterRegions
     """
@@ -348,7 +360,7 @@ function PlotRegion(regions, αs, ϵs, minVal; ticks = -10:2:10, title="", conto
         regions;
         xlabel = L"\epsilon_3",
         ylabel = L"\alpha_{13}",
-        clims=(-3, 0),
+        clims=(minimum(regions), 0),
         ylims=(minimum(αs), maximum(αs)),
         xlims=(minimum(ϵs), maximum(ϵs)),
         colorbar_title=L"ISCO $(R_g)$",
@@ -358,7 +370,8 @@ function PlotRegion(regions, αs, ϵs, minVal; ticks = -10:2:10, title="", conto
         minorgridalpha=0.5,
         aspect_ratio=:equal,
         xticks=ticks[ticks.>minVal],
-        yticks=ticks[ticks.>minVal]
+        yticks=ticks[ticks.>minVal],
+        c=c
     )
 
 end

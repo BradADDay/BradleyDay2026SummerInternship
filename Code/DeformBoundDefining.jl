@@ -56,15 +56,66 @@ as = range(-0.998, 0.998, 10)
 
 for a in as
 
-    plot = PlotBounds(a)
+    plt = PlotBounds(a)
 
     for ϵ in ϵs, α in αs
         if !QuickIsValid(ϵ, α, a)
             ϵ, α = FindNearestSafePoint([ϵ, α], a)
+            scatter!(plt, [ϵ], [α]; c=:red, msw=0, label=nothing, markersize=2)
         end
-        scatter!(plot, [ϵ], [α]; c=:red, msw=0, label=nothing, markersize=2)
     end
     xlims!(-9, 15)
     ylims!(-9, 11)
-    display(plot)
+    display(plt)
 end
+
+##
+
+using JSON3
+
+include("utils/GeneralUtils.jl")
+include("utils/DeformUtils.jl")
+include("utils/PlottingDefaults.jl")
+
+as   = range(-0.998, 0.998, 13)
+α13s = range(-8., 10., 10)
+ϵ3s  = range(-8., 10., 10)
+
+dict = Dict()
+
+pbar = ProgressBar(total=length(as)*length(α13s)*length(ϵ3s))
+
+for a in as
+    dict["$(round(a; digits=3))"] = Dict()
+    for α13 in α13s
+        oα13 = α13
+        for ϵ3 in ϵ3s
+
+            α13 = oα13
+            name = "$ϵ3, $α13"
+            println(a, " ", α13, " ", ϵ3)
+
+            update(pbar)
+
+            if !QuickIsValid(ϵ3, α13, a)
+                ϵ3, α13 = FindNearestSafePoint([ϵ3, α13], a)
+            end
+            println(a, " ", α13, " ", ϵ3)
+
+            dict["$(round(a; digits=3))"][name] = ϵ3, α13
+
+        end
+    end
+end
+
+open("my.json", "w") do f
+    JSON3.write(f, dict)
+    println(f)
+end
+
+#0.998 4.0
+#-2.0 6.0
+
+plt=PlotBounds(0.998)
+
+FindNearestSafePoint([6., -2.], 0.998)

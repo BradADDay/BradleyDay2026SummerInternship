@@ -2,7 +2,7 @@
 
 julia_version = "1.12.6"
 manifest_format = "2.0"
-project_hash = "f06a8b64b2fc473e1047faf87b0b5895e123177b"
+project_hash = "e485ece56c9229c3b1fbae8eac8d1caf0ec294ed"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "bbc22a9a08a0ef6460041086d8a7b27940ed4ffd"
@@ -2105,6 +2105,24 @@ weakdeps = ["ForwardDiff"]
 
     [deps.NonlinearSolveSpectralMethods.extensions]
     NonlinearSolveSpectralMethodsForwardDiffExt = "ForwardDiff"
+
+[[deps.ODEInterface]]
+deps = ["Dates", "Libdl", "LinearAlgebra", "Markdown", "ODEInterface_jll", "Unicode"]
+git-tree-sha1 = "47333eaf8d7723fb4dbb9b276afd73103edec08e"
+uuid = "54ca160b-1b9f-5127-a996-1867f4bc2a2c"
+version = "0.5.1"
+
+[[deps.ODEInterfaceDiffEq]]
+deps = ["Compat", "DataStructures", "DiffEqBase", "FunctionWrappers", "LinearAlgebra", "ODEInterface", "Reexport", "SciMLBase"]
+git-tree-sha1 = "7ca947a49a7c51d81169059e9960b248007a8a05"
+uuid = "09606e27-ecf5-54fc-bb29-004bd9f985bf"
+version = "3.17.0"
+
+[[deps.ODEInterface_jll]]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl"]
+git-tree-sha1 = "56a3c37af7d93f6234b32b1aa3ad08b2fd143dba"
+uuid = "c771fb93-2439-5ece-a3b3-58fecce82101"
+version = "0.0.2+0"
 
 [[deps.Observables]]
 git-tree-sha1 = "7438a59546cf62428fc9d1bc94729146d37a7225"

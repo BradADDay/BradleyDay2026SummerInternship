@@ -174,7 +174,7 @@ end
 function FindNearestSafePoint(point, a)
 
     # Moving the coordinate to be within valid parameter space
-    ReturnToConstraints.(point, a)
+    point .= ReturnToConstraints.(point, a)
 
     # Getting the boundary lines
     lines = GetLines(a)
@@ -185,7 +185,11 @@ function FindNearestSafePoint(point, a)
 
         # A catch for if the point gets stuck between the top and bottom triangle
         if iter > 3
-            point = (point[1] + 0.1, point[2])
+            point .= (point[1] + 0.2, point[2])
+        end
+
+        if (any(point .< Constraints(a)))
+            point = ReturnToConstraints.(point, [a])
         end
 
         # Finding which of the 4 regions the point is in
@@ -212,8 +216,6 @@ function FindNearestSafePoint(point, a)
             # Checking the point doesn't exceed the set region
             point = (point[1]-0.1, point[2])
             line = lines[2]
-        elseif (any(point .< Constraints(a)))
-            ReturnToConstraints.(point, [a])
         else
             # Breaking the loop if the point is now in a safe region
             break
@@ -221,10 +223,11 @@ function FindNearestSafePoint(point, a)
 
         # Moving the point to the closest point on the closest boundary it is breaching
         point = GetNewPoint(point, line)
+        # point = [round(point[1]; digits=3), round(point[2]; digits=3)]
  
     end
 
-    return point
+    return round.(point; digits=2)
 
 end
 
@@ -261,10 +264,8 @@ function NearestLine(point, lines, a)
     if point[2] > yi1
         # Checking that the new point will not be in breach of the constraints
         if (point[1] < xi1) & (GetNewPoint(point, lines[1])[1] > Constraints(a))
-            # println("1")
             return lines[1]
         else
-            # println("b")
             return lines[2]
         end
     elseif point[2] < yi2
@@ -281,9 +282,11 @@ function ReturnToConstraints(param, a)
 
     bound = Constraints(a)
 
-    if param < a
-        param = a
+    if param < bound
+        param = bound
     end
+
+    return param
 
 end
 

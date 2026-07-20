@@ -1,19 +1,21 @@
-using SpectralFitting
 using LaTeXStrings
 using Measures
+
+# Using some of the utils files for plotting, fit definitions
+# This also imports SpectralFitting, WAV, CSV, DataFrames, Gradus, and Interpolations
+include("PlottingDefaults.jl")
+include("FittingModels.jl")
+include("GeneralUtils.jl")
 
 # Setting Filepaths
 const ROOT = "/home/brad/Documents/SummerInternship/"
 const DATADIR = joinpath(ROOT, "data")
 const OUTPUT = joinpath(ROOT, "output/")
 
-include("PlottingDefaults.jl")
-include("FittingModels.jl")
-include("GeneralUtils.jl")
-
-function Residuals(result, domain; dataRange = (3, 10))
-    # select which result we want (only have one, but for generalisation to multi-model fits)
-    r = result
+function Residuals(r, domain; dataRange::Tuple{Int64, Int64}=(3, 10))
+    """
+    Calculate the residuals of a fit
+    """
     y = calculate_objective!(r, r.u)
     obj, var = get_objective(r), get_objective_variance(r)
     residuals = @. (obj - y) / sqrt(var)
@@ -24,11 +26,14 @@ function Residuals(result, domain; dataRange = (3, 10))
 
     # Putting into a data object
     InjectiveData(domain, residuals, name="Residuals")
+
 end
 
-function LoadData(path; dataRange=(3,10))
-    """Load in an OGIP dataset from a given path and 
-    curtail it to an energy range"""
+function LoadData(path::String; dataRange::Tuple{Int64, Int64}=(3,10))
+    """
+    Load in an OGIP dataset from a given path for NUStar data and 
+    curtail it to an energy range
+    """
 
     # Reading the dataset
     data = OGIPDataset(path)
@@ -36,7 +41,11 @@ function LoadData(path; dataRange=(3,10))
     CleanData(data, dataRange)
 end
 
-function LoadData(spectrum, background, response, ancillary; dataRange=(3,10))
+function LoadData(spectrum::String, background::String, response::String, ancillary::String; dataRange::Tuple{Int64, Int64}=(3,10))
+    """
+    Load in an OGIP dataset from a given path for XRISM data and 
+    curtail it to an energy range
+    """
 
     data = OGIPDataset(
         spectrum; 
@@ -48,7 +57,7 @@ function LoadData(spectrum, background, response, ancillary; dataRange=(3,10))
     CleanData(data, dataRange)
 end
 
-function CleanData(data::SpectralData, dataRange)
+function CleanData(data::SpectralData, dataRange::Tuple{Int64, Int64})
 
     # Regrouping, normalising, dropping bad channels and curtailing
     regroup!(data)
@@ -60,18 +69,22 @@ function CleanData(data::SpectralData, dataRange)
 
 end
 
-function PlotSpectrum(data; xlabel=nothing, ylabel=nothing)
-    """Plot a spectrum with a vertical line denoting the iron Kα line"""
+function PlotSpectrum(data::SpectralData; xlabel=nothing, ylabel=nothing)
+    """
+    Plot a spectrum with a vertical line denoting the iron Kα line
+    """
 
     # Plotting the vertical line
     plot = vline([6.4], c=:black, linestyle=:dash, label=nothing, xminorticks=4)
 
     # Plotting the spectrum
-    plot!(plot, data; seriestype = :stepmid, c=:black, 
+    plot!(
+        plot, data; 
+        seriestype = :stepmid, c=:black, markercolor=:black, 
+        lc=:black, lw=0.5, 
         legend=:topright, framestyle=:box,
         xlabel=xlabel, ylabel=ylabel, label=nothing, 
-        markercolor=:black, xticks=append!(collect(3.:10.), 6.4),
-        lc=:black, lw=0.5
+        xticks=append!(collect(3.:10.), 6.4)
     )
 
     # Functionality to turn off the x ticks
@@ -83,12 +96,17 @@ function PlotSpectrum(data; xlabel=nothing, ylabel=nothing)
 end
 
 function PlotSpectrum(data::SpectralData, fit; xlabel=nothing, ylabel=nothing)
-    """Plot a spectrum with a vertical line denoting the iron Kα line"""
+    """
+    Plot a spectrum, a fit to it, and a vertical line denoting the iron Kα line
+    """
 
     plot!(PlotSpectrum(data; xlabel=xlabel, ylabel=ylabel), fit; c=:red, lw=1)
 end
 
-function GetParams(result; model="J")
+function GetParams(result; model::String="J")
+    """
+    Get the fit parameters from a composite fit of a johannsen metric line profile and power law
+    """
 
     values = result.u
 
@@ -107,7 +125,7 @@ function GetParams(result; model="J")
     LP, PL
 end
 
-function SeparateModel(result, domain, model="J")
+function SeparateModel(result, domain, model::String="J")
 
     LPParams, PLParams = GetParams(result; model=model)
 
@@ -148,24 +166,33 @@ function FitContour(result, params, param1, param2)
     scatter!([result.u[params[1]]], [result.u[params[2]]])
 end
 
-function PlotResiduals(data, fit; dataRange=(3,10))
+function PlotResiduals(data::SpectralData, fit; dataRange::Tuple{Int64, Int64}=(3, 10))
+    """
+    Plot the residuals of a plot underneath the fitted spectrum
+    """
 
+    # Plotting the spectrum and fit
     fitPlot = PlotSpectrum(data, fit; ylabel=L"Flux (counts s$^{-1}$ keV$^{-1}$)")
 
-    residuals = Residuals(fit, SpectralFitting.plotting_domain(data); dataRange=(3,10))
+    # Getting and plotting the residuals
+    residuals = Residuals(fit, SpectralFitting.plotting_domain(data); dataRange=dataRange)
     resPlot = scatter(residuals; markershape=:circle, markersize=2, c=:black, msw=0, xlabel="Energy (keV)", label=nothing, ylabel="Residuals")
+
+    # Plotting a horizontal line at 0 and a line for the Fe Kα line
     vline!(resPlot, [6.4]; line=(:black, :dash), label=nothing)
     hline!(resPlot, [0]; c=:black, label=nothing)
 
+    # Combining the two plots
     layout = @layout [a{0.85h}; b{0.15h}]
-
     figure = plot(fitPlot, resPlot; layout = layout)
 
     display(figure)
+
+    figure
     
 end
 
-function FitPowerLawLineProfile(data; maxIter, kwargs...)
+function FitPowerLawLineProfile(data::SpectralData; maxIter::Int, kwargs...)
     model = XS_LampPostJohannsen(;kwargs...) + PowerLaw()
 
     prob = FittingProblem(model => data)
@@ -173,7 +200,7 @@ function FitPowerLawLineProfile(data; maxIter, kwargs...)
     SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, maxIter=maxIter)
 end
 
-function FitPowerLawLineProfile(data::SpectralData, model::CompositeModel; maxIter, kwargs...)
+function FitPowerLawLineProfile(data::SpectralData, model::CompositeModel; maxIter::Int, kwargs...)
 
     prob = FittingProblem(model => data)
 
@@ -185,7 +212,7 @@ end
 # NuSTAR data
 # =================================================================================
 
-function BindParameters(modelA, modelB, dataA, dataB)
+function BindParameters(modelA, modelB, dataA::SpectralData, dataB::SpectralData)
     """Bind the parameters of a Johannsen model together between two datasets"""
     prob = FittingProblem(modelA => dataA, modelB => dataB)
 
@@ -200,7 +227,7 @@ function BindParameters(modelA, modelB, dataA, dataB)
     return prob
 end
 
-function FitPowerLawLineProfile(dataA, dataB; maxIter, kwargs...)
+function FitPowerLawLineProfile(dataA::SpectralData, dataB::SpectralData; maxIter::Int, kwargs...)
     """Fit a composite model of a power law and line profile 
     from the Johannsen table model"""
 
@@ -215,7 +242,7 @@ function FitPowerLawLineProfile(dataA, dataB; maxIter, kwargs...)
     SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, maxIter=maxIter)
 end
 
-function FitPowerLawLineProfile(dataA, dataB, modelA, modelB; maxIter)
+function FitPowerLawLineProfile(dataA::SpectralData, dataB::SpectralData, modelA, modelB; maxIter::Int)
     """Fit a composite model of a power law and line profile 
     from the Johannsen table model"""
 
@@ -226,7 +253,7 @@ function FitPowerLawLineProfile(dataA, dataB, modelA, modelB; maxIter)
     SpectralFitting.fit(prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, maxIter=maxIter)
 end
 
-function DualSpectrumPlot(plotA, plotB; bounds=(5,7.5), title="", kwargs...)
+function DualSpectrumPlot(plotA, plotB; bounds::Tuple{Int64, Int64}=(5,7.5), title="", kwargs...)
     """Plotting the results of the fit to the two datasets"""
 
     # Plotting
@@ -249,10 +276,10 @@ function DualSpectrumPlot(plotA, plotB; bounds=(5,7.5), title="", kwargs...)
 
     display(figure)
 
-    return figure
+    figure
 end
 
-function PlotFits(dataA, fitA, dataB, fitB; bounds=(3, 10), title="")
+function PlotFits(dataA::SpectralData, fitA, dataB::SpectralData, fitB; bounds::Tuple{Int64, Int64}=(3, 10), title="")
 
     plotA = PlotSpectrum(dataA, fitA)
 
@@ -262,7 +289,7 @@ function PlotFits(dataA, fitA, dataB, fitB; bounds=(3, 10), title="")
 
 end
 
-function NUStarFitJohannsen(dataA, dataB, energy)
+function NUStarFitJohannsen(dataA::SpectralData, dataB::SpectralData, energy::FitParam)
     println("Fitting Johannsen...")
 
     # Fitting the table model
@@ -278,7 +305,7 @@ function NUStarFitJohannsen(dataA, dataB, energy)
     return johannsenResult
 end
 
-function NUStarFitKerr(dataA, dataB, energy)
+function NUStarFitKerr(dataA::SpectralData, dataB::SpectralData, energy::FitParam)
 
     println("Fitting Kerr...")
 
@@ -296,9 +323,9 @@ function NUStarFitKerr(dataA, dataB, energy)
 
 end
 
-function FitNUStar(file; extension="_sr_1000.pha", dataRange=(3,10),
-    energy=FitParam(6.4, lower_limit=6.4, upper_limit=7, frozen=false),
-    kerr=true, johannsen=true)
+function FitNUStar(file::String; extension::String="_sr_1000.pha", dataRange::Tuple{Int64, Int64}=(3,10),
+    energy::FitParam=FitParam(6.4, lower_limit=6.4, upper_limit=7, frozen=false),
+    kerr::Bool=true, johannsen::Bool=true)
         
     kerrResult, johannsenResult = nothing, nothing
 
@@ -325,9 +352,10 @@ end
 # XRISM data
 # =================================================================================
 
-function FitXRISM(spectrum, background, response, ancillary; 
-    dataRange=(3,10), energy=FitParam(6.4, lower_limit=6.4, upper_limit=7, frozen=false),
-    kerr=true, johannsen=true, kwargs...)
+function FitXRISM(spectrum::String, background::String, response::String, ancillary::String; 
+    dataRange::Tuple{Int64, Int64}=(3,10), 
+    energy::FitParam=FitParam(6.4, lower_limit=6.4, upper_limit=7, frozen=false),
+    kerr::Bool=true, johannsen::Bool=true, kwargs...)
 
     kerrResult, johannsenResult = nothing, nothing
 

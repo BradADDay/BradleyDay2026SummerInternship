@@ -1,8 +1,12 @@
+"""
+File containing a selection of defined SpectralFitting models using the Johannsen metric through Gradus
+"""
+
 using SpectralFitting
 using MultiLinearInterpolations
-using Interpolations
-using Gradus
 
+# Including the tools for defining invalid regions in parameter space
+# This imports CSV, DataFrames, Gradus, and Interpolations
 include("Deformations.jl")
 
 # ===============================================================

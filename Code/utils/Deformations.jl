@@ -1,9 +1,42 @@
 using CSV, DataFrames, Interpolations, Gradus
 
-# export GetLines, ValidityCheckISCO, IsValid, QuickIsValid, is_no_isco, Constraints, Gradient, Intercept, BoundLine, LineEquation
-
 const DeformationBoundsTable = DataFrame(CSV.File("Code/utils/DeformationBounds.csv"))
 
+# ====================================================================================
+# Lines
+# ====================================================================================
+
+# Get the gradient of a line between two coordinates
+function Gradient(coord1, coord2)
+    diff = coord1 .- coord2
+    diff[2]/diff[1]
+end
+
+# Get the intercept of a line with a given gradient that passes through a given point
+Intercept(grad, coord) = coord[2] - grad * coord[1]
+
+# Line struct
+struct BoundLine{T<:Real}
+    "Gradient"
+    m::T
+    "Intercept"
+    c::T
+end
+
+# Constructor from two coordinates
+function BoundLine(coord1::AbstractArray, coord2::AbstractArray)
+    m = Gradient(coord1, coord2)
+    c = Intercept(m, coord1)
+    BoundLine(m, c)
+end
+
+# Get a point on a line
+LineEquation(x, line::BoundLine) = line.m * x .+ line.c
+
+# Find the intersection of two lines
+Intersection(line1::BoundLine, line2::BoundLine) = (line2.c - line1.c) / (line1.m - line2.m)
+
+# Get the boundary line parameters for a given black hole spin from the bounds table
 function GetLineParams(a, df=DeformationBoundsTable)
 
     # Read the file and separate the spins
@@ -25,6 +58,7 @@ function GetLineParams(a, df=DeformationBoundsTable)
 
 end
 
+# Get the boundary lines for a given black hole spin
 function GetLines(a, df=DeformationBoundsTable)
     """
     Read the boundary line definitions, interpolate and return line objects for each of them
@@ -42,6 +76,10 @@ function GetLines(a, df=DeformationBoundsTable)
     returns
 end
 
+# ====================================================================================
+# Validity
+# ====================================================================================
+
 function ValidityCheckISCO(m)
     """
     Checking if the metric is valid
@@ -50,10 +88,10 @@ function ValidityCheckISCO(m)
     """
     if is_naked_singularity(m)
         # Naked singularity
-        return -3
+        return -2
     elseif ((m.α13 < Constraints(m.a)) | (m.ϵ3 < Constraints(m.a)))
         # Abnormal exterior region
-        return -2
+        return -3
     elseif is_no_isco(m)
         # No ISCO
         return -1
@@ -70,7 +108,7 @@ function IsValid(ϵ3, α13, a)
     """
     m = JohannsenMetric(a=a, ϵ3=ϵ3, α13=α13)
     
-    if is_naked_singularity(m) | is_no_isco(m) | (ϵ3 < Constraints(a)) | (α13 < Constraints(a))# | (abs(a) > 0.998)
+    if is_naked_singularity(m) | is_no_isco(m) | (ϵ3 < Constraints(a)) | (α13 < Constraints(a)) | (abs(a) > 0.998)
         return false
     else 
         return true
@@ -127,49 +165,21 @@ function is_no_isco(m)
     end
 end
 
-function is_no_isco(ϵ3, α13, a)
-    
-    is_no_isco(JohannsenMetric(ϵ3=ϵ3, α13=α13, a=a))
-    
-end
+# Defining a dispatch for a set of parameters as input
+is_no_isco(ϵ3, α13, a) = is_no_isco(JohannsenMetric(ϵ3=ϵ3, α13=α13, a=a))
 
 # The lower limit for the deformation parameters α13, ϵ3 for a given spin
 Constraints(a) = -(1+sqrt(1 - a^2))^3
 
-# Defining line parameters
-function Gradient(coord1, coord2)
-    diff = coord1 .- coord2
-    diff[2]/diff[1]
-end
-
-function Intercept(grad, coord)
-    coord[2] - grad * coord[1]
-end
-
-# Line struct
-struct BoundLine{T<:Real}
-    "Gradient"
-    m::T
-    "Intercept"
-    c::T
-end
-
-# Constructor
-function BoundLine(coord1::AbstractArray, coord2::AbstractArray)
-    m = Gradient(coord1, coord2)
-    c = Intercept(m, coord1)
-    BoundLine(m, c)
-end
-
-# Get a point on the line
-function LineEquation(x, line::BoundLine)
-    line.m * x .+ line.c
-end
-
 function IsValidFit(fit)
+    # Check if a SpectralFitting FitResult is valid
     u=fit.u
     IsValid(u[7], u[6], u[3])
 end
+
+# ====================================================================================
+# Corrections
+# ====================================================================================
 
 function FindNearestSafePoint(point, a)
 

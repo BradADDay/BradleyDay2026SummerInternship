@@ -1,12 +1,8 @@
-
-using DataFrames
-using CSV
 using Dates
 using ProgressBars
-using Gradus
 using JSON3
 
-include("Deformations.jl")
+include("utils/Deformations.jl")
 
 """
 Generate a csv of line profiles by varying the 5 parameters for the Johannsen metric:
@@ -57,8 +53,6 @@ function Generate(as, pbar, bins, OUTDIR, hs, θs, α13s, ϵ3s)
                         α13 = strα13
                         combination = "$h, $θ, $strα13, $ϵ3"
 
-                        flux = Array{Float64}(undef, 1000)
-
                         try
 
                             if !QuickIsValid(ϵ3, α13, a)
@@ -66,7 +60,7 @@ function Generate(as, pbar, bins, OUTDIR, hs, θs, α13s, ϵ3s)
                             end
 
                             # Calculating the spectrum and storing it in df
-                            flux .= GetLineProfile(bins, a, h, θ, α13, ϵ3)
+                            flux = GetLineProfile(bins, a, h, θ, α13, ϵ3)
                             
                         catch err
                             # If the parameter combination fails, noting this in a log file
@@ -78,7 +72,7 @@ function Generate(as, pbar, bins, OUTDIR, hs, θs, α13s, ϵ3s)
                                 write(io, "$(now()): $err\n")
                             end
 
-                            flux .= zeros(1000)
+                            flux = zeros(1000)
                         end
 
                         insertcols!(df, j, combination => flux)
@@ -120,12 +114,6 @@ hs   = range( 3  , 15.   , 8)
 θs   = range( 5.   , 85.   , 8)
 α13s = range(-8., 10., 10)
 ϵ3s  = range(-8., 10., 10)
-
-# as = [-0.998, 0., 0.998]
-# hs = [3., 9., 15.]
-# θs = [5., 45., 85.]
-# α13s = range(-8., 10., 10)
-# ϵ3s  = range(-8., 10., 10)
 
 OUTDIR = "FinalTableData/"
 

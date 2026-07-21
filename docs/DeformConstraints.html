@@ -578,6 +578,12 @@ window.Quarto = {
 </ul>
 <p>The final check is done as the fitting iterator sometimes exceeds the upper limit, causing the interpolation for the bound definitions to try to extrapolate which causes errors.</p>
 <p>The next step is to create a final table model to use for the fit that covers the entire allowed parameter space. In the construction of this, each combination will be checked for a valid ISCO and if <a href="FittingData.html#eq-Alpha13Constraint" class="quarto-xref">Equation&nbsp;<span>5.2</span></a> and <a href="FittingData.html#eq-Epsilon3Constraint" class="quarto-xref">Equation&nbsp;<span>5.1</span></a> are satisfied. If any of these are not satisfied then that point in the table will be an array of <code>NaN</code> to ensure that it does not get used.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/Bounds.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="The bounds (shown by the dotted regions) and the invalid regions (shown by the solid regions). The grey regions are where there is no valid ISCO, and the black regions are where there is a naked singularity"><img src="images/Bounds.gif" class="img-fluid figure-img" alt="The bounds (shown by the dotted regions) and the invalid regions (shown by the solid regions). The grey regions are where there is no valid ISCO, and the black regions are where there is a naked singularity"></a></p>
+<figcaption>The bounds (shown by the dotted regions) and the invalid regions (shown by the solid regions). The grey regions are where there is no valid ISCO, and the black regions are where there is a naked singularity</figcaption>
+</figure>
+</div>
 
 
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">

@@ -95,3 +95,5 @@ Here `QuickIsValid` checks the combination using the defined bounds and `IsValid
 The final check is done as the fitting iterator sometimes exceeds the upper limit, causing the interpolation for the bound definitions to try to extrapolate which causes errors.
 
 The next step is to create a final table model to use for the fit that covers the entire allowed parameter space. In the construction of this, each combination will be checked for a valid ISCO and if @eq-Alpha13Constraint and @eq-Epsilon3Constraint are satisfied. If any of these are not satisfied then that point in the table will be an array of `NaN` to ensure that it does not get used.
+
+![The bounds (shown by the dotted regions) and the invalid regions (shown by the solid regions). The grey regions are where there is no valid ISCO, and the black regions are where there is a naked singularity](images/Bounds.gif)

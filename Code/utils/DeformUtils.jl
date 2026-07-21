@@ -293,13 +293,19 @@ end
 # Boundary Validation
 # =============================================================================
 
-function PlotBounds(a, df=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1], step=0.4, pbarLabel=nothing, verbose=true)
+function PlotBounds(a::Real, df::DataFrame=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1], step=0.4, pbarLabel=nothing, verbose=true)
+
+    plts = ParameterRegions(10, 10; a=a, step=step, verbose=verbose)
+    PlotBounds(plts, a, df=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1], step=0.4, pbarLabel=nothing, verbose=true)
+
+end
+
+function PlotBounds(plts, a::Real, df::DataFrame=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1], step=0.4, pbarLabel=nothing, verbose=true)
     """
     Plot the parameter space showing the invalid regions, and plot the bounds defined within the table dataframe
     """
 
     # Plotting the parameter space regions
-    plts = ParameterRegions(10, 10; a=a, step=step, verbose=verbose)
     hmp = PlotRegion(plts...; title="a=$(round(a; digits=3))", c=:grays)
 
     # Getting the boundary lines for the input spin

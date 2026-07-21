@@ -18,8 +18,10 @@ function GetLineProfile(bins, tfs, h, minrₑ)
     profile = emissivity_profile(m, d, model)
 
     # Computing the line profile
-    _, flux = lineprofile(profile, tfs; verbose=false, bins=bins, 
-            method=TransferFunctionMethod(), maxrₑ=400, numrₑ=50, minrₑ=minrₑ
+    _, flux = lineprofile(
+        profile, tfs; verbose=false, bins=bins, 
+        method=TransferFunctionMethod(), maxrₑ=400, 
+        numrₑ=50, minrₑ=minrₑ
     )
 
     return flux

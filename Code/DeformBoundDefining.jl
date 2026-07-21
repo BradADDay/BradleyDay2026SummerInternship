@@ -1,6 +1,8 @@
 include("utils/GeneralUtils.jl")
 include("utils/DeformUtils.jl")
 
+using BSON: @save, @load
+
 total=31
 
 as = range(-0.998, 0.998, total)
@@ -9,11 +11,10 @@ function BoundPlot(as, pbar)
     for (i, a) in enumerate(as)
 
         update(pbar)
-        plt = PlotBounds(a; step = 0.2, verbose=false)
+        regions, _, _, _ = ParameterRegions(10., 10.; a=a, verbose=false)
 
-        savefig(plt, "outBin/$i_New.png")
+        @save "outBin/$(round(a; digits=3))" regions
 
-        close("all")
         GC.gc()
         
     end
@@ -26,3 +27,17 @@ tasks = map(chunks) do chunk
     Threads.@spawn BoundPlot(chunk, pbar)
 end
 chunk_sums = fetch.(tasks)
+
+for (i, a) in enumerate(as)
+
+    @load "outBin/$(round(a; digits=3))" regions
+
+    minVal = Constraints(a)
+    αs = minVal:0.1:10
+    ϵs = minVal:0.1:10
+
+    hmp = PlotBounds((regions, αs, ϵs, minVal), a)
+
+    savefig(hmp, "$i.png")
+
+end

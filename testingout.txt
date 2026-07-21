@@ -1,5 +1,0 @@
-position
-metric
-disk
-lamppost model
-line profile

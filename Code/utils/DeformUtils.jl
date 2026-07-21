@@ -293,14 +293,14 @@ end
 # Boundary Validation
 # =============================================================================
 
-function PlotBounds(a::Real, df::DataFrame=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1], step=0.4, pbarLabel=nothing, verbose=true)
+function PlotBounds(a::Real, df::DataFrame=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1], step=0.4, pbarLabel="", verbose=true)
 
     plts = ParameterRegions(10, 10; a=a, step=step, verbose=verbose)
-    PlotBounds(plts, a, df=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1], step=0.4, pbarLabel=nothing, verbose=true)
+    PlotBounds(plts, a, df; sgns=sgns, step=step, pbarLabel="", verbose=verbose)
 
 end
 
-function PlotBounds(plts, a::Real, df::DataFrame=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1], step=0.4, pbarLabel=nothing, verbose=true)
+function PlotBounds(plts, a::Real, df::DataFrame=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1], step=0.4, pbarLabel="", verbose=true)
     """
     Plot the parameter space showing the invalid regions, and plot the bounds defined within the table dataframe
     """
@@ -399,7 +399,7 @@ function PlotError(ϵ3, α13, a; df=DeformationBoundsTable)
     display(hmp)
 end
 
-function ParameterRegions(αmax, ϵmax; a=0.998, step=0.1, pbarLabel=nothing, verbose=true)
+function ParameterRegions(αmax, ϵmax; a=0.998, step=0.1, pbarLabel="", verbose=true)
     """
     Checking the validity for a grid of points in the parameter space for a given spin value and producing a heatmap
     """
@@ -437,7 +437,7 @@ function ParameterRegions(αmax, ϵmax; a=0.998, step=0.1, pbarLabel=nothing, ve
     return regions, αs, ϵs, minVal
 end
 
-function PlotRegion(regions, αs, ϵs, minVal; ticks = -10:2:10, title="", contour=false, c=:default)
+function PlotRegion(regions, αs, ϵs, minVal; ticks = -10:2:10, title="", contour=false, c=:Greys)
     """
     Plotting the output from ParameterRegions
     """
@@ -448,7 +448,7 @@ function PlotRegion(regions, αs, ϵs, minVal; ticks = -10:2:10, title="", conto
         regions;
         xlabel = L"\epsilon_3",
         ylabel = L"\alpha_{13}",
-        clims=(minimum(regions), 0),
+        clims=(1, maximum(regions)),
         ylims=(minimum(αs), maximum(αs)),
         xlims=(minimum(ϵs), maximum(ϵs)),
         colorbar_title=L"ISCO $(R_g)$",
@@ -459,7 +459,8 @@ function PlotRegion(regions, αs, ϵs, minVal; ticks = -10:2:10, title="", conto
         aspect_ratio=:equal,
         xticks=ticks[ticks.>minVal],
         yticks=ticks[ticks.>minVal],
-        c=c
+        c=c,
+        cscale=:log10
     )
 
 end

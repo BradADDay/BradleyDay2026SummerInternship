@@ -1,43 +1,14 @@
 include("utils/GeneralUtils.jl")
 include("utils/DeformUtils.jl")
 
-using BSON: @save, @load
+PlotBounds(-0.998)
+scatter!((1,-0.75); c=:red)
+using Gradus: isco, JohannsenMetric
 
-total=31
+m = JohannsenMetric(M=1., a=-0.998, α13=-0.75, ϵ3=1.)
 
-as = range(-0.998, 0.998, total)
+isco(m)
 
-function BoundPlot(as, pbar)
-    for (i, a) in enumerate(as)
-
-        update(pbar)
-        regions, _, _, _ = ParameterRegions(10., 10.; a=a, verbose=false)
-
-        @save "outBin/$(round(a; digits=3))" regions
-
-        GC.gc()
-        
-    end
-end
-
-pbar = ProgressBar(total=total)
-
-chunks = Iterators.partition(as, cld(length(as), Threads.nthreads()))
-tasks = map(chunks) do chunk
-    Threads.@spawn BoundPlot(chunk, pbar)
-end
-chunk_sums = fetch.(tasks)
-
-for (i, a) in enumerate(as)
-
-    @load "outBin/$(round(a; digits=3))" regions
-
-    minVal = Constraints(a)
-    αs = minVal:0.1:10
-    ϵs = minVal:0.1:10
-
-    hmp = PlotBounds((regions, αs, ϵs, minVal), a)
-
-    savefig(hmp, "$i.png")
-
-end
+plts = ParameterRegions(10., 10.; a=0.998)
+PlotRegion(plts...; c=:viridis)
+scatter!((1, -1))

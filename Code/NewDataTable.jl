@@ -47,7 +47,7 @@ function Generate(as, α13s, ϵ3s, θs, hs, pbar, bins, OUTDIR, json)
             x = SVector(0.0, 10000.0, deg2rad(θ), 0.0)
             d = ThinDisc(Gradus.isco(m), Inf)
 
-            tfs = transferfunctions(m, x, d)
+            # tfs = transferfunctions(m, x, d)
         
         end
     end
@@ -59,6 +59,7 @@ hs   = range( 3  , 15.   , 8)
 θs   = range( 5.   , 85.   , 8)
 α13s = range(-8., 10., 10)
 ϵ3s  = range(-8., 10., 10)
+
 bins = collect(range(0., 3., 1000))
 OUTDIR = "FinalTableData/"
 pbar = ProgressBar(total=length(hs)*length(as)*length(θs)*length(α13s)*length(ϵ3s))

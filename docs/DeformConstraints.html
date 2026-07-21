@@ -455,6 +455,8 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#plan-20260710" id="toc-plan-20260710" class="nav-link" data-scroll-target="#plan-20260710"><span class="header-section-number">8.3.1</span> Plan 2026/07/10</a></li>
   <li><a href="#notes-following-implementation" id="toc-notes-following-implementation" class="nav-link" data-scroll-target="#notes-following-implementation"><span class="header-section-number">8.3.2</span> Notes Following Implementation</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"><span class="header-section-number">8.3.3</span> 2026/07/17</a></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"><span class="header-section-number">8.3.4</span> 2026/07/21</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -584,11 +586,37 @@ window.Quarto = {
 <figcaption>The bounds (shown by the dotted regions) and the invalid regions (shown by the solid regions). The grey regions are where there is no valid ISCO, and the black regions are where there is a naked singularity</figcaption>
 </figure>
 </div>
+</section>
+<section id="section" class="level3" data-number="8.3.3">
+<h3 data-number="8.3.3" class="anchored" data-anchor-id="section"><span class="header-section-number">8.3.3</span> 2026/07/17</h3>
+<p>The previous suggested method of constructing the table model did not work due to the fact that the interpolator attempted to use the regions set to <code>NaN</code>, producing invalid spectra where there should not have been. Thus a new method was devised where rather than setting the spectra for the invalid regions to an array of <code>NaN</code> it would be set to a spectrum calculated from the closest valid point in the parameter space. This would increase the uncertainty in the results from the table model, which must be quantified by comparing the results from <code>Gradus</code> and the table model.</p>
+<p>To implement this, the table for <code>QuickIsValid</code> was refined such that the boundaries fit as close as possible to the invalid regions. This refinement was done by gradually increasing the number of rows of the table through interpolating and adjusting the gradients and intercepts for the 6 lines manually. A function was then defined to first find what invalid region a point is in, then define a line from the point perpendicular to the boundary. The intersection between this line and the boundary then gives the new point to move to in parameter space.</p>
+<p>This was then implemented into the construction of the table model by adjusting the deformation parameters whenever they are invalid, which will provide valid spectra, albeit likely at the cost of accuracy.</p>
+</section>
+<section id="section-1" class="level3" data-number="8.3.4">
+<h3 data-number="8.3.4" class="anchored" data-anchor-id="section-1"><span class="header-section-number">8.3.4</span> 2026/07/21</h3>
+<p>After implementing this it was found that some parameter combinations still failed to compute, or took an unreasonable amount of time to compute. Attempts to fix this included</p>
+<ol type="1">
+<li>Using different solvers that work for stiff equations as suggested by the warning raised by <code>DifferentialEquations.jl</code></li>
+</ol>
+<pre><code>┌ Warning: Verbosity toggle: max_iters 
+│  Interrupted. Larger maxiters is needed. If you are using an integrator for non-stiff ODEs or an automatic switching algorithm (the default), you may want to consider using a method for stiff equations. See the solver pages for more details (e.g. https://docs.sciml.ai/DiffEqDocs/stable/solvers/ode_solve/#Stiff-Problems).
+└ @ SciMLBase ~/.julia/packages/SciMLBase/O1HPI/src/integrator_interface.jl:679</code></pre>
+<ol start="2" type="1">
+<li>Ensuring that the metric is valid, which was satisfied for all test cases.</li>
+<li>Moving the lamppost corona out of the ISCO if it was within it.</li>
+<li>Using the <code>BinningMethod</code> dispatch to calculate the line profile.</li>
+<li>Running the code on a different operating system (Windows 11).</li>
+</ol>
+<p>None of these fixed the issue, however it was later noticed that the parameter combinations with negative spin were more prone to these errors. In the interest of progressing with the investigations, it was thus decided to only consider positive spin, i.e.&nbsp;Prograde motion of the accretion disk <span class="citation" data-cites="ISCOSpin">&nbsp;[<a href="references.html#ref-ISCOSpin" role="doc-biblioref">2</a>]</span>.</p>
 
 
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
 <div id="ref-JohannsenMetric" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[1] </div><div class="csl-right-inline"><a href="https://doi.org/10.1103/physrevd.88.044002">T. Johannsen, Physical Review D <strong>88</strong>, (2013)</a>.</div>
+</div>
+<div id="ref-ISCOSpin" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline"><a href="https://doi.org/10.1088/1742-6596/2012/1/012123">S. Liu, Journal of Physics: Conference Series <strong>2012</strong>, 012123 (2021)</a>.</div>
 </div>
 </div>
 </section>

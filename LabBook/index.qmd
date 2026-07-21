@@ -1,6 +1,6 @@
 # Preface {.unnumbered}
 
-This book details my research during Summer 2026. Many thanks to Dr. Andrew Young and Mr Darius Michienzi for supervising this project.
+This book details my research during Summer 2026. Many thanks to Dr. Andrew Young and Darius Michienzi for supervising this project.
 
 This is a Quarto book.
 

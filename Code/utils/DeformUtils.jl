@@ -306,7 +306,7 @@ function PlotBounds(plts, a::Real, df::DataFrame=DeformationBoundsTable; sgns=[1
     """
 
     # Plotting the parameter space regions
-    hmp = PlotRegion(plts...; title="a=$(round(a; digits=3))", c=:grays)
+    hmp = PlotRegion(plts...; title="a=$(round(a; digits=3))", c=:grays, clims=(-2,0))
 
     # Getting the boundary lines for the input spin
     lines = GetLines(a, df)
@@ -420,7 +420,8 @@ function ParameterRegions(αmax, ϵmax; a=0.998, step=0.1, pbarLabel="", verbose
     end
 
     # Checking the validity for each point on the grid
-    for (i, α) in enumerate(αs)
+    Threads.@threads for i in eachindex(αs)
+        α = αs[i]
         for (j, ϵ) in enumerate(ϵs)
             
             m = JohannsenMetric(M=1., a=a, ϵ3=ϵ, α13=α)
@@ -437,10 +438,14 @@ function ParameterRegions(αmax, ϵmax; a=0.998, step=0.1, pbarLabel="", verbose
     return regions, αs, ϵs, minVal
 end
 
-function PlotRegion(regions, αs, ϵs, minVal; ticks = -10:2:10, title="", contour=false, c=:Greys)
+function PlotRegion(regions, αs, ϵs, minVal; ticks = -10:2:10, title="", c=:Greys, clims=nothing)
     """
     Plotting the output from ParameterRegions
     """
+
+    if isnothing(clims)
+        clims = (0, maximum(regions))
+    end
 
     hmp = heatmap(
         ϵs,
@@ -448,7 +453,7 @@ function PlotRegion(regions, αs, ϵs, minVal; ticks = -10:2:10, title="", conto
         regions;
         xlabel = L"\epsilon_3",
         ylabel = L"\alpha_{13}",
-        clims=(1, maximum(regions)),
+        clims=clims,
         ylims=(minimum(αs), maximum(αs)),
         xlims=(minimum(ϵs), maximum(ϵs)),
         colorbar_title=L"ISCO $(R_g)$",
@@ -459,8 +464,7 @@ function PlotRegion(regions, αs, ϵs, minVal; ticks = -10:2:10, title="", conto
         aspect_ratio=:equal,
         xticks=ticks[ticks.>minVal],
         yticks=ticks[ticks.>minVal],
-        c=c,
-        cscale=:log10
+        c=c
     )
 
 end

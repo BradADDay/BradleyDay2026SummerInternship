@@ -13,16 +13,7 @@ global const jsonFile = JSON3.read("Code/utils/FixedCoords.json")
 
 function GetLineProfile(bins, tfs, h, minrₑ)
 
-    # Setting up the model and emissivity profile
-    model = LampPostModel(h = h)
-    profile = emissivity_profile(m, d, model)
-
-    # Computing the line profile
-    _, flux = lineprofile(
-        profile, tfs; verbose=false, bins=bins, 
-        method=TransferFunctionMethod(), maxrₑ=400, 
-        numrₑ=50, minrₑ=minrₑ
-    )
+    
 
     return flux
 
@@ -30,24 +21,82 @@ end
 
 function Generate(as, α13s, ϵ3s, θs, hs, pbar, bins, OUTDIR, json)
 
+    # Dictionary for storing spectra to avoid unnecessary calculations of repeats
+    spectra = Dict()
+
     for a in as
         
+        # Variable to store the column index when appending to df
         j=1
         df = DataFrame()
 
         for α13 in α13s, ϵ3 in ϵ3s, θs in θs
 
-            println("$α13, $ϵ3")
+            update(pbar)
 
+            # Fixing the coordinates
+            # TODO: change this to read from a table file
             if !QuickIsValid(ϵ3, α13, a)
                 ϵ3, α13 = convert.(Float64, json["$ϵ3, $α13"])
             end
 
+            # Pre computing transfer functions
             m = JohannsenMetric(; M=1., a=a, α13=α13, ϵ3=ϵ3)
             x = SVector(0.0, 10000.0, deg2rad(θ), 0.0)
-            d = ThinDisc(Gradus.isco(m), Inf)
+            minrₑ = Gradus.isco(m)
+            d = ThinDisc(minrₑ, Inf)
 
-            # tfs = transferfunctions(m, x, d)
+            tfs = transferfunctions(m, x, d)
+
+            for h in hs
+
+                # Storing the combination for error reporting
+                combination = "$a, $α13, $ϵ3, $θ, $h"
+
+                try
+
+                    # Checking if there is a spectrum already computed
+                    flux = spectra[combination]
+
+                catch
+                    try
+
+                        # Setting up the model and emissivity profile
+                        model = LampPostModel(h = h)
+                        profile = emissivity_profile(m, d, model)
+
+                        # Computing the line profile
+                        _, flux = lineprofile(
+                            profile, tfs; verbose=false, bins=bins, 
+                            method=TransferFunctionMethod(), maxrₑ=400, 
+                            numrₑ=100, minrₑ=minrₑ
+                        )
+
+                        spectra[combination] = flux
+
+                    catch err
+                        # If the parameter combination fails, noting this in a log file
+                        open(joinpath(OUTDIR, "log.txt"), "a") do io
+                            write(io, "$(now()): Combination ($combination) failed!\n")
+                        end
+
+                        open(joinpath(OUTDIR, "err.txt"), "a") do io
+                            write(io, "$(now()): $err\n")
+                        end
+
+                        flux = zeros(1000)
+
+                        spectra[combination] = flux
+                    end
+                end
+
+                insertcols!(df, j, combination => flux)
+                j+=1
+                
+            end
+
+            # Saving to CSV periodically to avoid losing all data in the event of a crash etc.
+            CSV.write(joinpath(OUTDIR, "$(a).csv"), df)         
         
         end
     end

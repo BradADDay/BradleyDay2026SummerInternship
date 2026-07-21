@@ -181,21 +181,27 @@ end
 # Corrections
 # ====================================================================================
 
-function FindNearestSafePoint(point, a)
+function FindNearestSafePoint(point, a; maxIter=1000)
+    
+    combo = "$a, $point"
 
     # Moving the coordinate to be within valid parameter space
-    point .= ReturnToConstraints.(point, a)
+    point .= ReturnToConstraints.(point, [a]) .+ 0.1
 
     # Getting the boundary lines
     lines = GetLines(a)
 
+    fixed=false
+
     iter = 0
 
-    while true
+    conds=nothing
+
+    for i in 1:maxIter
 
         # A catch for if the point gets stuck between the top and bottom triangle
         if iter > 3
-            point .= (point[1] + 0.2, point[2])
+            point = [point[1] + 0.2, point[2]]
         end
 
         if (any(point .< Constraints(a)))
@@ -208,12 +214,11 @@ function FindNearestSafePoint(point, a)
         if conds[1] & conds[2]
             # If the point is in both the top and bottom triangle, 
             # moving it to the top one and finding the nearest line
-            point = (point[1], point[2] + 1)
+            point = [point[1], point[2] + 1]
             line=NearestLine(point, lines[1:4], a)
         elseif conds[1] | conds[2]
             # If the point is in either the top or bottom triangle,
             # finding the nearest line
-            point = (point[1], point[2])
             line=NearestLine(point, lines[1:4], a)
             iter +=1
         elseif conds[3]
@@ -224,20 +229,24 @@ function FindNearestSafePoint(point, a)
             line = lines[6]
         elseif point[1] > 10
             # Checking the point doesn't exceed the set region
-            point = (point[1]-0.1, point[2])
+            point = [point[1]-0.5, point[2]]
             line = lines[2]
         else
             # Breaking the loop if the point is now in a safe region
+            fixed=true
             break
         end
 
         # Moving the point to the closest point on the closest boundary it is breaching
         point = GetNewPoint(point, line)
-        # point = [round(point[1]; digits=3), round(point[2]; digits=3)]
  
     end
 
-    return round.(point; digits=2)
+    if fixed
+        return round.(point; digits=2)
+    else
+        throw(error("Combination $combo could not be corrected! Ended at $point with conditions $conds"))
+    end
 
 end
 

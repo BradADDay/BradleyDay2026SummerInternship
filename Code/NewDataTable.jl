@@ -11,7 +11,7 @@ Generate a csv of line profiles by varying the 5 parameters for the Johannsen me
 """
 
 # Reading the JSON file containing the corrected coordinates in parameter space
-global const jsonFile = JSON3.read("Code/utils/FixedCoords.json")
+const jsonFile = JSON3.read("Code/utils/FixedCoords.json")
 
 # A function to generate a csv of spectra for a given set of parameters
 function Generate(as, α13s, ϵ3s, θs, hs, pbar, OUTDIR; bins=range(0, 3, 1000), json=jsonFile, maxrₑ=400.)
@@ -162,3 +162,5 @@ pbar = ProgressBar(total=length(hs)*length(as)*length(θs)*length(α13s)*length(
 
 # Generating the CSVs
 MultiGenerate(as, α13s, ϵ3s, hs, θs, pbar, OUTDIR)
+
+cp(OUTDIR, "/home/brad/OneDrive/$OUTDIR", force=true)

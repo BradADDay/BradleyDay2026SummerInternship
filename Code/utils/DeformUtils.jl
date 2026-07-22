@@ -470,47 +470,49 @@ function PlotRegion(regions, αs, ϵs, minVal; ticks = -10:2:10, title="", c=:Gr
 
 end
 
-function FixedParamsJSON(
-    outname; 
-    as=range(-0.998, 0.998, 13),
+function FixedParamsJSON(;
+    outname::String="Code/utils/FixedCoords.json",
+    as=range(0, 0.998, 10),
     α13s=range(-8., 10., 10),
-    ϵ3s=range(-8., 10., 10)
+    ϵ3s=range(-8., 10., 10),
+    fails=[]
     )
     """
     Generate a JSON file containing the corrected parameter space coordinates
     """
 
     dict = Dict()
-
-    pbar = ProgressBar(total=length(as)*length(α13s)*length(ϵ3s))
-    set_description(pbar, "Generating JSON: ")
+    f=0
 
     for a in as
         dict["$(round(a; digits=3))"] = Dict()
-        for α13 in α13s
-            oα13 = α13
-            for ϵ3 in ϵ3s
+        for α13 in α13s, ϵ3 in ϵ3s
 
-                α13 = oα13
-                name = "$ϵ3, $α13"
+            iα13 = α13
+            iϵ3 = ϵ3
 
-                update(pbar)
-
-                # Finding the corrected coordinates
-                if !QuickIsValid(ϵ3, α13, a)
-                    ϵ3, α13 = FindNearestSafePoint([ϵ3, α13], a)
-                end
-
-                # Storing to dict
-                dict["$(round(a; digits=3))"][name] = ϵ3, α13
-
+            if !QuickIsValid(ϵ3, α13, a)
+                ϵ3, α13 = FindNearestSafePoint([ϵ3, α13], a)
             end
+
+            if [a, α13, ϵ3] in fails
+                α13 += 0.7
+                f += 1
+            end
+
+            dict["$(round(a; digits=3))"]["$iα13, $iϵ3"] = (α13, ϵ3)
+
+            println("$a, $iα13, $iϵ3 => $a, $α13, $ϵ3")
+
         end
     end
 
-    # Saving to JSON
-    open("$outname.json", "w") do f
-        JSON3.write(f, dict)
+    dict["numFails"] = f
+
+    println(f)
+
+    open(outname, "w") do f
+        JSON3.pretty(f, dict)
         println(f)
     end
 

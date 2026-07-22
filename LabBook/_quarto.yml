@@ -4,7 +4,6 @@ project:
 
 bookdown::gitbook:
    
-
 book:
   title: "Lab Book"
   author: "Brad Day"

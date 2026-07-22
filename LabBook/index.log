@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.25.7 (MiKTeX 26.5) (format=lualatex 2026.6.18)  21 JUL 2026 10:22
+This is LuaHBTeX, Version 1.25.7 (MiKTeX 26.5) (format=lualatex 2026.6.18)  22 JUL 2026 15:33
  restricted system commands enabled.
 **index.tex
 (./index.tex
@@ -2201,6 +2201,6 @@ t, 3 temp, 3 if_stack, 1 pdf_dest, 1 pdf_action, 10 pdf_colorstack nodes
    avail lists: 1:1,2:1607,3:768,4:775,5:469,6:57,7:9261,8:34,9:757,10:26,11:681
 ,12:1
  65311 multiletter control sequences out of 65536+600000
- 75 fonts using 20327671 bytes
+ 75 fonts using 20327823 bytes
  108i,10n,114p,11226b,1126s stack positions out of 10000i,1000n,20000p,200000b,200000s
 !  ==> Fatal error occurred, no output PDF file produced!

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>8&nbsp; Further Constraints on the Deformation Parameters – Lab Book</title>
+<title>5&nbsp; Fitting to Data – Lab Book</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -22,41 +22,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 /* CSS for citations */
 div.csl-bib-body { }
@@ -88,8 +53,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
-<link href="./XRISMReduction.html" rel="prev">
+<link href="./6_TableModel.html" rel="next">
+<link href="./4_Fitting.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -350,7 +315,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./DeformConstraints.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Further Constraints on the Deformation Parameters</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./5_FittingData.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fitting to Data</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -387,49 +352,49 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./IronKalphaReviewSummary.html" class="sidebar-item-text sidebar-link">
+  <a href="./1_IronKalphaReviewSummary.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Reading</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./InitialGradus.html" class="sidebar-item-text sidebar-link">
+  <a href="./2_InitialGradus.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Initial Gradus Testing</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ParamSpace.html" class="sidebar-item-text sidebar-link">
+  <a href="./3_ParamSpace.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Parameter Space Investigations</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Fitting.html" class="sidebar-item-text sidebar-link">
+  <a href="./4_Fitting.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fitting Spectral Lines</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./FittingData.html" class="sidebar-item-text sidebar-link">
+  <a href="./5_FittingData.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fitting to Data</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./TableModel.html" class="sidebar-item-text sidebar-link">
+  <a href="./6_TableModel.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Developing and Migrating to a Table Model</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./XRISMReduction.html" class="sidebar-item-text sidebar-link">
+  <a href="./7_XRISMReduction.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">XRISM Data Reduction</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./DeformConstraints.html" class="sidebar-item-text sidebar-link active">
+  <a href="./8_DeformConstraints.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Further Constraints on the Deformation Parameters</span></span></a>
   </div>
 </li>
@@ -449,16 +414,7 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#the-behaviour-of-the-unphysical-regions" id="toc-the-behaviour-of-the-unphysical-regions" class="nav-link active" data-scroll-target="#the-behaviour-of-the-unphysical-regions"><span class="header-section-number">8.1</span> The Behaviour of the Unphysical Regions</a></li>
-  <li><a href="#allowed-values-of-the-deformation-parameters-for-varying-spin" id="toc-allowed-values-of-the-deformation-parameters-for-varying-spin" class="nav-link" data-scroll-target="#allowed-values-of-the-deformation-parameters-for-varying-spin"><span class="header-section-number">8.2</span> Allowed Values of the Deformation Parameters for Varying Spin</a></li>
-  <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation"><span class="header-section-number">8.3</span> Implementation</a>
-  <ul class="collapse">
-  <li><a href="#plan-20260710" id="toc-plan-20260710" class="nav-link" data-scroll-target="#plan-20260710"><span class="header-section-number">8.3.1</span> Plan 2026/07/10</a></li>
-  <li><a href="#notes-following-implementation" id="toc-notes-following-implementation" class="nav-link" data-scroll-target="#notes-following-implementation"><span class="header-section-number">8.3.2</span> Notes Following Implementation</a></li>
-  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"><span class="header-section-number">8.3.3</span> 2026/07/17</a></li>
-  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"><span class="header-section-number">8.3.4</span> 2026/07/21</a></li>
-  <li><a href="#section-2" id="toc-section-2" class="nav-link" data-scroll-target="#section-2"><span class="header-section-number">8.3.5</span> 2026/07/22</a></li>
-  </ul></li>
+  <li><a href="#initial-results" id="toc-initial-results" class="nav-link active" data-scroll-target="#initial-results"><span class="header-section-number">5.1</span> Initial Results</a></li>
   </ul>
 </nav>
     </div>
@@ -468,7 +424,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Further Constraints on the Deformation Parameters</span></h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fitting to Data</span></h1>
 </div>
 
 
@@ -485,403 +441,187 @@ window.Quarto = {
 </header>
 
 
-<p>Following a discussion with my supervisors it was found that the issues with negative deformation parameters were not an issue with Gradus but a quirk of the metric. To explore this, a heatmap was plotted of the ISCO for combinations of <span class="math inline">\(\alpha_{13}\)</span> and <span class="math inline">\(\epsilon_{3}\)</span></p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/DeformParameterSpace_a=0.0.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="The valid deformation parameters for a Schwarszchild black hole. The black regions show invalid configurations, and the red contours denote regions where there is a naked singularity."><img src="images/DeformParameterSpace_a=0.0.png" class="img-fluid figure-img" alt="The valid deformation parameters for a Schwarszchild black hole. The black regions show invalid configurations, and the red contours denote regions where there is a naked singularity."></a></p>
-<figcaption>The valid deformation parameters for a Schwarszchild black hole. The black regions show invalid configurations, and the red contours denote regions where there is a naked singularity.</figcaption>
-</figure>
-</div>
-<p>Doing several of these plots for different values of the spin parameter may permit rigorous constraints of the allowed values of the deformation parameters. This may be done in two ways:</p>
-<ol type="1">
-<li>Fitting the data with the Kerr metric to constrain the value of <span class="math inline">\(a\)</span> such that bounds can be determined for the deformation parameters in advance.</li>
-<li>Somehow dynamically setting constraints on the parameters by selecting from a pre-computed table of allowed combinations for all values of <span class="math inline">\(a\)</span> (permitted by interpolation).</li>
-<li>Checking the configuration upon each iteration of the fit, and either rejecting the configuration, or manually setting it to an acceptable configuration if it lies within an unphysical region.</li>
-</ol>
-<p>The first method would allow for an exploration as to whether the deformation parameters can independently improve the fit of the model, but may reduce the accuracy of the overall fit through forbidding the spin parameter to change. This may be overcome by using the method to obtain a “best guess” for the parameters and then using the result of this for a third and final fit, however this may require implementing the second method also.</p>
-<p>The second method would likely be more computationally complex and introduce an increased amount of uncertainty due to the reliance on interpolation.</p>
-<p>The third method is potentially the least complex and introduces the least error as it allows the fit to freely explore the parameter space while guiding it through the process to ensure the results remain physical.</p>
-<section id="the-behaviour-of-the-unphysical-regions" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="the-behaviour-of-the-unphysical-regions"><span class="header-section-number">8.1</span> The Behaviour of the Unphysical Regions</h2>
-<p>To gather more data on the allowed parameter space, the above image was replicated for 5 spin values as shown below:</p>
-<div class="quarto-layout-panel" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><a href="images/DeformParameterSpace_a=0.0.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/DeformParameterSpace_a=0.0.png" class="img-fluid"></a></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><a href="images/DeformParameterSpace_a=0.2495.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="images/DeformParameterSpace_a=0.2495.png" class="img-fluid"></a></p>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><a href="images/DeformParameterSpace_a=0.499.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="images/DeformParameterSpace_a=0.499.png" class="img-fluid"></a></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><a href="images/DeformParameterSpace_a=0.7485.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="images/DeformParameterSpace_a=0.7485.png" class="img-fluid"></a></p>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><a href="images/DeformParameterSpace_a=0.998.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="images/DeformParameterSpace_a=0.998.png" class="img-fluid"></a></p>
-</div>
-</div>
-</div>
-<p>From these plots it seems that it may be possible to empirically parameterise the invalid regions with 5 linear equations: one for the wedge in the bottom right first 3 figures, and two for each of the triangles visible in all cases.</p>
-<p>It may be practical to run a selection of cases to find the vertices of these regions such that their position can be plotted as a function of <span class="math inline">\(a\)</span> and then fit to find an empirical expression for the allowed values for any <span class="math inline">\(a\)</span>.</p>
-<p>To test this hypothesis a quick plot was made with 10 samples of the lower vertex of the triangular region seen in all plots at the top. The result of this is shown below</p>
-<p><a href="images/ParamBounds.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="images/ParamBounds.png" class="img-fluid"></a></p>
-<p>These example coordinates were found manually inspecting the heatmap with plotly. To find them more precisely, several high definition heatmaps could be produced and the resulting matrix iterated through to find the extrema of each of the shapes. The parameter space could then be constrained by either interpolating the values within a table, or by fitting some function to the data and finding the vertices of these major shapes.</p>
-<p>The vertices can then be used to define bounded exclusion regions, within which the model is invalid. During fitting these exclusion regions can then be used to “reject” a fit and force the parameters into an acceptable range.</p>
-</section>
-<section id="allowed-values-of-the-deformation-parameters-for-varying-spin" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="allowed-values-of-the-deformation-parameters-for-varying-spin"><span class="header-section-number">8.2</span> Allowed Values of the Deformation Parameters for Varying Spin</h2>
-<p>As another investigative route, Figure 6 from <span class="citation" data-cites="JohannsenMetric">&nbsp;[<a href="references.html#ref-JohannsenMetric" role="doc-biblioref">1</a>]</span> was reproduced as below. It was found that the results held consistent between Gradus, and Johannsen’s original calculations. The <span class="math inline">\(\alpha_{13}\)</span> parameter space showed an additional region (shown in red) where a naked singularity is present. This was not considered previously, however removes a significant region from the parameter space and will thus be considered here.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/alpha13Allowed.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="The valid values for \epsilon_{3} to take for a range of spin values. The black hatched region marks the constraints placed by Equation&nbsp;eq-Alpha13Constraint. Contours of constant ISCO are marked in red. The shaded red region marks where a naked singularity occurs."><img src="images/alpha13Allowed.png" class="img-fluid figure-img" alt="The valid values for \epsilon_{3} to take for a range of spin values. The black hatched region marks the constraints placed by Equation&nbsp;eq-Alpha13Constraint. Contours of constant ISCO are marked in red. The shaded red region marks where a naked singularity occurs."></a></p>
-<figcaption>The valid values for <span class="math inline">\(\epsilon_{3}\)</span> to take for a range of spin values. The black hatched region marks the constraints placed by <a href="FittingData.html#eq-Alpha13Constraint" class="quarto-xref">Equation&nbsp;<span>5.2</span></a>. Contours of constant ISCO are marked in red. The shaded red region marks where a naked singularity occurs.</figcaption>
-</figure>
-</div>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/epsilon3Allowed.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="The valid values for \epsilon_{3} to take for a range of spin values. The black hatched region marks the constraints placed by Equation&nbsp;eq-Epsilon3Constraint. Contours of constant ISCO are marked in red."><img src="images/epsilon3Allowed.png" class="img-fluid figure-img" alt="The valid values for \epsilon_{3} to take for a range of spin values. The black hatched region marks the constraints placed by Equation&nbsp;eq-Epsilon3Constraint. Contours of constant ISCO are marked in red."></a></p>
-<figcaption>The valid values for <span class="math inline">\(\epsilon_{3}\)</span> to take for a range of spin values. The black hatched region marks the constraints placed by <a href="FittingData.html#eq-Epsilon3Constraint" class="quarto-xref">Equation&nbsp;<span>5.1</span></a>. Contours of constant ISCO are marked in red.</figcaption>
-</figure>
-</div>
-</section>
-<section id="implementation" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="implementation"><span class="header-section-number">8.3</span> Implementation</h2>
-<section id="plan-20260710" class="level3" data-number="8.3.1">
-<h3 data-number="8.3.1" class="anchored" data-anchor-id="plan-20260710"><span class="header-section-number">8.3.1</span> Plan 2026/07/10</h3>
-<p>The current plan for excluding these unphysical regions of the parameter space from the fitting is as follows. The unphysical regions will be defined by a set of equations for a given spin, and within these regions the fit will be setup to check if the combination is valid. To ensure no invalid combinations are mistakenly used, some padding will be added to these equations such that all invalid combinations are contained within. When the fitting iterator enters an invalid region, the combination will be explicitly checked for naked singularities, or the absence of a valid ISCO.</p>
-<p>If the region is found to be invalid, then the <code>invoke!</code> function will return an array of zeros, which will signal to the fitting iterator that the parameter combination is not allowed for fitting.</p>
-<p>A potential roadblock to this process is the unpredictable region in the bottom left corner of the high spin case. This will be dealt with by defining a circular region around this area to catch all of these cases. This will lead to a decrease in efficiency, but will increase the accuracy and thoroughness of the model.</p>
-</section>
-<section id="notes-following-implementation" class="level3" data-number="8.3.2">
-<h3 data-number="8.3.2" class="anchored" data-anchor-id="notes-following-implementation"><span class="header-section-number">8.3.2</span> Notes Following Implementation</h3>
-<p>The boundary lines were successfully defined by finding the vertices through a grid search defined in <code>Code/utils/DeformUtils.jl</code>, and a csv of gradients and intercepts was defined for quick reading of the lines. Padding was added manually to these lines by randomly sampling the parameter space and checking the validity of the combination both using the bounds and explicitly checking the metric. Whenever the bounds missed an invalid point in the parameter space they were adjusted slightly and the process repeated until <span class="math inline">\(10^6\)</span> consecutive random samples could be taken without a point being missed. The bounds were designed to be overzealous such that no valid combinations are missed.</p>
-<p>To avoid removing valid combinations, the fitting process will involve first a quick check with the boundaries, followed by a thorough check with the metric if the first check fails.</p>
-<p>The “unpredictable region” noted in the lower left corner was bounded with a line rather than a circle for simplicity.</p>
-<p>The call to the bounds within the fitting iterator is shown below</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode julia eval-false code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reading from table for a quick check of parameter validity</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> !<span class="fu">QuickIsValid</span>(ϵ<span class="fl">3</span>, α<span class="fl">13</span>, a)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Doing a finer check if the quick check fails</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> !<span class="fu">IsValid</span>(ϵ<span class="fl">3</span>, α<span class="fl">13</span>, a)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        output <span class="op">=</span> <span class="fu">fill</span>(<span class="cn">NaN</span>, <span class="fu">length</span>(input)<span class="op">-</span><span class="fl">1</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> output</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Here <code>QuickIsValid</code> checks the combination using the defined bounds and <code>IsValid</code> checks it thoroughly using the metric through <code>Gradus.jl</code>. If both checks find the parameter combination to be invalid then the model returns an array of <code>NaN</code> for that iteration, such that the iterator will calculate a bad fit and move out of the region. The conditions that are checked through these functions are:</p>
-<ul>
-<li>The presence of a valid ISCO: Checked by defining a metric through <code>Gradus.jl</code> and attempting to calculate the isco using <code>Gradus.ISCO</code></li>
-<li>The presence of a naked singularity: Checked using <code>Gradus.is_naked_singularity</code></li>
-<li>If the combination satisfies <a href="FittingData.html#eq-Alpha13Constraint" class="quarto-xref">Equation&nbsp;<span>5.2</span></a> and <a href="FittingData.html#eq-Epsilon3Constraint" class="quarto-xref">Equation&nbsp;<span>5.1</span></a></li>
-<li>If the magnitude of the spin is below 0.998</li>
-</ul>
-<p>The final check is done as the fitting iterator sometimes exceeds the upper limit, causing the interpolation for the bound definitions to try to extrapolate which causes errors.</p>
-<p>The next step is to create a final table model to use for the fit that covers the entire allowed parameter space. In the construction of this, each combination will be checked for a valid ISCO and if <a href="FittingData.html#eq-Alpha13Constraint" class="quarto-xref">Equation&nbsp;<span>5.2</span></a> and <a href="FittingData.html#eq-Epsilon3Constraint" class="quarto-xref">Equation&nbsp;<span>5.1</span></a> are satisfied. If any of these are not satisfied then that point in the table will be an array of <code>NaN</code> to ensure that it does not get used.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/Bounds.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="The bounds (shown by the dotted regions) and the invalid regions (shown by the solid regions). The grey regions are where there is no valid ISCO, and the black regions are where there is a naked singularity"><img src="images/Bounds.gif" class="img-fluid figure-img" alt="The bounds (shown by the dotted regions) and the invalid regions (shown by the solid regions). The grey regions are where there is no valid ISCO, and the black regions are where there is a naked singularity"></a></p>
-<figcaption>The bounds (shown by the dotted regions) and the invalid regions (shown by the solid regions). The grey regions are where there is no valid ISCO, and the black regions are where there is a naked singularity</figcaption>
-</figure>
-</div>
-</section>
-<section id="section" class="level3" data-number="8.3.3">
-<h3 data-number="8.3.3" class="anchored" data-anchor-id="section"><span class="header-section-number">8.3.3</span> 2026/07/17</h3>
-<p>The previous suggested method of constructing the table model did not work due to the fact that the interpolator attempted to use the regions set to <code>NaN</code>, producing invalid spectra where there should not have been. Thus a new method was devised where rather than setting the spectra for the invalid regions to an array of <code>NaN</code> it would be set to a spectrum calculated from the closest valid point in the parameter space. This would increase the uncertainty in the results from the table model, which must be quantified by comparing the results from <code>Gradus</code> and the table model.</p>
-<p>To implement this, the table for <code>QuickIsValid</code> was refined such that the boundaries fit as close as possible to the invalid regions. This refinement was done by gradually increasing the number of rows of the table through interpolating and adjusting the gradients and intercepts for the 6 lines manually. A function was then defined to first find what invalid region a point is in, then define a line from the point perpendicular to the boundary. The intersection between this line and the boundary then gives the new point to move to in parameter space.</p>
-<p>This was then implemented into the construction of the table model by adjusting the deformation parameters whenever they are invalid, which will provide valid spectra, albeit likely at the cost of accuracy.</p>
-</section>
-<section id="section-1" class="level3" data-number="8.3.4">
-<h3 data-number="8.3.4" class="anchored" data-anchor-id="section-1"><span class="header-section-number">8.3.4</span> 2026/07/21</h3>
-<p>After implementing this it was found that some parameter combinations still failed to compute, or took an unreasonable amount of time to compute. Attempts to fix this included</p>
-<ol type="1">
-<li>Using different solvers that work for stiff equations as suggested by the warning raised by <code>DifferentialEquations.jl</code></li>
-</ol>
-<pre><code>┌ Warning: Verbosity toggle: max_iters 
-│  Interrupted. Larger maxiters is needed. If you are using an integrator for non-stiff ODEs or an automatic switching algorithm (the default), you may want to consider using a method for stiff equations. See the solver pages for more details (e.g. https://docs.sciml.ai/DiffEqDocs/stable/solvers/ode_solve/#Stiff-Problems).
-└ @ SciMLBase ~/.julia/packages/SciMLBase/O1HPI/src/integrator_interface.jl:679</code></pre>
-<ol start="2" type="1">
-<li>Ensuring that the metric is valid, which was satisfied for all test cases.</li>
-<li>Moving the lamppost corona out of the ISCO if it was within it.</li>
-<li>Using the <code>BinningMethod</code> dispatch to calculate the line profile.</li>
-<li>Running the code on a different operating system (Windows 11).</li>
-</ol>
-<p>None of these fixed the issue, however it was later noticed that the parameter combinations with negative spin were more prone to these errors. In the interest of progressing with the investigations, it was thus decided to only consider positive spin, i.e.&nbsp;Prograde motion of the accretion disk <span class="citation" data-cites="ISCOSpin">&nbsp;[<a href="references.html#ref-ISCOSpin" role="doc-biblioref">2</a>]</span>.</p>
-</section>
-<section id="section-2" class="level3" data-number="8.3.5">
-<h3 data-number="8.3.5" class="anchored" data-anchor-id="section-2"><span class="header-section-number">8.3.5</span> 2026/07/22</h3>
-<p>A new interesting finding with regards to this issue: The failed combinations seem to have consistently low <span class="math inline">\(\alpha_{13}\)</span>. A test was ran with 1000 different combinations throughout the parameter space with the following ranges:</p>
-<pre><code>as   = range(0, 0.998, 10)
-α13s = range(-8., 10., 10)
-ϵ3s  = range(-8., 10., 10)</code></pre>
-<p>The following 15 combinations failed to compute</p>
+<p>Data from the NuSTAR (Nuclear Spectroscopic Telescope Array) spacecraft <span class="citation" data-cites="NuSTAR">&nbsp;[<a href="references.html#ref-NuSTAR" role="doc-biblioref">1</a>]</span> was used, and the dataset used for testing was <code>nu80402315002B01</code>. Data loading was handled by <code>SpectralFitting.jl</code> through the <code>OGIPDataset</code> struct. This takes the spectrum file as an argument and automatically pulls in the background, <code>.arf</code>, and <code>.rmf</code> files to compute the spectrum.</p>
+<section id="initial-results" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="initial-results"><span class="header-section-number">5.1</span> Initial Results</h2>
+<div id="tbl-InitialFit" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-InitialFit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.1: The ranges and default values for the parameter space.
+</figcaption>
+<div aria-describedby="tbl-InitialFit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>a</th>
-<th>_{13}</th>
-<th>_{3}</th>
+<th>Model</th>
+<th>Variable</th>
+<th>Value</th>
+<th>Error</th>
+<th><span class="math inline">\(\chi^2\)</span></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>0.33266666666666667</td>
-<td>-6.84</td>
-<td>-5.96</td>
-</tr>
-<tr class="even">
-<td>0.6653333333333333</td>
-<td>-4.8</td>
-<td>-3.92</td>
-</tr>
-<tr class="odd">
-<td>0.5544444444444444</td>
-<td>-5.55</td>
-<td>-3.94</td>
-</tr>
-<tr class="even">
-<td>0.6653333333333333</td>
-<td>-4.71</td>
-<td>-1.46</td>
-</tr>
-<tr class="odd">
-<td>0.5544444444444444</td>
-<td>-5.55</td>
-<td>-3.93</td>
-</tr>
-<tr class="even">
-<td>0.7762222222222223</td>
-<td>-4.08</td>
-<td>-1.58</td>
-</tr>
-<tr class="odd">
-<td>0.8871111111111111</td>
-<td>-2.61</td>
-<td>0.03</td>
-</tr>
-<tr class="even">
-<td>0.998</td>
-<td>-1.02</td>
-<td>6.09</td>
-</tr>
-<tr class="odd">
-<td>0.7762222222222223</td>
-<td>-4.23</td>
-<td>0.1</td>
-</tr>
-<tr class="even">
-<td>0.7762222222222223</td>
-<td>-4.2</td>
-<td>2.1</td>
-</tr>
-<tr class="odd">
-<td>0.7762222222222223</td>
-<td>-3.92</td>
-<td>4.05</td>
-</tr>
-<tr class="even">
-<td>0.7762222222222223</td>
-<td>-3.81</td>
-<td>-1.72</td>
-</tr>
-<tr class="odd">
-<td>0.7762222222222223</td>
-<td>-4.0</td>
-<td>0.0</td>
-</tr>
-<tr class="even">
-<td>0.7762222222222223</td>
-<td>-4.0</td>
-<td>2.0</td>
-</tr>
-<tr class="odd">
-<td>0.7762222222222223</td>
-<td>-3.9</td>
-<td>4.1</td>
-</tr>
-</tbody>
-</table>
-<p>Plotted in parameter space, these combinations are placed as follows:</p>
-<div class="quarto-layout-panel" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/Fail1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="images/Fail1.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
-</figure>
-</div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/Fail2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="images/Fail2.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/Fail3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img src="images/Fail3.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
-</figure>
-</div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/Fail4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img src="images/Fail4.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/Fail5.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img src="images/Fail5.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
-</figure>
-</div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/Fail6.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img src="images/Fail6.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/Fail7.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img src="images/Fail7.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
-</figure>
-</div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/Fail8.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img src="images/Fail8.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/Fail9.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19"><img src="images/Fail9.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
-</figure>
-</div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/Fail10.png" class="lightbox" data-gallery="quarto-lightbox-gallery-20"><img src="images/Fail10.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/Fail11.png" class="lightbox" data-gallery="quarto-lightbox-gallery-21"><img src="images/Fail11.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
-</figure>
-</div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/Fail12.png" class="lightbox" data-gallery="quarto-lightbox-gallery-22"><img src="images/Fail12.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/Fail13.png" class="lightbox" data-gallery="quarto-lightbox-gallery-23"><img src="images/Fail13.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
-</figure>
-</div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/Fail14.png" class="lightbox" data-gallery="quarto-lightbox-gallery-24"><img src="images/Fail14.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/Fail15.png" class="lightbox" data-gallery="quarto-lightbox-gallery-25"><img src="images/Fail15.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<p>Given that the bad combinations consistently had low <span class="math inline">\(\alpha_{13}\)</span>, it was possible to fix these errors by simply shifting the points upwards slightly in parameter space. This of course increases the error in the table model, however this can be quantified and was deemed necessary for the purposes of this investigation. The table model was thus constructed from a 5D grid with equally spaced points selected from the following ranges</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Parameter</th>
-<th>Lower Bound</th>
-<th>Upper Bound</th>
-<th>Number</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
+<td>Johannsen</td>
 <td><span class="math inline">\(a\)</span></td>
-<td>0</td>
-<td>0.998</td>
-<td>10</td>
+<td>0.57</td>
+<td>1.88</td>
+<td>116.84</td>
 </tr>
 <tr class="even">
+<td></td>
 <td><span class="math inline">\(h\)</span></td>
-<td>1</td>
-<td>15</td>
-<td>10</td>
+<td>50.00</td>
+<td>8.77</td>
+<td></td>
 </tr>
 <tr class="odd">
+<td></td>
 <td><span class="math inline">\(\theta\)</span></td>
-<td>5</td>
-<td>85</td>
-<td>9</td>
+<td>58.24</td>
+<td>4.93</td>
+<td></td>
 </tr>
 <tr class="even">
+<td></td>
 <td><span class="math inline">\(\alpha_{13}\)</span></td>
-<td>-8</td>
-<td>10</td>
-<td>10</td>
+<td>2.29</td>
+<td>10.96</td>
+<td></td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(\epsilon_{3}\)</span></td>
-<td>-8</td>
-<td>10</td>
-<td>10</td>
+<td></td>
+<td><span class="math inline">\(\epsilon_3\)</span></td>
+<td>29.74</td>
+<td>25.89</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><span class="math inline">\(K\)</span></td>
+<td>161.8</td>
+<td>7.15</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><span class="math inline">\(E\)</span></td>
+<td>6.27</td>
+<td>0.016</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Kerr</td>
+<td><span class="math inline">\(a\)</span></td>
+<td>0.77</td>
+<td>0.057</td>
+<td>124.64</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><span class="math inline">\(h\)</span></td>
+<td>50.0</td>
+<td>2.75</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><span class="math inline">\(\theta\)</span></td>
+<td>55.44</td>
+<td>2.67</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><span class="math inline">\(K\)</span></td>
+<td>162.0</td>
+<td>7.07</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><span class="math inline">\(E\)</span></td>
+<td>6.27</td>
+<td>0.014</td>
+<td></td>
 </tr>
 </tbody>
 </table>
+</div>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/FirstDataFit.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="The first attempt at fitting to data. The Johannsen metric was used to produce the blue line, and the Kerr metric was used to produce the red. Neither fit was particularly good which may either be the result of poor data, or a poor model."><img src="images/FirstDataFit.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The first attempt at fitting to data. The Johannsen metric was used to produce the blue line, and the Kerr metric was used to produce the red. Neither fit was particularly good which may either be the result of poor data, or a poor model."></a></p>
+</figure>
+</div>
+<figcaption>The first attempt at fitting to data. The Johannsen metric was used to produce the blue line, and the Kerr metric was used to produce the red. Neither fit was particularly good which may either be the result of poor data, or a poor model.</figcaption>
+</figure>
+</div>
+<p>The NuSTAR datasets have two distinct spectra from each telescope, which can be fit simultaneously, binding some of the parameters together. The fitting code was thus adjusted to fit both datasets simultaneously while binding all parameters other than the normalisation. The dataset labelled “nu80402315002” was once again used.</p>
+<div id="fig-DualFit" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-DualFit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/DualFit.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;5.1: The fits to the nu80402315002 dataset. The Johannsen fit is shown in blue, and the Kerr fit in red."><img src="images/DualFit.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-DualFit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.1: The fits to the nu80402315002 dataset. The Johannsen fit is shown in blue, and the Kerr fit in red.
+</figcaption>
+</figure>
+</div>
+<p>It is evident from <a href="#fig-DualFit" class="quarto-xref">Figure&nbsp;<span>5.1</span></a> that the fitting process needs refinement as the fits do not currently fit the data well, and therefore drawing comparisons would be useless.</p>
+<p>Following these experiments it was decided to fit a composite model of <code>PowerLaw</code> + <code>LampPost</code>, with the latter being the line profiles generated using either the Kerr or Johannsen metric through <code>Gradus.jl</code>. The first attempt at this provided the plots below.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/Johannsennu80402315002.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="The composite fit using the Johannsen metric."><img src="images/Johannsennu80402315002.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The composite fit using the Johannsen metric."></a></p>
+</figure>
+</div>
+<figcaption>The composite fit using the Johannsen metric.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/Kerrnu80402315002.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="The composite fit using the Kerr metric"><img src="images/Kerrnu80402315002.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The composite fit using the Kerr metric"></a></p>
+</figure>
+</div>
+<figcaption>The composite fit using the Kerr metric</figcaption>
+</figure>
+</div>
+<p>The inner and outer radii of the accretion disk were set constant at the ISCO and 400 <span class="math inline">\(R_g\)</span> respectively. The Johannsen metric currently seems to yield a better fit, however this appears to be an effect of parameters other than the deformation parameters <span class="math inline">\(\alpha_{13}\)</span> and <span class="math inline">\(\epsilon_{3}\)</span> as they were both relatively small (<span class="math inline">\(1.0285\)</span> and <span class="math inline">\(1.6702\times10^{-5}\)</span>, respectively). It may therefore be more effective to investigate the effect of these parameters by first fitting the Kerr metric to the data to find the Kerr parameters, then fitting the Johannsen metric with the found parameters, only allowing the two deformation parameters to vary.</p>
+<p>Further reading suggests that it may be possible to constrain the parameters for fitting further. In T. Johannsen’s 2013 paper describing the Johannsen metric <span class="citation" data-cites="JohannsenMetric">&nbsp;[<a href="references.html#ref-JohannsenMetric" role="doc-biblioref">2</a>]</span>, the following constraints were derived for the deformation parameters:</p>
+<p><span id="eq-Epsilon3Constraint"><span class="math display">\[
+\epsilon_3 &gt; -\frac{(M + \sqrt{M^2 - a^2})^3}{M^3}
+\tag{5.1}\]</span></span></p>
+<p>and</p>
+<p><span id="eq-Alpha13Constraint"><span class="math display">\[
+\alpha_{13} &gt; -\frac{(M + \sqrt{M^2 - a^2})^3}{M^3}
+\tag{5.2}\]</span></span></p>
+<p>Until now, the deformation parameters had been allowed to take only positive values. These constraints show that this was potentially a naive restriction, thus the code should be adapted to allow for negative values with these constraints. This would ideally be done through <code>SpectralFitting.jl</code>’s parameter patching functionality or equivalent however if that is possible remains to be seen. For now, the lower bound for the deformation parameters has been set to -1, which is allowed no matter how large <span class="math inline">\(a\)</span> gets.</p>
+<p><a href="images/alpha13spin.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="images/alpha13spin.png" class="img-fluid"></a></p>
+<!-- 
+To Do:
+- Comment and clean up code
+- Fit Kerr to freeze parameters?
+    - Check if this would be valid
+    - I think it'd cause overfitting
+- Make utility to retrieve fitting parameters easily
+-->
 
 
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-NuSTAR" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline"><a href="https://doi.org/10.1088/0004-637X/770/2/103">F. A. Harrison <em>et al.</em>, American Physical Journal <strong>770</strong>, 103 (2013)</a>.</div>
+</div>
 <div id="ref-JohannsenMetric" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline"><a href="https://doi.org/10.1103/physrevd.88.044002">T. Johannsen, Physical Review D <strong>88</strong>, (2013)</a>.</div>
-</div>
-<div id="ref-ISCOSpin" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[2] </div><div class="csl-right-inline"><a href="https://doi.org/10.1088/1742-6596/2012/1/012123">S. Liu, Journal of Physics: Conference Series <strong>2012</strong>, 012123 (2021)</a>.</div>
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline"><a href="https://doi.org/10.1103/physrevd.88.044002">T. Johannsen, Physical Review D <strong>88</strong>, (2013)</a>.</div>
 </div>
 </div>
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -1300,13 +1040,13 @@ window.Quarto = {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./XRISMReduction.html" class="pagination-link" aria-label="XRISM Data Reduction">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">XRISM Data Reduction</span></span>
+      <a href="./4_Fitting.html" class="pagination-link" aria-label="Fitting Spectral Lines">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fitting Spectral Lines</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link" aria-label="References">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./6_TableModel.html" class="pagination-link" aria-label="Developing and Migrating to a Table Model">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Developing and Migrating to a Table Model</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

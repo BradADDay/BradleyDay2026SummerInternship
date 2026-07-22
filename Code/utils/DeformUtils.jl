@@ -396,7 +396,8 @@ function PlotError(ϵ3, α13, a; df=DeformationBoundsTable)
 
     # Plotting the point that failed the checks
     scatter!(hmp, [ϵ3], [α13]; c=:white, label=nothing, msc=:red)
-    display(hmp)
+
+    return hmp
 end
 
 function ParameterRegions(αmax, ϵmax; a=0.998, step=0.1, pbarLabel="", verbose=true)

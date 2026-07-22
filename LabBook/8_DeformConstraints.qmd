@@ -124,3 +124,79 @@ After implementing this it was found that some parameter combinations still fail
 5. Running the code on a different operating system (Windows 11).
 
 None of these fixed the issue, however it was later noticed that the parameter combinations with negative spin were more prone to these errors. In the interest of progressing with the investigations, it was thus decided to only consider positive spin, i.e. Prograde motion of the accretion disk @ISCOSpin.
+
+### 2026/07/22
+
+A new interesting finding with regards to this issue: The failed combinations seem to have consistently low $\alpha_{13}$. A test was ran with 1000 different combinations throughout the parameter space with the following ranges:
+
+```
+as   = range(0, 0.998, 10)
+α13s = range(-8., 10., 10)
+ϵ3s  = range(-8., 10., 10)
+```
+
+The following 15 combinations failed to compute
+
+| $a$                 | $\alpha_{13}$ | $\epsilon_{3}$ |
+|---------------------|---------------|----------------|
+| 0.33266666666666667 | -6.84         | -5.96          | 
+| 0.6653333333333333  | -4.8          | -3.92          |
+| 0.5544444444444444  | -5.55         | -3.94          |
+| 0.6653333333333333  | -4.71         | -1.46          |
+| 0.5544444444444444  | -5.55         | -3.93          |
+| 0.7762222222222223  | -4.08         | -1.58          |
+| 0.8871111111111111  | -2.61         | 0.03           |
+| 0.998               | -1.02         | 6.09           |
+| 0.7762222222222223  | -4.23         | 0.1            |
+| 0.7762222222222223  | -4.2          | 2.1            |
+| 0.7762222222222223  | -3.92         | 4.05           |
+| 0.7762222222222223  | -3.81         | -1.72          |
+| 0.7762222222222223  | -4.0          | 0.0            |
+| 0.7762222222222223  | -4.0          | 2.0            |
+| 0.7762222222222223  | -3.9          | 4.1            |
+
+Plotted in parameter space, these combinations are placed as follows:
+
+::: {layout-ncol=2}
+
+![](images/Fail1.png){fig-align="center"}
+
+![](images/Fail2.png){fig-align="center"}
+
+![](images/Fail3.png){fig-align="center"}
+
+![](images/Fail4.png){fig-align="center"}
+
+![](images/Fail5.png){fig-align="center"}
+
+![](images/Fail6.png){fig-align="center"}
+
+![](images/Fail7.png){fig-align="center"}
+
+![](images/Fail8.png){fig-align="center"}
+
+![](images/Fail9.png){fig-align="center"}
+
+![](images/Fail10.png){fig-align="center"}
+
+![](images/Fail11.png){fig-align="center"}
+
+![](images/Fail12.png){fig-align="center"}
+
+![](images/Fail13.png){fig-align="center"}
+
+![](images/Fail14.png){fig-align="center"}
+
+![](images/Fail15.png){fig-align="center"}
+
+:::
+
+Given that the bad combinations consistently had low $\alpha_{13}$, it was possible to fix these errors by simply shifting the points upwards slightly in parameter space. This of course increases the error in the table model, however this can be quantified and was deemed necessary for the purposes of this investigation. The table model was thus constructed from a 5D grid with equally spaced points selected from the following ranges
+
+| Parameter      | Lower Bound | Upper Bound | Number |
+|----------------|-------------|-------------|--------|
+| $a$            | 0           | 0.998       | 10     |
+| $h$            | 1           | 15          | 10     |
+| $\theta$       | 5           | 85          | 9      |
+| $\alpha_{13}$  | -8          | 10          | 10     |
+| $\epsilon_{3}$ | -8          | 10          | 10     |

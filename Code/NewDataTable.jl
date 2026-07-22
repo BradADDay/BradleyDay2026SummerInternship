@@ -1,6 +1,7 @@
 using Dates
 using ProgressBars
 using JSON3
+using Gradus: integrate_lineprofile
 
 include("utils/Deformations.jl")
 
@@ -9,17 +10,15 @@ Generate a csv of line profiles by varying the 5 parameters for the Johannsen me
     a, h, θ, α13, ϵ3
 """
 
+# Reading the JSON file containing the corrected coordinates in parameter space
 global const jsonFile = JSON3.read("Code/utils/FixedCoords.json")
 
-function GetLineProfile(bins, tfs, h, minrₑ)
+# A function to generate a csv of spectra for a given set of parameters
+function Generate(as, α13s, ϵ3s, θs, hs, pbar, OUTDIR; bins=range(0, 3, 1000), json=jsonFile, maxrₑ=400.)
 
-    
-
-    return flux
-
-end
-
-function Generate(as, α13s, ϵ3s, θs, hs, pbar, bins, OUTDIR, json)
+    """
+    Generate CSVs of spectra to compile a table model for the Johannsen metric with a lamppost corona
+    """
 
     # Dictionary for storing spectra to avoid unnecessary calculations of repeats
     spectra = Dict()
@@ -29,34 +28,44 @@ function Generate(as, α13s, ϵ3s, θs, hs, pbar, bins, OUTDIR, json)
         # Variable to store the column index when appending to df
         j=1
         df = DataFrame()
+        FIXED = json["$(round(a; digits=3))"]
 
-        for α13 in α13s, ϵ3 in ϵ3s, θs in θs
+        for α13 in α13s, ϵ3 in ϵ3s, θ in θs
 
-            update(pbar)
+            # Storing the combination before the deformation parameters get overwritten
+            combo = "$α13, $ϵ3, $θ"
 
             # Fixing the coordinates
-            # TODO: change this to read from a table file
-            if !QuickIsValid(ϵ3, α13, a)
-                ϵ3, α13 = convert.(Float64, json["$ϵ3, $α13"])
-            end
+            α13, ϵ3 = FIXED["$α13, $ϵ3"]
 
-            # Pre computing transfer functions
+            # Setting up the metric, observer position, and disc
             m = JohannsenMetric(; M=1., a=a, α13=α13, ϵ3=ϵ3)
             x = SVector(0.0, 10000.0, deg2rad(θ), 0.0)
             minrₑ = Gradus.isco(m)
             d = ThinDisc(minrₑ, Inf)
 
-            tfs = transferfunctions(m, x, d)
+            # Pre-computing transfer functions
+            tfs = transferfunctions(
+                m, x, d;
+                maxrₑ= maxrₑ,
+                numrₑ=200, 
+                minrₑ=minrₑ,
+            )
 
             for h in hs
 
+                update(pbar)
+
                 # Storing the combination for error reporting
-                combination = "$a, $α13, $ϵ3, $θ, $h"
+                combination = "$combo, $h"
+
+                # Instantiating the flux
+                flux = Array{Float64}(undef, length(bins))
 
                 try
 
                     # Checking if there is a spectrum already computed
-                    flux = spectra[combination]
+                    flux .= spectra[combination]
 
                 catch
                     try
@@ -66,27 +75,32 @@ function Generate(as, α13s, ϵ3s, θs, hs, pbar, bins, OUTDIR, json)
                         profile = emissivity_profile(m, d, model)
 
                         # Computing the line profile
-                        _, flux = lineprofile(
-                            profile, tfs; verbose=false, bins=bins, 
-                            method=TransferFunctionMethod(), maxrₑ=400, 
-                            numrₑ=100, minrₑ=minrₑ
+                        flux .= integrate_lineprofile(
+                            profile, tfs, bins;
+                            rmax=maxrₑ, 
+                            rmin=minrₑ
                         )
 
+                        # Storing the flux to avoid unnecessary computation
                         spectra[combination] = flux
 
                     catch err
+
                         # If the parameter combination fails, noting this in a log file
-                        open(joinpath(OUTDIR, "log.txt"), "a") do io
+                        open(joinpath(OUTDIR, "$(a)_log.txt"), "a") do io
                             write(io, "$(now()): Combination ($combination) failed!\n")
                         end
 
-                        open(joinpath(OUTDIR, "err.txt"), "a") do io
+                        # Noting the relevant error message
+                        open(joinpath(OUTDIR, "$(a)_err.txt"), "a") do io
                             write(io, "$(now()): $err\n")
                         end
 
+                        # Setting the flux to an array of zeros
                         flux = zeros(1000)
 
-                        spectra[combination] = flux
+                        # Storing the flux to avoid unnecessary computations
+                        spectra[combination] .= flux
                     end
                 end
 
@@ -100,21 +114,51 @@ function Generate(as, α13s, ϵ3s, θs, hs, pbar, bins, OUTDIR, json)
         
         end
     end
+end
+
+function MultiGenerate(as, α13s, ϵ3s, hs, θs, pbar, OUTDIR; bins=range(0, 3, 1000), json=jsonFile)
+
+    """
+    Dispatch `Generate(...)` to multiple threads
+    """
+
+    chunks = Iterators.partition(as, cld(length(as), Threads.nthreads()))
+    tasks = map(chunks) do chunk
+        Threads.@spawn Generate(chunk, α13s, ϵ3s, hs, θs, pbar, OUTDIR; bins=bins, json=json)
+    end
+    fetch.(tasks)
 
 end
 
-as   = range(-0.998, 0.998, 13)
-hs   = range( 3  , 15.   , 8)
-θs   = range( 5.   , 85.   , 8)
+function GetVars(path::String, as, hs, θs, α13s, ϵ3s)
+
+    """
+    Generate a text file containing the parameters used, this is used to later construct the table model
+    """
+
+    for i in [as, hs, θs, α13s, ϵ3s]
+        open(joinpath(path, "vars.txt"), "a") do io
+            write(io, "$(collect(i)),\n")
+        end
+    end
+
+end
+
+# Setting up the parameter space to compute for
+as   = range(0, 0.998, 10)
+hs   = range( 1  , 15.   , 10)
+θs   = range( 5.   , 85.   , 9)
 α13s = range(-8., 10., 10)
 ϵ3s  = range(-8., 10., 10)
 
-bins = collect(range(0., 3., 1000))
-OUTDIR = "FinalTableData/"
+# Output directory
+OUTDIR = "tabledataFinal/"
+
+# Generating the variables file
+GetVars(OUTDIR, as, hs, θs, α13s, ϵ3s)
+
+# Setting up a progress bar
 pbar = ProgressBar(total=length(hs)*length(as)*length(θs)*length(α13s)*length(ϵ3s))
 
-Generate(as, hs, θs, α13s, ϵ3s, pbar, bins, OUTDIR, jsonFile)
-
-# for h in hs
-#     flux = GetLineProfile(bins, tfs, h, minrₑ)
-# end
+# Generating the CSVs
+MultiGenerate(as, α13s, ϵ3s, hs, θs, pbar, OUTDIR)

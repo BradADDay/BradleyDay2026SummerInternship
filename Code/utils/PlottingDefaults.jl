@@ -18,7 +18,7 @@ default(
     minorgridalpha=0.2,
     minorgrid=true,
     # Image
-    dpi=300,
+    dpi=1200,
     size=cm2px.((12,9)),
     framestyle=:box
 )

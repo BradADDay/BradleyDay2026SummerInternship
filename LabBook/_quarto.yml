@@ -20,6 +20,7 @@ book:
     - 6_TableModel.qmd
     - 7_XRISMReduction.qmd
     - 8_DeformConstraints.qmd
+    - 9_DeformProperties.qmd
     - references.qmd
 
 bibliography: references.bib

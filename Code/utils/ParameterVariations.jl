@@ -1,34 +1,23 @@
-using Gradus
-using Colors
-using Measures
+using Gradus: JohannsenMetric, SVector, TransferFunctionMethod, BinningMethod, isco, ThinDisc, LampPostModel, emissivity_profile, lineprofile, rendergeodesics, ConstPointFunctions
+using Colors: diverging_palette
+# using Measures
+using LaTeXStrings
 
 include("PlottingDefaults.jl")
-
-# =======================================================================
-# Defaults
-# =======================================================================
-
-# Metric Defaults
-M = 1.0     # Mass
-a = 0.998   # Spin
-
-# Perturbation Defaults
-α13 = 0.
-α22 = 0.
-α52 = 0.
-ϵ3  = 0.
-
-# BH Defaults
-θ = 60. # Inclination, degrees
-h = 10. # Corona height
-
-# Dictionary for easy access and modification of the model parameters
-defaultSetupDict = Dict((["θ", θ], ["α13", α13], ["M", M], ["α22", α22], ["ϵ3", ϵ3], ["a", a], ["h", h], ["α52", α52]))
 
 # =======================================================================
 # Functions
 # =======================================================================
 
+"""
+    RedshiftColormap(img)
+
+Get a colormap for a redshift render using Gradus. Values greater than 1 get coloured 
+blue (blueshifting) and less than 1 get assigned red (redshifting). Non-doppler shifted 
+regions get coloured white.
+
+See also [`RenderImage`](@ref), [`PlotImage`](@ref).
+"""
 function RedshiftColormap(img)
 
     img = collect(Iterators.flatten(img))
@@ -40,56 +29,74 @@ function RedshiftColormap(img)
 
     mid = (1-iMin) / (iMax-iMin)
 
-    cmap = diverging_palette(0, 250, 100, mid=mid, d1=1, d2=1, b=0)
+    cmap = diverging_palette(0, 255, 100, mid=mid, d1=1, d2=1, b=0)
 
     return cmap, (iMin, iMax)
 end
 
-function generateConfig(variables, setupDict)
-    """
-    Generate a string denoting the configuration of a given data run.
-    """
-    config = ""
+"""
+    JohannsenLineProfile(;
+        M=1., a=0.998, α13=0., ϵ3=0., α52=0., α22=0., θ=60., h=10., 
+        bins = range(0.0, 1.5, 180), minrₑ=-1., maxrₑ=400., numrₑ=100, 
+        method=TransferFunctionMethod(), kwargs...
+    )
 
-    # Looping through the variables
-    for i in variables
-        config *= "$i = $(round(setupDict[i]; digits= 2))"
-        if i != variables[end]
-            config *= ", "
-        end
-    end
-    return config
-end
+Compute an emission line profile from a Johannsen metric with a lamppost corona and thin 
+disk accretion model.
 
-function ComputeLineProfile(m, x; height, bins = range(0.0, 1.5, 180), minrₑ=-1., maxrₑ=400., numrₑ=100, kwargs...)
-    """
-    Compute the line profile for a given metric using a 
-    thin disk and lamppost corona.
-    """
+See also [`PlotJohannsenLineProfile`](@ref).
 
-    # Setting the inner radius to the ISCO if the entered value is <0
+# Arguments
+- `method`: The method to be used by Gradus' solver, either `TransferFunctionMethod()` 
+(default) or `BinningMethod()`
+"""
+function JohannsenLineProfile(;
+        M=1., a=0.998, α13=0., ϵ3=0., α52=0., α22=0., θ=60., h=10., 
+        bins = range(0.0, 1.5, 180), minrₑ=-1., maxrₑ=400., numrₑ=100, 
+        method=TransferFunctionMethod(), kwargs...
+    )
+
+    # Position of the observer
+    x = SVector(0.0, 10000.0, deg2rad(θ), 0.0)
+
+    # Instantiating the metric
+    m = JohannsenMetric(M=M, a=a, α13=α13, ϵ3=ϵ3, α52=α52, α22=α22)
+
+    # Setting the inner radius to the ISCO if the entered value is < 0
     if minrₑ < 0.
-        minrₑ = Gradus.isco(m)
+        minrₑ = isco(m)
     end
 
     # Disk
     d = ThinDisc(minrₑ, Inf)
 
     # Setting up the model and emissivity profile
-    model = LampPostModel(h = height)
+    model = LampPostModel(h = h)
     profile = emissivity_profile(m, d, model)
 
     # Computing the line profile
-    _, flux = lineprofile(m, x, d, profile; verbose=false, bins=bins, 
-            method=TransferFunctionMethod(), minrₑ=minrₑ, maxrₑ=maxrₑ, numrₑ=30)
+    _, flux = lineprofile(
+        m, x, d, profile; verbose=true, bins=bins, method=method, 
+        minrₑ=minrₑ, maxrₑ=maxrₑ, numrₑ=numrₑ
+    )
 
-    return flux
+    flux
 end
 
-function RenderImage(m, x; λ_max, imageSize=(40,30), kwargs...)
+function RenderImage(;
+        M=1., a=0.998, α13=0., ϵ3=0., α52=0., α22=0., θ=60., imageSize=(100,75), 
+        αlim=20, βlim=15, kwargs...
+    )
     """
     Render a redshift image of the disk
     """
+
+    # Position of the observer
+    x = SVector(0.0, 10000.0, deg2rad(θ), 0.0)
+    λ_max = 2x[2]
+
+    # Instantiating the metric
+    m = JohannsenMetric(M=M, a=a, α13=α13, ϵ3=ϵ3, α52=α52, α22=α22)
 
     # Disk
     d = ThinDisc(0.0, 15.0)
@@ -100,124 +107,58 @@ function RenderImage(m, x; λ_max, imageSize=(40,30), kwargs...)
 
     # Rendering the image
     α, β, image = rendergeodesics(
-            m, x, d, λ_max, pf = redshiftGeometry,
-            # image parameters
-            image_width = imageSize[1], image_height = imageSize[2],
-            αlims = (-20, 20), βlims = (-15, 15), verbose = true)
+        m, x, d, λ_max, pf = redshiftGeometry,
+        # image parameters
+        image_width = imageSize[1], image_height = imageSize[2],
+        αlims = (-αlim, αlim), βlims = (-βlim, βlim), verbose = true
+    )
 
-    return Dict("α" => α, "β" => β, "image" => image)
+    α, β, image
 end
 
-function JohannsenParamVar(setup, bins, func; kwargs...)
-    """
-    Either render a redshift image or compute a line profile for the Johannsen metric 
-    with given parameters and a lamppost corona at a given height above the accretion disk.
-    """
+function PlotImage(;
+        M=1., a=0.998, α13=0., ϵ3=0., α52=0., α22=0., θ=60., imageSize=(100,75), 
+        αlim=20, βlim=15, title="", kwargs...
+    )
 
-    # Position of the observer
-    x = SVector(0.0, 10000.0, deg2rad(setup["θ"]), 0.0)
+    α, β, image = RenderImage(; 
+        M, a, α13, ϵ3, α52, α22, θ, imageSize, βlim, αlim, kwargs...
+    )
 
-    # Instantiating the metric
-    m = JohannsenMetric(setup["M"], setup["a"], setup["α13"], setup["α22"], setup["α52"], setup["ϵ3"])
-    # print("ISCO: $(Gradus.isco(m))")
+    # Generating a colormap accurately depicting red/blueshift
+    # cmap, clims = RedshiftColormap(image)
+    clims = (0.024515552807013563, 1.2349754807819402)
+    
+    mid = (1-clims[1]) / (clims[2]-clims[1])
 
-    # Calling the selected function
-    output = func(m, x; λ_max=2x[2], height = setup["h"], bins=bins, kwargs...)
+    cmap = diverging_palette(0, 255, 100, mid=mid, d1=1, d2=1, b=0)
 
-    return output
+    # Looping through each config and plotting/storing the plot
+    hmp = heatmap(
+        α, β, image, aspect_ratio = 1; title=title, 
+        cmap=cmap, clims=clims, cbartitle="Redshift", 
+        xlims=(-αlim, αlim), ylims=(-βlim, βlim),
+        xlabel=L"\alpha", ylabel=L"\beta"
+    )
+
+    α, β, image, hmp
+
 end
 
-function ParamLoop(parameter, values, setupDict; bins=collect(range(0.1, 1.5, 180)), 
-                   line=true, render=true, ParamVar=JohannsenParamVar, kwargs...)
-    """
-    Loop through a list of values for a given parameter and either render a redshift image,
-    compute a line profile, or both.
-    """
+function PlotJohannsenLineProfile(;
+        M=1., a=0.998, α13=0., ϵ3=0., α52=0., α22=0., θ=60., h=10., E=1.,
+        bins=range(0.0, 1.5, 180), minrₑ=-1., maxrₑ=400., numrₑ=100, 
+        method=TransferFunctionMethod(), title="", kwargs...
+    )
 
-    # Setup arrays for storage
-    results = Dict("flux" => [], "α" => [], "β" => [], "image" => [], "config" => [])
+    # Computing the line profile
+    flux = JohannsenLineProfile(;
+        M, a, α13, ϵ3, α52, α22, θ, h, bins, minrₑ, maxrₑ, numrₑ, method, kwargs...
+    )
 
-    # Looping through the list of values
-    for i in values
-        try
-            # Setting the value
-            setupDict[parameter] = i
-            config = generateConfig([parameter], setupDict)
+    # Plotting the line profile
+    plt = plot(bins*E, flux; xlabel="Energy (keV)", ylabel="Flux (Arbitrary)", title=title)
 
-            # Computing line profile
-            if line
-                flux = ParamVar(setupDict, bins, ComputeLineProfile; kwargs...)
-                append!(results["flux"], [flux])
-            end
-
-            # rendering redshift image
-            if render
-                result = ParamVar(setupDict, bins, RenderImage; kwargs...)
-
-                for key in ["α", "β", "image"]
-                    append!(results[key], [result[key]])
-                end
-            end
-
-            # Storing the configuration
-            append!(results["config"], [config])
-        
-        catch err
-            println("Value of $i failed to compute")
-            println(err)
-        end
-    end
-
-    # Plotting the results
-    Plotting(parameter, results, bins; line, render)
-end
-
-function Plotting(parameter, results, bins; line, render)
-    """
-    Plot the results from ParamLoop
-    """
-
-    # Pulling the configs used
-    configs = results["config"]
-
-    # Plotting the redshift images
-    if render
-        # Generating a colormap accurately depicting red/blueshift
-        cmap, clims = RedshiftColormap(results["image"])
-        
-        number = length(configs)
-        if number%2 != 0
-            number += 1
-            ps = Array{Any}(nothing, number)
-            ps[end] = scatter([0], [0], xlims=(1,2), label="", framestyle=:none)
-        else
-            ps = Array{Any}(nothing, number)
-        end
-
-        # Looping through each config and plotting/storing the plot
-        for i in eachindex(configs)
-            ps[i] = heatmap(results["α"][i], results["β"][i], results["image"][i], aspect_ratio = 1; title=configs[i], 
-                    titleloc=:center, colorbar=false, cmap=cmap, clims=clims)
-        end
-        
-        # An empty scatter plot to generate the colorbar
-        h2 = scatter([0], [0], zcolor=[1], clims=clims, xlims=(1,2), label="", c=palette(cmap, 100), colorbar_title="Redshift", framestyle=:none, colorbar_titlefontsize=12)
-        
-        # Plotting the subplots
-        l = @layout [grid(Int(number/2),2) a{0.05w}]
-        display(plot(ps..., h2, layout=l, link=:all))
-
-    end
-
-    # Plotting the line profiles
-    if line
-        # Plotting the line profile
-        plot(xlabel="g", ylabel="Flux (Arbitrary)")
-
-        for i in eachindex(configs)
-            plot!(bins, results["flux"][i]; label=configs[i], palette=:tab10, lw=3)
-        end
-
-        display(plot!(title="Variations of $parameter"))
-    end
+    flux, plt
+ 
 end

@@ -300,6 +300,36 @@
     ]
   },
   {
+    "objectID": "9_DeformProperties.html",
+    "href": "9_DeformProperties.html",
+    "title": "9  Properties of the Deformation Parameters",
+    "section": "",
+    "text": "9.1 \\(\\alpha_{13}\\)\n\\(\\alpha_{13}\\) is the highest order deformation parameter in the Johannsen metric and thus has the largest effect on the line profile. The animation below shows the effect of \\(\\alpha_{13}\\) on the observed image of the disc. The radius of the ISCO and degree of doppler shifting observed both increase with \\(\\alpha_{13}\\). The doppler shifting trend agrees with the statement from Johannsen (2013)  [1]: “Keplerian frequency increases for increasing values of the parameter \\(\\alpha_{13}\\)”. An increase in orbital frequency leads to an increase in relative speed to an observer, and thus increased redshifting is observed.\nThe plot below shows \\(R_\\text{ISCO}\\) as a function of \\(\\alpha_{13}\\) for varying \\(a\\).\nFor \\(\\alpha_{13} \\lesssim -5.7\\) the energy can have two local minima and stable circular orbits can only exist at and outside of the radius of the local maximum between them  [1]. The effect of this on the ISCO can be seen in Figure 9.1 where the behaviour of the ISCO becomes chaotic below \\(\\alpha_{13} \\approx -5.7\\).",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Properties of the Deformation Parameters</span>"
+    ]
+  },
+  {
+    "objectID": "9_DeformProperties.html#alpha_13",
+    "href": "9_DeformProperties.html#alpha_13",
+    "title": "9  Properties of the Deformation Parameters",
+    "section": "",
+    "text": "A rendered image of a thin accretion disk around a Johannsen black hole with varying \\(\\alpha_{13}\\). The colour scale denotes the doppler shift of the light emitted from each region of the disk.\n\n\n\n\n\n\n\n\n\nFigure 9.1: The radius of the ISCO as a function of the deformation parameter \\(\\alpha_{13}\\) for various values of the black hole spin, \\(a\\).",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Properties of the Deformation Parameters</span>"
+    ]
+  },
+  {
+    "objectID": "9_DeformProperties.html#epsilon_3",
+    "href": "9_DeformProperties.html#epsilon_3",
+    "title": "9  Properties of the Deformation Parameters",
+    "section": "9.2 \\(\\epsilon_{3}\\)",
+    "text": "9.2 \\(\\epsilon_{3}\\)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n[1] T. Johannsen, Physical Review D 88, (2013).",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Properties of the Deformation Parameters</span>"
+    ]
+  },
+  {
     "objectID": "references.html",
     "href": "references.html",
     "title": "References",

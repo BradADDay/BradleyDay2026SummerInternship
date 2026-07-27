@@ -33,6 +33,15 @@ tbl = table()
 def getColumn(a, h, theta, alpha, epsilon):
     return f"{a}, {h}, {theta}, {alpha}, {epsilon}"
 
+def addTableParameter(table, name, default, delta, values):
+
+    parameter = tableParameter(name, 0, default, delta, min(values), min(values), max(values), max(values))
+    parameter.setTabulatedValues(values)
+
+    table.pushParameter(parameter)
+
+    return table
+
 # ===============================================================
 # Primary header unit
 # ===============================================================
@@ -58,49 +67,14 @@ tbl.setNumIntParams(5)
 tbl.setNumAddParams(0)
 
 # ---------------------------------------------------------------
-# Spin
+# Parameters
 # ---------------------------------------------------------------
 
-spin = tableParameter("SPIN", 0, 0.998, 0.001, min(spins), min(spins), max(spins), max(spins))
-spin.setTabulatedValues(spins)
-
-tbl.pushParameter(spin)
-
-# ---------------------------------------------------------------
-# Height
-# ---------------------------------------------------------------
-
-height = tableParameter("HEIGHT", 0, 10.0, 0.1, min(heights), min(heights), max(heights), max(heights)) 
-height.setTabulatedValues(heights)
-
-tbl.pushParameter(height)
-
-# ---------------------------------------------------------------
-# Inclination
-# ---------------------------------------------------------------
-
-inclination = tableParameter("INCLINATION", 0, 60.0, 0.1, min(inclinations), min(inclinations), max(inclinations), max(inclinations)) 
-inclination.setTabulatedValues(inclinations)
-
-tbl.pushParameter(inclination)
-
-# ---------------------------------------------------------------
-# Alpha13
-# ---------------------------------------------------------------
-
-alpha13 = tableParameter("ALPHA13", 0, 0.0, 0.1, min(alphas), min(alphas), max(alphas), max(alphas)) 
-alpha13.setTabulatedValues(alphas)
-
-tbl.pushParameter(alpha13)
-
-# ---------------------------------------------------------------
-# Epsilon3
-# ---------------------------------------------------------------
-
-epsilon3 = tableParameter("EPSILON3", 0, 0.0, 0.1, min(epsilons), min(epsilons), max(epsilons), max(epsilons))
-epsilon3.setTabulatedValues(epsilons)
-
-tbl.pushParameter(epsilon3)
+tbl = addTableParameter(tbl, "SPIN", 0.998, 0.001, spins)
+tbl = addTableParameter(tbl, "HEIGHT", 0, 10.0, 0.1, heights)
+tbl = addTableParameter(tbl, "INCLINATION", 0, 60.0, 0.1, inclinations)
+tbl = addTableParameter(tbl, "ALPHA13", 0, 0.0, 0.1, alphas)
+tbl = addTableParameter(tbl, "EPSILON3", 0, 0.0, 0.1, epsilons)
 
 # ===============================================================
 # Reading the data to store in the table model
@@ -115,8 +89,6 @@ files = []
 for i in os.listdir(DIR):
     print(i)
     files.append(pd.read_csv(DIR + i))
-
-
 
 i=0
 j=0

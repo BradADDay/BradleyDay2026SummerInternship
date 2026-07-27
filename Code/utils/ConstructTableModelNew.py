@@ -16,9 +16,7 @@ See https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/headas/heasp/node1.html
 for more information.
 """
 
-0.8165454545454546
-0.8165454545454546
-
+# The values each parameter was varied between
 spins, heights, inclinations, alphas, epsilons = [
     [0.0, 0.11088888888888888, 0.22177777777777777, 0.33266666666666667, 0.44355555555555554, 0.5544444444444444, 0.6653333333333333, 0.7762222222222223, 0.8871111111111111, 0.998],
     [1.0, 2.5555555555555554, 4.111111111111111, 5.666666666666667, 7.222222222222222, 8.777777777777779, 10.333333333333334, 11.88888888888889, 13.444444444444445, 15.0],
@@ -27,18 +25,30 @@ spins, heights, inclinations, alphas, epsilons = [
     [10.0, 8.0, 6.0, 4.0, 2.0, 0.0, -2.0, -4.0, -6.0, -8.0]
 ]
 
+# The directory containing the data
+DIR = "tabledataFinal4/"
+
 tbl = table()
 
 # Utility function to generate a string formatted like the columns
 def getColumn(h, theta, alpha, epsilon):
     return f"{alpha}, {epsilon}, {h}, {theta}"
 
+def addTableParameter(table, name, default, delta, values):
+
+    parameter = tableParameter(name, 0, default, delta, min(values), min(values), max(values), max(values))
+    parameter.setTabulatedValues(values)
+
+    table.pushParameter(parameter)
+
+    return table
+
 # ===============================================================
 # Primary header unit
 # ===============================================================
 
 tbl.setModelName("JhnsnLmPst")
-tbl.setModelUnits(" ")
+tbl.setModelUnits("counts")
 tbl.setisRedshift(False)
 tbl.setisAdditive(True)
 tbl.setisError(False)
@@ -58,49 +68,14 @@ tbl.setNumIntParams(5)
 tbl.setNumAddParams(0)
 
 # ---------------------------------------------------------------
-# Spin
+# Parameters
 # ---------------------------------------------------------------
 
-spin = tableParameter("SPIN", 0, 0.998, 0.001, min(spins), min(spins), max(spins), max(spins))
-spin.setTabulatedValues(spins)
-
-tbl.pushParameter(spin)
-
-# ---------------------------------------------------------------
-# Height
-# ---------------------------------------------------------------
-
-height = tableParameter("HEIGHT", 0, 10.0, 0.1, min(heights), min(heights), max(heights), max(heights)) 
-height.setTabulatedValues(heights)
-
-tbl.pushParameter(height)
-
-# ---------------------------------------------------------------
-# Inclination
-# ---------------------------------------------------------------
-
-inclination = tableParameter("INCLINATION", 0, 60.0, 0.1, min(inclinations), min(inclinations), max(inclinations), max(inclinations)) 
-inclination.setTabulatedValues(inclinations)
-
-tbl.pushParameter(inclination)
-
-# ---------------------------------------------------------------
-# Alpha13
-# ---------------------------------------------------------------
-
-alpha13 = tableParameter("ALPHA13", 0, 0.0, 0.1, min(alphas), min(alphas), max(alphas), max(alphas)) 
-alpha13.setTabulatedValues(alphas)
-
-tbl.pushParameter(alpha13)
-
-# ---------------------------------------------------------------
-# Epsilon3
-# ---------------------------------------------------------------
-
-epsilon3 = tableParameter("EPSILON3", 0, 0.0, 0.1, min(epsilons), min(epsilons), max(epsilons), max(epsilons))
-epsilon3.setTabulatedValues(epsilons)
-
-tbl.pushParameter(epsilon3)
+tbl = addTableParameter(tbl, "SPIN", 0.998, 0.001, spins)
+tbl = addTableParameter(tbl, "HEIGHT", 0, 10.0, 0.1, heights)
+tbl = addTableParameter(tbl, "INCLINATION", 0, 60.0, 0.1, inclinations)
+tbl = addTableParameter(tbl, "ALPHA13", 0, 0.0, 0.1, alphas)
+tbl = addTableParameter(tbl, "EPSILON3", 0, 0.0, 0.1, epsilons)
 
 # ===============================================================
 # Reading the data to store in the table model
@@ -108,7 +83,6 @@ tbl.pushParameter(epsilon3)
 
 # Reading the CSV
 print("Loading CSVs...")
-DIR = "tabledataFinal4/"
 
 files = {}
 
@@ -119,7 +93,6 @@ for i in os.listdir(DIR):
 
 i=0
 j=0
-k=0
 
 # Looping through the parameters in the same order as for generation
 print("Parameter loop...")
@@ -156,4 +129,3 @@ if status != 0:
 
 # Printing the number of failed spectra to compare against the logs
 print(f"{100*(i/j)}% Failure")
-print(f"{100*(k/j)}% NaN")

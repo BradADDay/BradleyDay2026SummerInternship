@@ -28,8 +28,10 @@ function Generate(as, α13s, ϵ3s, θs, hs, pbar, OUTDIR; bins=range(0, 3, 1000)
         # Variable to store the column index when appending to df
         j=1
 
+        df = nothing
         try
             df = DataFrame(CSV.File(joinpath(OUTDIR, "$(a).csv")))
+            println("Loaded $(a).csv")
         catch
             df = DataFrame()
         end
@@ -163,7 +165,7 @@ end
 as   = range(0, 0.998, 10)
 hs   = range( 3.  , 19.   , 9)
 θs   = range( 5.   , 85.   , 9)
-α13s = [10.]
+α13s = [8.]
 ϵ3s  = reverse(range(-8., 10., 10))
 
 # Output directory

@@ -6,16 +6,28 @@ const DeformationBoundsTable = DataFrame(CSV.File("Code/utils/DeformationBounds.
 # Lines
 # ====================================================================================
 
-# Get the gradient of a line between two coordinates
-function Gradient(coord1, coord2)
+"""
+    Gradient(coord1, coord2)
+
+Calculate the gradient of the line connecting two points
+"""
+function Gradient(coord1::AbstractArray, coord2::AbstractArray)::Real
     diff = coord1 .- coord2
     diff[2]/diff[1]
 end
 
-# Get the intercept of a line with a given gradient that passes through a given point
-Intercept(grad, coord) = coord[2] - grad * coord[1]
+"""
+    Intercept(grad, coord)
 
-# Line struct
+Calculate the Intercept of the line passing through a point with a given gradient
+"""
+Intercept(grad::Real, coord::AbstractArray)::Real = coord[2] - grad * coord[1]
+
+"""
+    BoundLine{T<:Real}
+
+A structure to define a line in 2D
+"""
 struct BoundLine{T<:Real}
     "Gradient"
     m::T
@@ -23,21 +35,40 @@ struct BoundLine{T<:Real}
     c::T
 end
 
-# Constructor from two coordinates
+"""
+Constructor from two coordinates
+"""
 function BoundLine(coord1::AbstractArray, coord2::AbstractArray)
     m = Gradient(coord1, coord2)
     c = Intercept(m, coord1)
     BoundLine(m, c)
 end
 
-# Get a point on a line
-LineEquation(x, line::BoundLine) = line.m * x .+ line.c
+"""
+    LineEquation(x, line)
 
-# Find the intersection of two lines
-Intersection(line1::BoundLine, line2::BoundLine) = (line2.c - line1.c) / (line1.m - line2.m)
+Get the y coordinate of a point on a line from a given x coordinate.
+Uses the `BoundLine` struct.
+"""
+function LineEquation(x::Real, line::BoundLine)::Real
+    line.m * x .+ line.c
+end
 
-# Get the boundary line parameters for a given black hole spin from the bounds table
-function GetLineParams(a, df=DeformationBoundsTable)
+"""
+    Intersection(line1, line2)
+
+Find the intersection point of two `BoundLine` objects
+"""
+function Intersection(line1::BoundLine, line2::BoundLine)::Real
+    (line2.c - line1.c) / (line1.m - line2.m)
+end
+
+"""
+    GetLineParams(a, df)
+
+Get the Intercepts and Gradients for the boundary lines for a given a from the data table.
+"""
+function GetLineParams(a::Real, df::DataFrame=DeformationBoundsTable)
 
     # Read the file and separate the spins
     as = df.a
@@ -58,11 +89,12 @@ function GetLineParams(a, df=DeformationBoundsTable)
 
 end
 
-# Get the boundary lines for a given black hole spin
-function GetLines(a, df=DeformationBoundsTable)
-    """
-    Read the boundary line definitions, interpolate and return line objects for each of them
-    """
+"""
+    GetLines(a, df)
+
+Get the line objects defining the parameter space boundaries for a given spin value.
+"""
+function GetLines(a::Real, df::DataFrame=DeformationBoundsTable)
     
     out, len = GetLineParams(a, df)
 
@@ -80,12 +112,15 @@ end
 # Validity
 # ====================================================================================
 
-function ValidityCheckISCO(m)
-    """
-    Checking if the metric is valid
-        returns the ISCO if so
-        returns an error value if not
-    """
+"""
+    ValidityCheckISCO(m)
+
+Check if a given Johannsen metric is valid by checking for naked singularities, the 
+presence of an ISCO, and the boundaries. If it is valid then the value of the ISCO is 
+returned
+"""
+function ValidityCheckISCO(m::AbstractMetric)::Real
+    
     if is_naked_singularity(m)
         # Naked singularity
         return -2
@@ -102,10 +137,15 @@ function ValidityCheckISCO(m)
 
 end
 
-function IsValid(ϵ3, α13, a)
-    """
-    Check if a parameter combination is valid by explicitly checking the resulting metric
-    """
+"""
+    IsValid(ϵ3, α13, a)
+
+Check if a parameter combination produces a valid Johannsen metric by explicitly checking
+for naked singularities, an ISCO, or if it is outside of predefined bounds.
+
+See also [`QuickIsValid`](@ref)
+"""
+function IsValid(ϵ3::Real, α13::Real, a::Real)::Bool
     m = JohannsenMetric(a=a, ϵ3=ϵ3, α13=α13)
     
     if is_naked_singularity(m) | is_no_isco(m) | (ϵ3 < Constraints(a)) | (α13 < Constraints(a)) | (abs(a) > 0.998)
@@ -116,16 +156,23 @@ function IsValid(ϵ3, α13, a)
 
 end
 
-function QuickIsValid(ϵ3, α13, a, df=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1])
-    """
-    Checking if a parameter combination is valid by checking if it falls within the pre-defined bounds
-    """
+"""
+    QuickIsValid(ϵ3, α13, a)
+
+Check if a parameter combination produces a valid Johannsen metric by comparing against the 
+defined boundary lines.
+
+See also [`IsValid`](@ref)
+"""
+function QuickIsValid(ϵ3::Real, α13::Real, a::Real, df::DataFrame=DeformationBoundsTable; 
+        sgns::AbstractArray=[1,1,-1,-1,-1,-1]
+    )::Bool
 
     if (ϵ3 < Constraints(a)) | (α13 < Constraints(a)) | (abs(a) > 0.998)
         return false
     end
     
-    conds = GetValidityConditions(ϵ3, α13, a, df; sgns=[1,1,-1,-1,-1,-1])
+    conds = GetValidityConditions(ϵ3, α13, a, df; sgns=sgns)
     
     # Checking if the parameter combination is within any of the 4 forbidden regions
     if conds[1] | conds[2] | conds[3] | conds[4]
@@ -136,7 +183,15 @@ function QuickIsValid(ϵ3, α13, a, df=DeformationBoundsTable; sgns=[1,1,-1,-1,-
 
 end
 
-function GetValidityConditions(ϵ3, α13, a, df=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1])
+"""
+    GetValidityConditions(ϵ3, α13, a)
+
+Check a parameter combination against the pre defined boundary lines to see if it is valid.
+"""
+function GetValidityConditions(
+        ϵ3::Real, α13::Real, a::Real, 
+        df::DataFrame=DeformationBoundsTable; sgns::AbstractArray=[1,1,-1,-1,-1,-1]
+    )
 
     # Getting the boundary lines and defining conditions
     lines = GetLines(a, df)
@@ -153,10 +208,12 @@ function GetValidityConditions(ϵ3, α13, a, df=DeformationBoundsTable; sgns=[1,
 
 end
 
-function is_no_isco(m)
-    """
-    Check if there is a valid ISCO for the input metric
-    """
+"""
+    is_no_isco(m)
+
+Check if there is a valid ISCO for the input metric
+"""
+function is_no_isco(m::AbstractMetric)::Bool
     try 
         Gradus.isco(m)
         return false
@@ -165,13 +222,31 @@ function is_no_isco(m)
     end
 end
 
-# Defining a dispatch for a set of parameters as input
-is_no_isco(ϵ3, α13, a) = is_no_isco(JohannsenMetric(ϵ3=ϵ3, α13=α13, a=a))
+"""
+    is_no_isco(ϵ3, α13, a)
 
-# The lower limit for the deformation parameters α13, ϵ3 for a given spin
-Constraints(a) = -(1+sqrt(1 - a^2))^3
+Check if there is a valid ISCO for the input parameter combination
+"""
+function is_no_isco(ϵ3::Real, α13::Real, a::Real)::Bool
+    is_no_isco(JohannsenMetric(ϵ3=ϵ3, α13=α13, a=a))
+end
 
-function IsValidFit(fit)
+@doc raw"""
+    Constraints(a)
+
+The boundary line for the Johannsen deformation parameters α13 and ϵ3.
+```math
+-(1+\sqrt{1 - a^2)})^3
+```
+"""
+Constraints(a::Real)::Real = -(1+sqrt(1 - a^2))^3
+
+"""
+    IsValidFit(fit)
+
+Check is a `SpectralFitting` Johannsen metric `FitResult` is valid 
+"""
+function IsValidFit(fit)::Bool
     # Check if a SpectralFitting FitResult is valid
     u=fit.u
     IsValid(u[7], u[6], u[3])
@@ -181,7 +256,15 @@ end
 # Corrections
 # ====================================================================================
 
-function FindNearestSafePoint(point, a; maxIter=1000)
+"""
+    FindNearestSafePoint(point, a; maxIter=1000)
+
+Find the nearest safe point in the Johannsen parameter space by finding the nearest point 
+on the offending boundary lines
+"""
+function FindNearestSafePoint(
+        point::AbstractArray, a::Real; maxIter::Int=1000
+    )::AbstractArray
     
     combo = "$a, $point"
 
@@ -250,7 +333,12 @@ function FindNearestSafePoint(point, a; maxIter=1000)
 
 end
 
-function GetNewPoint(point, line)
+"""
+    GetNewPoint(point, line)
+
+Find the closest point from a point to a line in 2D.
+"""
+function GetNewPoint(point::AbstractArray, line::BoundLine)::AbstractArray
 
     # Finding the gradient and intercept of the perpendicular line from the point to the boundary
     perpGrad = -1/line.m
@@ -267,7 +355,15 @@ function GetNewPoint(point, line)
 
 end
 
-function NearestLine(point, lines, a)
+"""
+    NearestLine(point, lines, a)
+
+Find the nearest line from a given point out a selection of lines. The output will always 
+lead [`GetNewPoint`](@ref) to return a valid point in the parameter space.
+"""
+function NearestLine(
+        point::AbstractArray, lines::AbstractArray{BoundLine}, a::Real
+    )::BoundLine
 
     # Finding the points at which the top and bottom triangle bounds intersect eachother
 
@@ -297,7 +393,13 @@ function NearestLine(point, lines, a)
 
 end
 
-function ReturnToConstraints(param, a)
+"""
+    ReturnToConstraints(param, a)
+
+If a parameter is out of bounds for a given spin value, returning it to the nearest valid 
+value (on the boundary line).
+"""
+function ReturnToConstraints(param::Real, a::Real)::Real
 
     bound = Constraints(a)
 
@@ -305,7 +407,7 @@ function ReturnToConstraints(param, a)
         param = bound
     end
 
-    return param
+    param
 
 end
 

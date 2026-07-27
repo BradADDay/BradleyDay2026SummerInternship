@@ -422,6 +422,7 @@ window.Quarto = {
   <ul>
   <li><a href="#alpha_13" id="toc-alpha_13" class="nav-link active" data-scroll-target="#alpha_13"><span class="header-section-number">9.1</span> <span class="math inline">\(\alpha_{13}\)</span></a></li>
   <li><a href="#epsilon_3" id="toc-epsilon_3" class="nav-link" data-scroll-target="#epsilon_3"><span class="header-section-number">9.2</span> <span class="math inline">\(\epsilon_{3}\)</span></a></li>
+  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways"><span class="header-section-number">9.3</span> Takeaways</a></li>
   </ul>
 </nav>
     </div>
@@ -450,7 +451,7 @@ window.Quarto = {
 
 <section id="alpha_13" class="level2" data-number="9.1">
 <h2 data-number="9.1" class="anchored" data-anchor-id="alpha_13"><span class="header-section-number">9.1</span> <span class="math inline">\(\alpha_{13}\)</span></h2>
-<p><span class="math inline">\(\alpha_{13}\)</span> is the highest order deformation parameter in the Johannsen metric and thus has the largest effect on the line profile. The animation below shows the effect of <span class="math inline">\(\alpha_{13}\)</span> on the observed image of the disc. The radius of the ISCO and degree of doppler shifting observed both increase with <span class="math inline">\(\alpha_{13}\)</span>. The doppler shifting trend agrees with the statement from Johannsen (2013) <span class="citation" data-cites="JohannsenMetric">&nbsp;[<a href="references.html#ref-JohannsenMetric" role="doc-biblioref">1</a>]</span>: “Keplerian frequency increases for increasing values of the parameter <span class="math inline">\(\alpha_{13}\)</span>”. An increase in orbital frequency leads to an increase in relative speed to an observer, and thus increased redshifting is observed.</p>
+<p><span class="math inline">\(\alpha_{13}\)</span> is the highest order deformation parameter in the Johannsen metric and thus has the largest effect on the line profile. The animation below shows the effect of <span class="math inline">\(\alpha_{13}\)</span> on the observed image of the disc. The radius of the ISCO and degree of doppler shifting observed both increase with <span class="math inline">\(\alpha_{13}\)</span>. The doppler shifting trend is due to an increase in the Keplerian (orbital) frequency of surrounding particles <span class="citation" data-cites="JohannsenMetric">&nbsp;[<a href="references.html#ref-JohannsenMetric" role="doc-biblioref">1</a>]</span>: “Keplerian frequency increases for increasing values of the parameter <span class="math inline">\(\alpha_{13}\)</span>”. An increase in orbital frequency leads to an increase in relative speed to an observer, and thus increased redshifting is observed.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><a href="images/alpha.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="A rendered image of a thin accretion disk around a Johannsen black hole with varying \alpha_{13}. The colour scale denotes the doppler shift of the light emitted from each region of the disk."><img src="images/alpha.gif" class="img-fluid figure-img" style="width:80.0%" alt="A rendered image of a thin accretion disk around a Johannsen black hole with varying \alpha_{13}. The colour scale denotes the doppler shift of the light emitted from each region of the disk."></a></p>
@@ -468,20 +469,46 @@ Figure&nbsp;9.1: The radius of the ISCO as a function of the deformation paramet
 </figcaption>
 </figure>
 </div>
-<p>For <span class="math inline">\(\alpha_{13} \lesssim -5.7\)</span> the energy can have two local minima and stable circular orbits can only exist at and outside of the radius of the local maximum between them <span class="citation" data-cites="JohannsenMetric">&nbsp;[<a href="references.html#ref-JohannsenMetric" role="doc-biblioref">1</a>]</span>. The effect of this on the ISCO can be seen in <a href="#fig-alphaISCO" class="quarto-xref">Figure&nbsp;<span>9.1</span></a> where the behaviour of the ISCO becomes chaotic below <span class="math inline">\(\alpha_{13} \approx -5.7\)</span>.</p>
+<p>For <span class="math inline">\(\alpha_{13} \lesssim -5.7\)</span> the energy can have two local minima and stable circular orbits can only exist at and outside of the radius of the local maximum between them <span class="citation" data-cites="JohannsenMetric">&nbsp;[<a href="references.html#ref-JohannsenMetric" role="doc-biblioref">1</a>]</span>. The effect of this on the ISCO can be seen in <a href="#fig-alphaISCO" class="quarto-xref">Figure&nbsp;<span>9.1</span></a> where the behaviour of the ISCO becomes chaotic below <span class="math inline">\(\alpha_{13} \approx -5.7\)</span>. For <span class="math inline">\(\alpha_{13} \lesssim -6.2\)</span>, the energy and Keplerian frequency of an orbiting particle become imaginary in a small range of radii.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/Johannsen_Alpha13Spin.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="The dependence on the ISCO radius on \alpha_{13}. In the green shaded region the energy has two local minima and the ISCO is located at the outer radius where these minima occur. In the red shaded region, circular equatorial orbits do not exist at radii r\sim 2.5M and the ISCO is located at the outer boundary of this radial interval. Image credit Johannsen (2013) @JohannsenMetric."><img src="images/Johannsen_Alpha13Spin.png" class="img-fluid figure-img" style="width:50.0%" alt="The dependence on the ISCO radius on \alpha_{13}. In the green shaded region the energy has two local minima and the ISCO is located at the outer radius where these minima occur. In the red shaded region, circular equatorial orbits do not exist at radii r\sim 2.5M and the ISCO is located at the outer boundary of this radial interval. Image credit Johannsen (2013) &nbsp;[1]."></a></p>
+<figcaption>The dependence on the ISCO radius on <span class="math inline">\(\alpha_{13}\)</span>. In the green shaded region the energy has two local minima and the ISCO is located at the outer radius where these minima occur. In the red shaded region, circular equatorial orbits do not exist at radii <span class="math inline">\(r\sim 2.5M\)</span> and the ISCO is located at the outer boundary of this radial interval. Image credit Johannsen (2013) <span class="citation" data-cites="JohannsenMetric">&nbsp;[<a href="references.html#ref-JohannsenMetric" role="doc-biblioref">1</a>]</span>.</figcaption>
+</figure>
+</div>
 </section>
 <section id="epsilon_3" class="level2" data-number="9.2">
 <h2 data-number="9.2" class="anchored" data-anchor-id="epsilon_3"><span class="header-section-number">9.2</span> <span class="math inline">\(\epsilon_{3}\)</span></h2>
+<p>The animation below shows the effect of <span class="math inline">\(\epsilon_{3}\)</span> on the observed image of the disc. The radius of the ISCO changes only slightly and degree of doppler shifting observed decreases with increasing <span class="math inline">\(\epsilon_{3}\)</span>. The doppler shifting trend is due to a decrease in the Keplerian frequency of surrounding particles <span class="citation" data-cites="JohannsenMetric">&nbsp;[<a href="references.html#ref-JohannsenMetric" role="doc-biblioref">1</a>]</span>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/epsilon.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="images/epsilon.gif" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></a></p>
-</figure>
-</div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/EpsilonISCOPlot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="images/EpsilonISCOPlot.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></a></p>
+<p><a href="images/epsilon.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="A rendered image of a thin accretion disk around a Johannsen black hole with varying \epsilon_{3}. The colour scale denotes the doppler shift of the light emitted from each region of the disk."><img src="images/epsilon.gif" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%" alt="A rendered image of a thin accretion disk around a Johannsen black hole with varying \epsilon_{3}. The colour scale denotes the doppler shift of the light emitted from each region of the disk."></a></p>
 </figure>
 </div>
+<figcaption>A rendered image of a thin accretion disk around a Johannsen black hole with varying <span class="math inline">\(\epsilon_{3}\)</span>. The colour scale denotes the doppler shift of the light emitted from each region of the disk.</figcaption>
+</figure>
+</div>
+<p>The plot below shows <span class="math inline">\(R_\text{ISCO}\)</span> as a function of <span class="math inline">\(\epsilon_{3}\)</span> for varying <span class="math inline">\(a\)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/EpsilonISCOPlot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="The radius of the ISCO as a function of the deformation parameter \epsilon_{3} for various values of the black hole spin, a."><img src="images/EpsilonISCOPlot.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%" alt="The radius of the ISCO as a function of the deformation parameter \epsilon_{3} for various values of the black hole spin, a."></a></p>
+</figure>
+</div>
+<figcaption>The radius of the ISCO as a function of the deformation parameter <span class="math inline">\(\epsilon_{3}\)</span> for various values of the black hole spin, <span class="math inline">\(a\)</span>.</figcaption>
+</figure>
+</div>
+<p>The radius of the ISCO decreases for <span class="math inline">\(a \lesssim 0.7\)</span>. For <span class="math inline">\(a \gtrsim 0.7\)</span> the radius decreases before increasing, and for very large <span class="math inline">\(a\)</span> the radius only increases. The discontinuous regions seen for <span class="math inline">\(a=0.887,\; 0.998\)</span> are due to the boundaries set by <a href="5_FittingData.html#eq-Epsilon3Constraint" class="quarto-xref">Equation&nbsp;<span>5.1</span></a>.</p>
+</section>
+<section id="takeaways" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="takeaways"><span class="header-section-number">9.3</span> Takeaways</h2>
+<ul>
+<li>The main takeaway from this section of research is that <span class="math inline">\(\alpha_{13}\)</span> should not only be disallowed from being in the bounded regions of parameter space, but should also not be allowed to go below -5.7. This was implemented in the assembly of the final table model.</li>
+<li>The observed change in redshift is due to test particles physically changing speed.</li>
+</ul>
 
 
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">

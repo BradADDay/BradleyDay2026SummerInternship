@@ -329,3 +329,35 @@ begin
 	display(plt)
 
 end
+
+##
+include("utils/ParameterVariations.jl")
+include("utils/FittingUtils.jl")
+
+using DataFrames, CSV
+
+df = DataFrame(CSV.File("tabledataFinal4/0.998.csv"))
+
+plot(bins, df[!, "0.0, 0.0, 15.0, 65.0"]/maximum(df[!, "0.0, 0.0, 15.0, 65.0"]))
+
+K = 1.
+E = 6.4
+a = 0.998
+h = 15.
+θ = 60.
+α13 = 0.
+ϵ3 = 0.
+
+model = XS_LampPostJohannsen(K=K, E=E, a=a, h=h, θ=θ, α13=α13, ϵ3=ϵ3)
+bins = range(0,3,1000)
+
+flux = invokemodel!(bins, model)
+
+plot(bins, flux / maximum(flux))
+
+flux2 = JohannsenLineProfile(;
+	M=1., a=0.998, h=65., θ=15., α13=0., ϵ3=0., α52=0., α22=0.,
+	bins=bins, numrₑ=200
+)
+
+plot!(bins, flux2 / maximum(flux2))

@@ -17,7 +17,7 @@ include("Deformations.jl")
 const ModelNumParams = 5
 
 # The path to the model
-MODELDATAFILE = "/home/brad/Documents/SummerInternship/Code/models/FinalModel.FITS"
+MODELDATAFILE = "/home/brad/Documents/SummerInternship/Code/models/FinalFinalModel.FITS"
 
 # Reading in the table model and setting it up as an interpolation object
 data = TableModelData(Val(ModelNumParams), MODELDATAFILE)
@@ -47,10 +47,10 @@ function XS_LampPostJohannsen(;
     K = FitParam(1.),
     E = FitParam(1., lower_limit=1., upper_limit=10., frozen=false),
     a = FitParam(0.5, lower_limit=0, upper_limit=0.998, frozen=false),
-    h = FitParam(10., lower_limit=3., upper_limit=15., frozen=false),
+    h = FitParam(10., lower_limit=1., upper_limit=15., frozen=false),
     θ = FitParam(60., lower_limit=5., upper_limit=85., frozen=false),
-    α13 = FitParam(0., lower_limit=-0.4, upper_limit=10., frozen=false),
-    ϵ3 = FitParam(0., lower_limit=-0.4, upper_limit=10., frozen=false)
+    α13 = FitParam(0., lower_limit=-8, upper_limit=10., frozen=false),
+    ϵ3 = FitParam(0., lower_limit=-8, upper_limit=10., frozen=false)
     )
 
     XS_LampPostJohannsen(table, K, E, a, h, θ, α13, ϵ3)

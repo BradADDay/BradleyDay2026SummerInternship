@@ -70,14 +70,21 @@ function JohannsenLineProfile(;
     # Disk
     d = ThinDisc(minrₑ, Inf)
 
+    # Pre-computing transfer functions
+    tfs = transferfunctions(
+        m, x, d;
+        maxrₑ= maxrₑ,
+        numrₑ=200, 
+        minrₑ=minrₑ,
+    )
+
     # Setting up the model and emissivity profile
     model = LampPostModel(h = h)
     profile = emissivity_profile(m, d, model)
 
     # Computing the line profile
-    _, flux = lineprofile(
-        m, x, d, profile; verbose=true, bins=bins, method=method, 
-        minrₑ=minrₑ, maxrₑ=maxrₑ, numrₑ=numrₑ
+    flux = integrate_lineprofile(
+        profile, tfs, bins; rmin=minrₑ, rmax=maxrₑ
     )
 
     flux

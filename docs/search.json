@@ -304,7 +304,7 @@
     "href": "9_DeformProperties.html",
     "title": "9  Properties of the Deformation Parameters",
     "section": "",
-    "text": "9.1 \\(\\alpha_{13}\\)\n\\(\\alpha_{13}\\) is the highest order deformation parameter in the Johannsen metric and thus has the largest effect on the line profile. The animation below shows the effect of \\(\\alpha_{13}\\) on the observed image of the disc. The radius of the ISCO and degree of doppler shifting observed both increase with \\(\\alpha_{13}\\). The doppler shifting trend agrees with the statement from Johannsen (2013)  [1]: “Keplerian frequency increases for increasing values of the parameter \\(\\alpha_{13}\\)”. An increase in orbital frequency leads to an increase in relative speed to an observer, and thus increased redshifting is observed.\nThe plot below shows \\(R_\\text{ISCO}\\) as a function of \\(\\alpha_{13}\\) for varying \\(a\\).\nFor \\(\\alpha_{13} \\lesssim -5.7\\) the energy can have two local minima and stable circular orbits can only exist at and outside of the radius of the local maximum between them  [1]. The effect of this on the ISCO can be seen in Figure 9.1 where the behaviour of the ISCO becomes chaotic below \\(\\alpha_{13} \\approx -5.7\\).",
+    "text": "9.1 \\(\\alpha_{13}\\)\n\\(\\alpha_{13}\\) is the highest order deformation parameter in the Johannsen metric and thus has the largest effect on the line profile. The animation below shows the effect of \\(\\alpha_{13}\\) on the observed image of the disc. The radius of the ISCO and degree of doppler shifting observed both increase with \\(\\alpha_{13}\\). The doppler shifting trend is due to an increase in the Keplerian (orbital) frequency of surrounding particles  [1]: “Keplerian frequency increases for increasing values of the parameter \\(\\alpha_{13}\\)”. An increase in orbital frequency leads to an increase in relative speed to an observer, and thus increased redshifting is observed.\nThe plot below shows \\(R_\\text{ISCO}\\) as a function of \\(\\alpha_{13}\\) for varying \\(a\\).\nFor \\(\\alpha_{13} \\lesssim -5.7\\) the energy can have two local minima and stable circular orbits can only exist at and outside of the radius of the local maximum between them  [1]. The effect of this on the ISCO can be seen in Figure 9.1 where the behaviour of the ISCO becomes chaotic below \\(\\alpha_{13} \\approx -5.7\\). For \\(\\alpha_{13} \\lesssim -6.2\\), the energy and Keplerian frequency of an orbiting particle become imaginary in a small range of radii.",
     "crumbs": [
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Properties of the Deformation Parameters</span>"
     ]
@@ -314,7 +314,7 @@
     "href": "9_DeformProperties.html#alpha_13",
     "title": "9  Properties of the Deformation Parameters",
     "section": "",
-    "text": "A rendered image of a thin accretion disk around a Johannsen black hole with varying \\(\\alpha_{13}\\). The colour scale denotes the doppler shift of the light emitted from each region of the disk.\n\n\n\n\n\n\n\n\n\nFigure 9.1: The radius of the ISCO as a function of the deformation parameter \\(\\alpha_{13}\\) for various values of the black hole spin, \\(a\\).",
+    "text": "A rendered image of a thin accretion disk around a Johannsen black hole with varying \\(\\alpha_{13}\\). The colour scale denotes the doppler shift of the light emitted from each region of the disk.\n\n\n\n\n\n\n\n\n\nFigure 9.1: The radius of the ISCO as a function of the deformation parameter \\(\\alpha_{13}\\) for various values of the black hole spin, \\(a\\).\n\n\n\n\n\n\n\nThe dependence on the ISCO radius on \\(\\alpha_{13}\\). In the green shaded region the energy has two local minima and the ISCO is located at the outer radius where these minima occur. In the red shaded region, circular equatorial orbits do not exist at radii \\(r\\sim 2.5M\\) and the ISCO is located at the outer boundary of this radial interval. Image credit Johannsen (2013)  [1].",
     "crumbs": [
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Properties of the Deformation Parameters</span>"
     ]
@@ -324,7 +324,17 @@
     "href": "9_DeformProperties.html#epsilon_3",
     "title": "9  Properties of the Deformation Parameters",
     "section": "9.2 \\(\\epsilon_{3}\\)",
-    "text": "9.2 \\(\\epsilon_{3}\\)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n[1] T. Johannsen, Physical Review D 88, (2013).",
+    "text": "9.2 \\(\\epsilon_{3}\\)\nThe animation below shows the effect of \\(\\epsilon_{3}\\) on the observed image of the disc. The radius of the ISCO changes only slightly and degree of doppler shifting observed decreases with increasing \\(\\epsilon_{3}\\). The doppler shifting trend is due to a decrease in the Keplerian frequency of surrounding particles  [1].\n\n\n\n\n\n\n\nA rendered image of a thin accretion disk around a Johannsen black hole with varying \\(\\epsilon_{3}\\). The colour scale denotes the doppler shift of the light emitted from each region of the disk.\n\n\nThe plot below shows \\(R_\\text{ISCO}\\) as a function of \\(\\epsilon_{3}\\) for varying \\(a\\).\n\n\n\n\n\n\n\nThe radius of the ISCO as a function of the deformation parameter \\(\\epsilon_{3}\\) for various values of the black hole spin, \\(a\\).\n\n\nThe radius of the ISCO decreases for \\(a \\lesssim 0.7\\). For \\(a \\gtrsim 0.7\\) the radius decreases before increasing, and for very large \\(a\\) the radius only increases. The discontinuous regions seen for \\(a=0.887,\\; 0.998\\) are due to the boundaries set by Equation 5.1.",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Properties of the Deformation Parameters</span>"
+    ]
+  },
+  {
+    "objectID": "9_DeformProperties.html#takeaways",
+    "href": "9_DeformProperties.html#takeaways",
+    "title": "9  Properties of the Deformation Parameters",
+    "section": "9.3 Takeaways",
+    "text": "9.3 Takeaways\n\nThe main takeaway from this section of research is that \\(\\alpha_{13}\\) should not only be disallowed from being in the bounded regions of parameter space, but should also not be allowed to go below -5.7. This was implemented in the assembly of the final table model.\nThe observed change in redshift is due to test particles physically changing speed.\n\n\n\n\n\n[1] T. Johannsen, Physical Review D 88, (2013).",
     "crumbs": [
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Properties of the Deformation Parameters</span>"
     ]

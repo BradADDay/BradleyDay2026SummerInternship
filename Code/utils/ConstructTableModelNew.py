@@ -20,18 +20,18 @@ for more information.
 0.8165454545454546
 
 spins, heights, inclinations, alphas, epsilons = [
-    [-0.998, -0.8165454545454546, -0.635090909090909, -0.4536363636363636, -0.2721818181818182, -0.09072727272727273, 0.09072727272727273, 0.2721818181818182, 0.4536363636363636, 0.635090909090909, 0.8165454545454546, 0.998],
-    [3.0, 4.5, 6.0, 7.5, 9.0, 10.5, 12.0, 13.5, 15.0],
+    [0.0, 0.11088888888888888, 0.22177777777777777, 0.33266666666666667, 0.44355555555555554, 0.5544444444444444, 0.6653333333333333, 0.7762222222222223, 0.8871111111111111, 0.998],
+    [1.0, 2.5555555555555554, 4.111111111111111, 5.666666666666667, 7.222222222222222, 8.777777777777779, 10.333333333333334, 11.88888888888889, 13.444444444444445, 15.0],
     [5.0, 15.0, 25.0, 35.0, 45.0, 55.0, 65.0, 75.0, 85.0],
-    [-8.0, -6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0],
-    [-8.0, -6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0],
+    [10.0, 8.0, 6.0, 4.0, 2.0, 0.0, -2.0, -4.0, -6.0, -8.0],
+    [10.0, 8.0, 6.0, 4.0, 2.0, 0.0, -2.0, -4.0, -6.0, -8.0]
 ]
 
 tbl = table()
 
 # Utility function to generate a string formatted like the columns
 def getColumn(h, theta, alpha, epsilon):
-    return f"{h}, {theta}, {alpha}, {epsilon}"
+    return f"{alpha}, {epsilon}, {h}, {theta}"
 
 # ===============================================================
 # Primary header unit
@@ -108,13 +108,14 @@ tbl.pushParameter(epsilon3)
 
 # Reading the CSV
 print("Loading CSVs...")
-DIR = "tabledata3/"
+DIR = "tabledataFinal4/"
 
 files = {}
 
 for i in os.listdir(DIR):
-    print(i)
-    files[i[:-4]] = pd.read_csv(DIR + i)
+    if i[-4:] == ".csv":
+        print(i)
+        files[i[:-4]] = pd.read_csv(DIR + i)
 
 i=0
 j=0
@@ -130,13 +131,14 @@ for a in spins:
 
                     j+=1
 
-                    flux = files[str(a)][getColumn(h, theta, alpha, epsilon)].to_numpy()
+                    try:
+                        flux = files[str(a)][getColumn(h, theta, alpha, epsilon)].to_numpy()
+                    except:
+                        flux = None
                     
                     if flux is None:
-                        flux = np.full(1000, np.nan)
+                        flux = np.zeros(1000)
                         i+=1
-                    if flux[0] == NaN:
-                        k+=1
 
                     # Storing the spectrum and pushing it to the table alongside its parameter combination
                     spec = tableSpectrum()

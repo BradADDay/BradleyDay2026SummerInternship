@@ -76,6 +76,7 @@ function JohannsenLineProfile(;
         maxrₑ= maxrₑ,
         numrₑ=200, 
         minrₑ=minrₑ,
+        kwargs...
     )
 
     # Setting up the model and emissivity profile

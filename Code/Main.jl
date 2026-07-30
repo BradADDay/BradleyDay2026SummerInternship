@@ -330,34 +330,59 @@ begin
 
 end
 
+
 ##
+
 include("utils/ParameterVariations.jl")
 include("utils/FittingUtils.jl")
+include("utils/DeformUtils.jl")
 
-using DataFrames, CSV
+using CSV, DataFrames, Statistics
 
-df = DataFrame(CSV.File("tabledataFinal4/0.998.csv"))
+gr()
 
-plot(bins, df[!, "0.0, 0.0, 15.0, 65.0"]/maximum(df[!, "0.0, 0.0, 15.0, 65.0"]))
+r2(True, Pred) = 1 - (sum((True .- Pred).^2) / sum((Pred .- mean(Pred)).^2))
 
-K = 1.
-E = 6.4
-a = 0.998
-h = 15.
-θ = 60.
-α13 = 0.
-ϵ3 = 0.
+open("ModelPerformance.csv", "a") do io
+	write(io, "K, E, a, h, θ, α13, ϵ3, r2\n")
+end
 
-model = XS_LampPostJohannsen(K=K, E=E, a=a, h=h, θ=θ, α13=α13, ϵ3=ϵ3)
-bins = range(0,3,1000)
+for i in 1:100
 
-flux = invokemodel!(bins, model)
+	try
+		K = 1.
+		E = 6.4
+		a = rand(0:0.001:0.998)
+		h = rand(3.:0.1:19.)
+		θ = rand(5.:0.1:85.)
+		α13 = rand(-6.:0.1:10.)
+		ϵ3 = rand(-8.:0.1:10.)
 
-plot(bins, flux / maximum(flux))
+		bins = range(3, 10, 1000)
 
-flux2 = JohannsenLineProfile(;
-	M=1., a=0.998, h=65., θ=15., α13=0., ϵ3=0., α52=0., α22=0.,
-	bins=bins, numrₑ=200
-)
+		if QuickIsValid(ϵ3, α13, a)
 
-plot!(bins, flux2 / maximum(flux2))
+			model = XS_LampPostJohannsen(;K=K, E=E, a=a, h=h, θ=θ, α13=α13, ϵ3=ϵ3)
+
+			modelFlux = invokemodel!(bins, model)
+			modelFlux = modelFlux/maximum(modelFlux)
+
+			trueFlux = JohannsenLineProfile(
+				M=1., a=a, α13=α13, ϵ3=ϵ3, α52=0., α22=0., θ=θ, h=h, 
+				bins=bins/E, minrₑ=-1., maxrₑ=400., numrₑ=100, 
+				method=TransferFunctionMethod(), verbose=true
+			)
+
+			trueFlux = trueFlux/maximum(trueFlux)
+
+			open("ModelPerformance.csv", "a") do io
+				write(io, "$K, $E, $a, $h, $θ, $α13, $ϵ3, $(r2(trueFlux[1:end-1], modelFlux))\n")
+			end
+
+			# plt = plot(bins[1:end-1], modelFlux, label="Model")
+			# plot!(plt, bins, trueFlux, label="True")
+		end
+	catch
+		println("Combination Failed!")
+	end
+end

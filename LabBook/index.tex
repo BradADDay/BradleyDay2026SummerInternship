@@ -291,7 +291,7 @@ To learn more about Quarto books visit
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \section{Summary of ``Broad Iron Lines in Active Galactic Nuclei''
-~{[}1{]}}\label{summary-of-broad-iron-lines-in-active-galactic-nuclei-broadironlines}
+~{[}1{]}}\label{summary-of-broad-iron-lines-in-active-galactic-nuclei-fabian_broad_2000}
 
 Fluorescent iron line, Fe-K\(\alpha\), in the X-ray band at \(6.4-6.9\)
 keV is the strongest narrow line emitted by an accretion disk around a
@@ -2649,6 +2649,197 @@ Parameter & Lower Bound & Upper Bound & Number \\
 
 \bookmarksetup{startatroot}
 
+\chapter{Properties of the Deformation
+Parameters}\label{properties-of-the-deformation-parameters}
+
+\section{\texorpdfstring{\(\alpha_{13}\)}{\textbackslash alpha\_\{13\}}}\label{alpha_13}
+
+\(\alpha_{13}\) is the highest order deformation parameter in the
+Johannsen metric and thus has the largest effect on the line profile.
+The animation below shows the effect of \(\alpha_{13}\) on the observed
+image of the disc. The radius of the ISCO and degree of doppler shifting
+observed both increase with \(\alpha_{13}\). The doppler shifting trend
+is due to an increase in the Keplerian (orbital) frequency of
+surrounding particles ~{[}3{]}: ``Keplerian frequency increases for
+increasing values of the parameter \(\alpha_{13}\)''. An increase in
+orbital frequency leads to an increase in relative speed to an observer,
+and thus increased redshifting is observed.
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{images/alpha.gif}
+
+}
+
+\caption{A rendered image of a thin accretion disk around a Johannsen
+black hole with varying \(\alpha_{13}\). The colour scale denotes the
+doppler shift of the light emitted from each region of the disk.}
+
+\end{figure}%
+
+The plot below shows \(R_\text{ISCO}\) as a function of \(\alpha_{13}\)
+for varying \(a\).
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{images/ISCOPlotCombined.png}
+
+}
+
+\caption{\label{fig-alphaISCO}The radius of the ISCO as a function of
+the deformation parameter \(\alpha_{13}\) for various values of the
+black hole spin, \(a\).}
+
+\end{figure}%
+
+For \(\alpha_{13} \lesssim -5.7\) the energy can have two local minima
+and stable circular orbits can only exist at and outside of the radius
+of the local maximum between them ~{[}3{]}. The effect of this on the
+ISCO can be seen in Figure~\ref{fig-alphaISCO} where the behaviour of
+the ISCO becomes chaotic below \(\alpha_{13} \approx -5.7\). For
+\(\alpha_{13} \lesssim -6.2\), the energy and Keplerian frequency of an
+orbiting particle become imaginary in a small range of radii.
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{images/Johannsen_Alpha13Spin.png}
+
+}
+
+\caption{The dependence on the ISCO radius on \(\alpha_{13}\). In the
+green shaded region the energy has two local minima and the ISCO is
+located at the outer radius where these minima occur. In the red shaded
+region, circular equatorial orbits do not exist at radii \(r\sim 2.5M\)
+and the ISCO is located at the outer boundary of this radial interval.
+Image credit Johannsen (2013) ~{[}3{]}.}
+
+\end{figure}%
+
+\section{\texorpdfstring{\(\epsilon_{3}\)}{\textbackslash epsilon\_\{3\}}}\label{epsilon_3}
+
+The animation below shows the effect of \(\epsilon_{3}\) on the observed
+image of the disc. The radius of the ISCO changes only slightly and
+degree of doppler shifting observed decreases with increasing
+\(\epsilon_{3}\). The doppler shifting trend is due to a decrease in the
+Keplerian frequency of surrounding particles ~{[}3{]}.
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{images/epsilon.gif}
+
+}
+
+\caption{A rendered image of a thin accretion disk around a Johannsen
+black hole with varying \(\epsilon_{3}\). The colour scale denotes the
+doppler shift of the light emitted from each region of the disk.}
+
+\end{figure}%
+
+The plot below shows \(R_\text{ISCO}\) as a function of \(\epsilon_{3}\)
+for varying \(a\).
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{images/EpsilonISCOPlot.png}
+
+}
+
+\caption{The radius of the ISCO as a function of the deformation
+parameter \(\epsilon_{3}\) for various values of the black hole spin,
+\(a\).}
+
+\end{figure}%
+
+The radius of the ISCO decreases for \(a \lesssim 0.7\). For
+\(a \gtrsim 0.7\) the radius decreases before increasing, and for very
+large \(a\) the radius only increases. The discontinuous regions seen
+for \(a=0.887,\; 0.998\) are due to the boundaries set by
+Equation~\ref{eq-Epsilon3Constraint}.
+
+\section{Takeaways}\label{takeaways}
+
+\begin{itemize}
+\tightlist
+\item
+  The main takeaway from this section of research is that
+  \(\alpha_{13}\) should not only be disallowed from being in the
+  bounded regions of parameter space, but should also not be allowed to
+  go below -5.7. This was implemented in the assembly of the final table
+  model.
+\item
+  The observed change in redshift is due to test particles physically
+  changing speed.
+\end{itemize}
+
+\bookmarksetup{startatroot}
+
+\chapter{Fitting the Refined Model to the
+Data}\label{fitting-the-refined-model-to-the-data}
+
+With the table model constructed and the parameter space now understood,
+it was possible to start fitting to data. To refine the fitting process
+the processed XRISM dataset of NGC4151 was used. Modifications had to be
+made to the previous fitting code to include a rest frame spectrum, and
+photoelectric absorption. The rest frame model \texttt{XILLVER} was
+selected as implemented through \texttt{SpectralFitting.jl}.
+
+The model used was:
+
+\begin{verbatim}
+PhotoelectricAbsorption * (PowerLaw + ConvolutionLineProfile(XillverD5))
+\end{verbatim}
+
+where \texttt{PhotoelectricAbsorption}, \texttt{PowerLaw}, and
+\texttt{XillverD5} were implemented through \texttt{SpectralFitting.jl}.
+\texttt{ConvolutionLineProfile} is the table model defined here using
+the Johannsen metric, and convolving over the reflection spectrum to
+apply the relativistic properties to the emission lines. The parameters
+of the model are shown below. Note that the photon index appears in both
+the spectrum and the power law, and the inclination appears in both the
+spectrum and the line profile. These two pairs of parameters were bound
+together for fitting.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1795}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.4359}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1923}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1923}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Component
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Parameter
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Initial Value
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Bounds
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Line Profile & Spin (\(a\)) & 0.998 & (0, 0.998) \\
+& Corona Height (\(h\)) & 19 & (3, 19) \\
+& Inclination (\(\theta\)) & 15 & (5, 85) \\
+& \(\alpha_{13}\) & 0 & (-6, 10) \\
+& \(\epsilon_{3}\) & 0 & (-8, 10) \\
+\texttt{XILLVER} & Normalisation (\(K\)) & 0.01 & (0, \(\infty\)) \\
+& Photon Index (\(\Gamma\)) & 3.5 & (1, 5) \\
+& Iron Abundance (\(A_{\rm Fe}\)) & 1 & (0, 2) \\
+& Ionisation (\(\log\xi\)) & 0.5 & (0, 4) \\
+& Density & 30 & (1, 30) \\
+& Inclination (\(\theta4)           | 15            | (5, 85)       |
+| Absorption   | Equiv H column density (\)\eta\(H) | 10            | (0, 30)       |
+| Power Law    | Normalisation (\)K\$) & 40,000 & (0, \(\infty\)) \\
+& Photon Index (\(\Gamma\)) & 3.5 & (1, 5) \\
+\end{longtable}
+}
+
+\bookmarksetup{startatroot}
+
 \chapter*{References}\label{references}
 \addcontentsline{toc}{chapter}{References}
 
@@ -2656,22 +2847,20 @@ Parameter & Lower Bound & Upper Bound & Number \\
 
 \protect\phantomsection\label{refs}
 \begin{CSLReferences}{0}{0}
-\bibitem[\citeproctext]{ref-BroadIronLines}
+\bibitem[\citeproctext]{ref-fabian_broad_2000}
 \CSLLeftMargin{{[}1{]} }%
-\CSLRightInline{\href{https://doi.org/10.1086/316610}{A. C. Fabian
-\emph{et al.}, Publications of the Astronomical Society of the Pacific
-\textbf{112}, 1145 (2000)}.}
+\CSLRightInline{A. C. Fabian \emph{et al.}, (2000).}
 
-\bibitem[\citeproctext]{ref-NuSTAR}
+\bibitem[\citeproctext]{ref-harrison_nuclear_2013}
 \CSLLeftMargin{{[}2{]} }%
 \CSLRightInline{\href{https://doi.org/10.1088/0004-637X/770/2/103}{F. A.
-Harrison \emph{et al.}, American Physical Journal \textbf{770}, 103
+Harrison \emph{et al.}, The Astrophysical Journal \textbf{770}, 103
 (2013)}.}
 
-\bibitem[\citeproctext]{ref-JohannsenMetric}
+\bibitem[\citeproctext]{ref-johannsen_regular_2013}
 \CSLLeftMargin{{[}3{]} }%
-\CSLRightInline{\href{https://doi.org/10.1103/physrevd.88.044002}{T.
-Johannsen, Physical Review D \textbf{88}, (2013)}.}
+\CSLRightInline{\href{https://doi.org/10.1103/PhysRevD.88.044002}{T.
+Johannsen, Physical Review D \textbf{88}, 044002 (2013)}.}
 
 \bibitem[\citeproctext]{ref-XSPECModelSpecification}
 \CSLLeftMargin{{[}4{]} }%

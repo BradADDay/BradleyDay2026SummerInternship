@@ -1,5 +1,6 @@
 """
-File containing a selection of utility functions for investigating the deformation parameter space
+File containing a selection of utility functions for investigating the deformation parameter 
+space
 """
 
 include("Deformations.jl")
@@ -8,9 +9,9 @@ include("PlottingDefaults.jl")
 using ProgressBars, LaTeXStrings, JSON3
 using BSON: @save, @load
 
-# =============================================================================
+# ==========================================================================================
 # Boundary Finding
-# =============================================================================
+# ==========================================================================================
 
 function FindTopVertices(regions, ϵs, αs)
     """
@@ -230,7 +231,10 @@ end
 
 function GenerateBoundsCSV(as=range(-0.998, 0.998, 20))
 
-    df = DataFrame([[],[],[],[],[],[],[],[],[],[],[],[],[]], ["a", "m1", "c1", "m2", "c2", "m3", "c3", "m4", "c4", "m5", "c5", "m6", "c6"])
+    df = DataFrame(
+        [[],[],[],[],[],[],[],[],[],[],[],[],[]], 
+        ["a", "m1", "c1", "m2", "c2", "m3", "c3", "m4", "c4", "m5", "c5", "m6", "c6"]
+    )
 
     for a in as
         @load "outBin/a=$(round(a; digits=3)).bson" regions
@@ -289,21 +293,27 @@ function GenerateRegionFiles(as=range(-0.998, 0.998, 20))
 
 end
 
-# =============================================================================
+# ==========================================================================================
 # Boundary Validation
-# =============================================================================
+# ==========================================================================================
 
-function PlotBounds(a::Real, df::DataFrame=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1], step=0.4, pbarLabel="", verbose=true)
+function PlotBounds(
+        a::Real, df::DataFrame=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1], step=0.4, 
+        pbarLabel="", verbose=true
+    )
 
     plts = ParameterRegions(10, 10; a=a, step=step, verbose=verbose)
     PlotBounds(plts, a, df; sgns=sgns, step=step, pbarLabel="", verbose=verbose)
 
 end
 
-function PlotBounds(plts, a::Real, df::DataFrame=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1], step=0.4, pbarLabel="", verbose=true)
-    """
-    Plot the parameter space showing the invalid regions, and plot the bounds defined within the table dataframe
-    """
+"""
+Plot the parameter space showing the invalid regions, and plot the bounds defined within the table dataframe
+"""
+function PlotBounds(
+        plts, a::Real, df::DataFrame=DeformationBoundsTable; sgns=[1,1,-1,-1,-1,-1], 
+        step=0.4, pbarLabel="", verbose=true
+    )    
 
     # Plotting the parameter space regions
     hmp = PlotRegion(plts...; title="a=$(round(a; digits=3))", c=:grays, clims=(-2,0))
@@ -321,10 +331,16 @@ function PlotBounds(plts, a::Real, df::DataFrame=DeformationBoundsTable; sgns=[1
     ys = Array{Array{Float64}}(undef, 4)
 
     # Defining the lines as coordinates for plotting
-    ys[1] = LineEquation(x, lines[5])
-    ys[2] = LineEquation(x, lines[6])
-    ys[3] = append!(LineEquation(x[x.<=tri1Int], lines[1]), LineEquation(x[x.>=tri1Int], lines[2]))
-    ys[4] = append!(LineEquation(x[x.<=tri2Int], lines[3]), LineEquation(x[x.>=tri2Int], lines[4]))
+    ys[1] = LineEquation.(x, [lines[5]])
+    ys[2] = LineEquation.(x, [lines[6]])
+    ys[3] = append!(
+        LineEquation.(x[x.<=tri1Int], [lines[1]]), 
+        LineEquation.(x[x.>=tri1Int], [lines[2]])
+    )
+    ys[4] = append!(
+        LineEquation.(x[x.<=tri2Int], [lines[3]]), 
+        LineEquation.(x[x.>=tri2Int], [lines[4]])
+    )
 
     # Defining fill ranges for the Invalid regions
     fill = 10*ones(length(x))
@@ -402,7 +418,8 @@ end
 
 function ParameterRegions(αmax, ϵmax; a=0.998, step=0.1, pbarLabel="", verbose=true)
     """
-    Checking the validity for a grid of points in the parameter space for a given spin value and producing a heatmap
+    Checking the validity for a grid of points in the parameter space for a given spin value 
+    and producing a heatmap
     """
     # Get the minimum valid value using Eqs 75, 77 of Johannsen 2013
     minVal = Constraints(a)
@@ -439,10 +456,12 @@ function ParameterRegions(αmax, ϵmax; a=0.998, step=0.1, pbarLabel="", verbose
     return regions, αs, ϵs, minVal
 end
 
-function PlotRegion(regions, αs, ϵs, minVal; ticks = -10:2:10, title="", c=:Greys, clims=nothing)
-    """
-    Plotting the output from ParameterRegions
-    """
+"""
+Plotting the output from ParameterRegions
+"""
+function PlotRegion(
+        regions, αs, ϵs, minVal; ticks = -10:2:10, title="", c=:Greys, clims=nothing
+    )
 
     if isnothing(clims)
         clims = (0, maximum(regions))
@@ -546,9 +565,9 @@ function CheckDeformCorrection(;
     end
 end
 
-# =================================================================================
+# ==========================================================================================
 # Figure 6 of Johannsen 2013
-# =================================================================================
+# ==========================================================================================
 
 function DeformationSpinPlot(x, y, regions; xlabel=L"a", ylabel=L"\epsilon_3")
     """
@@ -563,7 +582,9 @@ function DeformationSpinPlot(x, y, regions; xlabel=L"a", ylabel=L"\epsilon_3")
     grndown = Constraints.(x)
 
     plot(x, grnup, label=nothing, fillstyle=:xxxx, c=:green, fillrange=grndown)
-    plot!(x, zeros(length(x)).+10, label=nothing, c=:red, fillalpha=0.5, fillrange=redbounds)
+    plot!(
+        x, zeros(length(x)).+10, label=nothing, c=:red, fillalpha=0.5, fillrange=redbounds
+    )
 
     heatmap!(
         x,
@@ -579,7 +600,10 @@ function DeformationSpinPlot(x, y, regions; xlabel=L"a", ylabel=L"\epsilon_3")
         c=:grays
     )
 
-    plot!(x, Constraints.(x), label=nothing, fillstyle=://, c=:black, fillrange=zeros(length(x)).-10)
+    plot!(
+        x, Constraints.(x), label=nothing, fillstyle=://, c=:black, 
+        fillrange=zeros(length(x)).-10
+    )
     contour!(x, y, regions, levels=1:12, c=[:red], lw=1, clabels=true)
 end
 
@@ -614,7 +638,7 @@ function DeformationSpin(;xs = -0.998:0.005:0.998, ys = -10:0.1:10, param="α13"
     regions[regions.<0] .= NaN
 
     if plt
-        Figure6(xs, ys, regions; ylabel=param)
+        DeformationSpinPlot(xs, ys, regions; ylabel=param)
     end
 
     xs, ys, regions

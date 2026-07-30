@@ -1,5 +1,6 @@
 """
-File containing a selection of defined SpectralFitting models using the Johannsen metric through Gradus
+File containing a selection of defined SpectralFitting models using the Johannsen metric 
+through Gradus.jl
 """
 
 using SpectralFitting
@@ -7,17 +8,17 @@ using MultiLinearInterpolations
 
 # Including the tools for defining invalid regions in parameter space
 # This imports CSV, DataFrames, Gradus, and Interpolations
-include("Deformations.jl")
+include("./Deformations.jl")
 
-# ===============================================================
+# ==========================================================================================
 # Lamp post table model
-# ===============================================================
+# ==========================================================================================
 
 # The number of parameters the model has
 const ModelNumParams = 5
 
 # The path to the model
-MODELDATAFILE = "/home/brad/Documents/SummerInternship/Code/models/FinalFinalModel.FITS"
+MODELDATAFILE = "/home/brad/Documents/SummerInternship/Code/models/TestModel.FITS"
 
 # Reading in the table model and setting it up as an interpolation object
 data = TableModelData(Val(ModelNumParams), MODELDATAFILE)
@@ -46,11 +47,11 @@ end
 function XS_LampPostJohannsen(;
     K = FitParam(1.),
     E = FitParam(1., lower_limit=1., upper_limit=10., frozen=false),
-    a = FitParam(0.5, lower_limit=0, upper_limit=0.998, frozen=false),
-    h = FitParam(10., lower_limit=1., upper_limit=15., frozen=false),
+    a = FitParam(0.5, lower_limit=0., upper_limit=0.998, frozen=false),
+    h = FitParam(10., lower_limit=3., upper_limit=19., frozen=false),
     θ = FitParam(60., lower_limit=5., upper_limit=85., frozen=false),
-    α13 = FitParam(0., lower_limit=-8, upper_limit=10., frozen=false),
-    ϵ3 = FitParam(0., lower_limit=-8, upper_limit=10., frozen=false)
+    α13 = FitParam(0., lower_limit=-6., upper_limit=10., frozen=false),
+    ϵ3 = FitParam(0., lower_limit=-8., upper_limit=10., frozen=false)
     )
 
     XS_LampPostJohannsen(table, K, E, a, h, θ, α13, ϵ3)
@@ -60,13 +61,20 @@ end
 function SpectralFitting.invoke!(output, input, model::XS_LampPostJohannsen)
 
     # Pulling the necessary parameters
-    let table = model.table, K = model.K, E = model.E, a = model.a, h = model.h, θ = model.θ, α13 = model.α13, ϵ3 = model.ϵ3
+    let table, E, a, h, θ, α13, ϵ3
+        table = model.table
+        E = model.E
+        a = model.a
+        h = model.h
+        θ = model.θ
+        α13 = model.α13
+        ϵ3 = model.ϵ3
 
         # Reading from table for a quick check of parameter validity
         if !QuickIsValid(ϵ3, α13, a)
             # Doing a finer check if the quick check fails
             if !IsValid(ϵ3, α13, a)
-                output = fill(NaN, length(input)-1)
+                output = fill(0, length(input)-1)
                 return output
             end
         end
@@ -78,26 +86,26 @@ function SpectralFitting.invoke!(output, input, model::XS_LampPostJohannsen)
         profile = SpectralFitting.interpolate_table!(table, a, h, θ, α13, ϵ3)
 
         # Interpolating the profile to get the result for the input domain
-        interp = linear_interpolation(table.data.energy_bins[1:end-1], profile)
+        interp = linear_interpolation(
+            table.data.energy_bins[1:end-1], profile, extrapolation_bc=Flat()
+        )
         flux = interp.(domain)
 
-        output .= K * flux[1:end-1]
+        output .= flux[1:end-1]
     end
 end
 
-function SpectralFitting.invokemodel!(input, model::XS_LampPostJohannsen)
+# function SpectralFitting.invokemodel!(input, model::XS_LampPostJohannsen)
 
-    println("$(model.a), $(model.α13), $(model.ϵ3)")
+#     output = zeros(length(input)-1)
 
-    output = zeros(length(input)-1)
+#     SpectralFitting.invoke!(output, input, model)
 
-    SpectralFitting.invoke!(output, input, model)
+# end
 
-end
-
-# ===============================================================
+# ==========================================================================================
 # Johannsen Metric
-# ===============================================================
+# ==========================================================================================
 
 function DeformationConstraints(a)
     -(1+sqrt(1 - a^2))^3
@@ -180,9 +188,9 @@ function SpectralFitting.invoke!(output, input, model::LampPostJohannsen)
     
 end
 
-# ===============================================================
+# ==========================================================================================
 # Kerr Metric
-# ===============================================================
+# ==========================================================================================
 
 # Lamppost model for a Johannsen metric
 struct LampPostKerr{T} <: AbstractSpectralModel{T, Additive}

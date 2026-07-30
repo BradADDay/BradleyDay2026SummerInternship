@@ -1,6 +1,7 @@
-OBSID, Object
-000100000, Abell2319_BS
-000103000, Abell2319
-300050010, NGC3783
-201083010, MRK279
-201081010 , NGC5548
+OBSID,      Object,         Notes
+000100000,  Abell2319_BS,   Pipeline didn't produce a cl_evt file | PSP limit exceeded
+000103000,  Abell2319,      
+000125000,  NGC4151,        PSP limit exceeded
+300050010,  NGC3783,        
+201083010,  MRK279,         
+201081010,  NGC5548,        

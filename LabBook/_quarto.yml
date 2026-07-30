@@ -21,6 +21,7 @@ book:
     - 7_XRISMReduction.qmd
     - 8_DeformConstraints.qmd
     - 9_DeformProperties.qmd
+    - 10_FittingData.qmd
     - references.qmd
 
 bibliography: references.bib

@@ -2,7 +2,7 @@
 
 julia_version = "1.12.6"
 manifest_format = "2.0"
-project_hash = "1becce6ab3eb5eb8e62e45034767f9addfc8fcc7"
+project_hash = "f519ea4ce76caed9e39b8dc2475635c6d325b951"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "bbc22a9a08a0ef6460041086d8a7b27940ed4ffd"
@@ -1105,6 +1105,12 @@ git-tree-sha1 = "68c173f4f449de5b438ee67ed0c9c748dc31a2ec"
 uuid = "34004b35-14d8-5ef3-9330-4cdb6864b03a"
 version = "0.3.28"
 
+[[deps.HypothesisTests]]
+deps = ["Combinatorics", "Distributions", "LinearAlgebra", "Printf", "Random", "Roots", "Statistics", "StatsAPI", "StatsBase", "StatsFuns"]
+git-tree-sha1 = "7040110b339e4a35a78e12ad3000d9708bb86a60"
+uuid = "09f84164-cd44-5f33-b23f-e6b0d136a0d5"
+version = "0.11.8"
+
 [[deps.ILUZero]]
 deps = ["LinearAlgebra", "SparseArrays"]
 git-tree-sha1 = "b007cfc7f9bee9a958992d2301e9c5b63f332a90"
@@ -1405,6 +1411,12 @@ version = "1.9.0+0"
 deps = ["Artifacts", "Libdl", "OpenSSL_jll"]
 uuid = "29816b5a-b9ab-546f-933c-edad1886dfa8"
 version = "1.11.3+1"
+
+[[deps.LibXSPEC_Relxill_jll]]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "LibXSPEC_jll", "Libdl"]
+git-tree-sha1 = "502c854ae66bf7dfbb4e8320e1729361800a719b"
+uuid = "e5636fd8-dfb6-572c-a65b-f91a4431b0da"
+version = "0.2.4+0"
 
 [[deps.LibXSPEC_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Ncurses_jll", "Zlib_jll"]
@@ -2487,6 +2499,12 @@ deps = ["SHA", "Scratch"]
 git-tree-sha1 = "ffdaf70d81cf6ff22c2b6e733c900c3321cab864"
 uuid = "05181044-ff0b-4ac5-8273-598c1e38db00"
 version = "1.0.1"
+
+[[deps.Relxill]]
+deps = ["LibXSPEC_Relxill_jll", "LibXSPEC_jll", "SpectralFitting", "XSPECModels"]
+git-tree-sha1 = "24dd1fc42a4405a3439a916d2e9cfdaed8a839c0"
+uuid = "b6389841-9bc2-481d-a2e0-8b38b8d5f21d"
+version = "0.2.4"
 
 [[deps.Requires]]
 deps = ["UUIDs"]

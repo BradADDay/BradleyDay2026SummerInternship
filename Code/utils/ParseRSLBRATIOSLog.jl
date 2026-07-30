@@ -18,7 +18,7 @@ function FindAfter(string, substring)
     parse(Int64, out)
 end
 
-function ParseRSBLRATIOS(f)
+function ParseRSBLRATIOS(f; limit=50)
 
     # Reading the file
     lines = readlines(f)
@@ -43,8 +43,8 @@ function ParseRSBLRATIOS(f)
     end
 
     # Filtering the dataframe for invalid values
-    df = subset(df, :Counts => a -> a .> 49)
+    df = subset(df, :Counts => a -> a .> limit)
 
     # Returning the invalid quadrants
-    unique(df.Quadrant)
+    unique(df.Quadrant), df
 end

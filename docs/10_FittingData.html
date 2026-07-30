@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>6&nbsp; Developing and Migrating to a Table Model – Lab Book</title>
+<title>10&nbsp; Fitting the Refined Model to the Data – Lab Book</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -23,27 +23,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -53,8 +33,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./7_XRISMReduction.html" rel="next">
-<link href="./5_FittingData.html" rel="prev">
+<link href="./references.html" rel="next">
+<link href="./9_DeformProperties.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -69,9 +49,6 @@ div.csl-indent {
 <link href="site_libs/bootstrap/bootstrap-382dad073c37032be9e988f92f56c479.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/bootstrap/bootstrap-dark-bd29a33bb155b7791116d1c9ba40c699.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <link href="site_libs/bootstrap/bootstrap-382dad073c37032be9e988f92f56c479.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
-<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
-<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -315,7 +292,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./6_TableModel.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Developing and Migrating to a Table Model</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./10_FittingData.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Fitting the Refined Model to the Data</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -382,7 +359,7 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./6_TableModel.html" class="sidebar-item-text sidebar-link active">
+  <a href="./6_TableModel.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Developing and Migrating to a Table Model</span></span></a>
   </div>
 </li>
@@ -406,7 +383,7 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10_FittingData.html" class="sidebar-item-text sidebar-link">
+  <a href="./10_FittingData.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Fitting the Refined Model to the Data</span></span></a>
   </div>
 </li>
@@ -421,22 +398,8 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">6.1</span> Introduction</a></li>
-  <li><a href="#data-generation" id="toc-data-generation" class="nav-link" data-scroll-target="#data-generation"><span class="header-section-number">6.2</span> Data Generation</a></li>
-  <li><a href="#loading-into-fits-format" id="toc-loading-into-fits-format" class="nav-link" data-scroll-target="#loading-into-fits-format"><span class="header-section-number">6.3</span> Loading into FITS Format</a></li>
-  <li><a href="#the-model" id="toc-the-model" class="nav-link" data-scroll-target="#the-model"><span class="header-section-number">6.4</span> The Model</a>
-  <ul class="collapse">
-  <li><a href="#performance" id="toc-performance" class="nav-link" data-scroll-target="#performance"><span class="header-section-number">6.4.1</span> Performance</a></li>
-  </ul></li>
-  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps"><span class="header-section-number">6.5</span> Next Steps</a></li>
-  <li><a href="#current-issues-20260703" id="toc-current-issues-20260703" class="nav-link" data-scroll-target="#current-issues-20260703"><span class="header-section-number">6.6</span> Current Issues 2026/07/03</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -444,7 +407,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Developing and Migrating to a Table Model</span></h1>
+<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Fitting the Refined Model to the Data</span></h1>
 </div>
 
 
@@ -461,138 +424,104 @@ window.Quarto = {
 </header>
 
 
-<section id="introduction" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">6.1</span> Introduction</h2>
-<p>Due to having to render the line profile through Gradus upon every iteration of the fit, the model took a significant amount of time to fit to the data. Thus other methods were looked into and it was decided to develop a table model, allowing for the pre-computation of the line profiles. The computed profiles could then be interpolated between for a given set of parameters, significantly speeding up computation. This would of course decrease the accuracy of the model, however the increased efficiency would likely be worth that loss.</p>
-<p>The structure for XSPEC table models is well documented at <a href="https://heasarc.gsfc.nasa.gov/FTP/caldb/docs/memos/ogip_92_009/ogip_92_009.pdf">XSPEC Table Models</a> <span class="citation" data-cites="XSPECModelSpecification">&nbsp;[<a href="references.html#ref-XSPECModelSpecification" role="doc-biblioref">1</a>]</span>, thus the model was constructed using this specification. <code>SpectralFitting.jl</code> also has compatibility with this model format, which made integration more viable (see <a href="https://github.com/JuliaAstro/SpectralFitting.jl/blob/main/src/meta-models/table-models.jl">here</a> for more <span class="citation" data-cites="SpectralFitting">&nbsp;[<a href="references.html#ref-SpectralFitting" role="doc-biblioref">2</a>]</span>).</p>
-</section>
-<section id="data-generation" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="data-generation"><span class="header-section-number">6.2</span> Data Generation</h2>
-<p>The spectra for the model were simply generated by looping through a defined parameter space, with a given number of values for each of the 5 parameters. The values selected were defined as follows</p>
+<p>With the table model constructed and the parameter space now understood, it was possible to start fitting to data. To refine the fitting process the processed XRISM dataset of NGC4151 was used. Modifications had to be made to the previous fitting code to include a rest frame spectrum, and photoelectric absorption. The rest frame model <code>XILLVER</code> was selected as implemented through <code>SpectralFitting.jl</code>.</p>
+<p>The model used was:</p>
+<pre><code>PhotoelectricAbsorption * (PowerLaw + ConvolutionLineProfile(XillverD5))</code></pre>
+<p>where <code>PhotoelectricAbsorption</code>, <code>PowerLaw</code>, and <code>XillverD5</code> were implemented through <code>SpectralFitting.jl</code>. <code>ConvolutionLineProfile</code> is the table model defined here using the Johannsen metric, and convolving over the reflection spectrum to apply the relativistic properties to the emission lines. The parameters of the model are shown below. Note that the photon index appears in both the spectrum and the power law, and the inclination appears in both the spectrum and the line profile. These two pairs of parameters were bound together for fitting.</p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 43%">
+<col style="width: 19%">
+<col style="width: 19%">
+</colgroup>
 <thead>
 <tr class="header">
+<th>Component</th>
 <th>Parameter</th>
-<th>Lower Bound</th>
-<th>Upper Bound</th>
-<th>Number</th>
+<th>Initial Value</th>
+<th>Bounds</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><span class="math inline">\(a\)</span></td>
-<td>-0.998</td>
+<td>Line Profile</td>
+<td>Spin (<span class="math inline">\(a\)</span>)</td>
 <td>0.998</td>
-<td>7</td>
+<td>(0, 0.998)</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(h\)</span></td>
-<td>1.5</td>
-<td>30</td>
-<td>10</td>
+<td></td>
+<td>Corona Height (<span class="math inline">\(h\)</span>)</td>
+<td>19</td>
+<td>(3, 19)</td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(\theta\)</span></td>
-<td>5</td>
-<td>85</td>
-<td>10</td>
+<td></td>
+<td>Inclination (<span class="math inline">\(\theta\)</span>)</td>
+<td>15</td>
+<td>(5, 85)</td>
 </tr>
 <tr class="even">
+<td></td>
 <td><span class="math inline">\(\alpha_{13}\)</span></td>
 <td>0</td>
-<td>50</td>
-<td>7</td>
+<td>(-6, 10)</td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(\epsilon_3\)</span></td>
+<td></td>
+<td><span class="math inline">\(\epsilon_{3}\)</span></td>
 <td>0</td>
+<td>(-8, 10)</td>
+</tr>
+<tr class="even">
+<td><code>XILLVER</code></td>
+<td>Normalisation (<span class="math inline">\(K\)</span>)</td>
+<td>0.01</td>
+<td>(0, <span class="math inline">\(\infty\)</span>)</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Photon Index (<span class="math inline">\(\Gamma\)</span>)</td>
+<td>3.5</td>
+<td>(1, 5)</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Iron Abundance (<span class="math inline">\(A_{\rm Fe}\)</span>)</td>
+<td>1</td>
+<td>(0, 2)</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Ionisation (<span class="math inline">\(\log\xi\)</span>)</td>
+<td>0.5</td>
+<td>(0, 4)</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Density</td>
 <td>30</td>
-<td>10</td>
+<td>(1, 30)</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Inclination (<span class="math inline">\(\theta4)           | 15            | (5, 85)       |
+| Absorption   | Equiv H column density (\)</span><span class="math inline">\(H) | 10            | (0, 30)       |
+| Power Law    | Normalisation (\)</span>K$)</td>
+<td>40,000</td>
+<td>(0, <span class="math inline">\(\infty\)</span>)</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Photon Index (<span class="math inline">\(\Gamma\)</span>)</td>
+<td>3.5</td>
+<td>(1, 5)</td>
 </tr>
 </tbody>
 </table>
-<p>This gave a total of 49,000 combinations to loop through. Seven values were used for both <span class="math inline">\(a\)</span> and <span class="math inline">\(\alpha_{13}\)</span> as they had the smallest, and most predictable effect on the line profile, respectively. In a later iteration of this model it would be ideal to have a larger parameter space to reduce the innacuracies of interpolation, however for a test case it was necessary to keep compute times down. The line profiles were stored in columns of a CSV with the header containing the parameter information.</p>
-<p>Certain parameter combinations would fail to compute, and therefore a log file was kept, noting the combination and when it failed. This allowed the computations to run over night without risk of an error. The final compute time for this data generation was 16 hours. 3,500 of the 49,000 did not compute correctly, thus there is 45,500 datapoints in the grid.</p>
-</section>
-<section id="loading-into-fits-format" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="loading-into-fits-format"><span class="header-section-number">6.3</span> Loading into FITS Format</h2>
-<p>This data was then loaded into a FITS file following the XSPEC model format using the python wrapper for the <code>heasp</code> C library, <code>heasoftpy</code> (see the <a href="https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/headas/heasp/node2.html">documentation</a> for more information). The model specification requires that the grid be rectilinear <span class="citation" data-cites="XSPECModelSpecification">&nbsp;[<a href="references.html#ref-XSPECModelSpecification" role="doc-biblioref">1</a>]</span>, thus it was not possible to simply disregard the failed runs, and the spectra for these combinations was set to be zeroed out. This was determined to be acceptable as the majority of the failed runs had large <span class="math inline">\(\alpha_{13}\)</span> or <span class="math inline">\(\epsilon_3\)</span>, which from earlier testing was noted to be unlikely during fitting, thus the failed combinations would be unlikely to be used for interpolation.</p>
-</section>
-<section id="the-model" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="the-model"><span class="header-section-number">6.4</span> The Model</h2>
-<p>To create a model in SpectralFitting using the table, the data was loaded into a <code>TableModelData</code> struct. This could then be wrapped using <code>TableModelInterpolation</code> such that it can work with the <code>TableModelInterpolation</code> function. This functionality made it trivial to set up the interpolation through the parameter grid by simply calling</p>
-<pre><code>SpectralFitting.interpolate_table!(table, a, h, θ, α13, ϵ3)</code></pre>
-<p>This returned a spectrum with 1000 datapoints, which could then be interpolated over the domain of the input data. With this architecture it was simple to fit the data as previous.</p>
-<section id="performance" class="level3" data-number="6.4.1">
-<h3 data-number="6.4.1" class="anchored" data-anchor-id="performance"><span class="header-section-number">6.4.1</span> Performance</h3>
-<p>Using the nu80402315002 dataset as before, the new model yielded the following results.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/TableKerrnu80402315002.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="The table model result for the Kerr metric"><img src="images/TableKerrnu80402315002.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The table model result for the Kerr metric"></a></p>
-</figure>
-</div>
-<figcaption>The table model result for the Kerr metric</figcaption>
-</figure>
-</div>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="images/TableJohannsennu80402315002.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="The table model result for the Johannsen metric"><img src="images/TableJohannsennu80402315002.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="The table model result for the Johannsen metric"></a></p>
-</figure>
-</div>
-<figcaption>The table model result for the Johannsen metric</figcaption>
-</figure>
-</div>
-<p>Comparing to the previous fits, the <span class="math inline">\(\chi^2\)</span> value for both of these fits were surprisingly improved. The Kerr fit was completed by freezing the deformation parameters at 0.</p>
-<p>These fits took only 30 seconds to fit and plot both metrics, which was significantly faster than previous which could take an hour or more for a single fit.</p>
-</section>
-</section>
-<section id="next-steps" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="next-steps"><span class="header-section-number">6.5</span> Next Steps</h2>
-<p>After review of the log file, it was found that a lot of the cases where the deformation parameters were zero failed. This is significant as it implies that many of the Kerr model interpolations are innacurate due to the “correction” method used (setting missing values to zero). Using code to parse the unique values for each of the 5 parameters, it was found that every instance of failure had <span class="math inline">\(h=1.5\)</span>. It was thus decided that upon the next iteration of the model, the lower bound of <span class="math inline">\(h\)</span> would be set to 3. This value was determined after some brief testing with the failed runs, manually setting <span class="math inline">\(h=3\)</span>. <span class="math inline">\(h=2\)</span> was also attempted, however this similarly caused errors.</p>
-<p>Building on what was discussed in the previous chapter regarding the lower bounds for the parameters, it was also tested whether a value of -1 computed correctly for both of the deformation parameters. This was successful and thus a partial implementation of these bounds can be completed.</p>
-<p>Further testing was also conducted in the parameter space of <span class="math inline">\(a\)</span> where it was found that the line profile does not change with the sign of <span class="math inline">\(a\)</span>. This will allow for much more resolution without increasing the length of computation.</p>
-<p>To use the negative deformation parameters, their allowed values must be reduced as it is necessary to have confidence in the deformation = 0 (Kerr) cases. They will therefore take the values <span class="math inline">\(\alpha_{13}, \epsilon_3 \in [-1, 10], \mathbb{Z}\)</span>. The other variables will take <span class="math inline">\(h\in[3,15]\)</span>, <span class="math inline">\(a\in[0,0.998]\)</span> and <span class="math inline">\(\theta\in [5,85]\)</span>. Thus 7 values will be taken for <span class="math inline">\(a\)</span>, 12 for the deformation parameters, and 9 for <span class="math inline">\(h,\;\theta\)</span>, giving a total size of 81648 for the table.</p>
-<p>The final iteration that needs to be made upon the data is to increase the domain, as the model is currently forced to extrapolate causing unexpected issues, likely forcing the fitting to take worse values to avoid these errors.</p>
-<p>All of these iterations were implemented and another dataset computed. At the time of writing these computations are still ongoing and therefore time was taken to clean up the plotting and do further reading.</p>
-<p>Functionality was then added to plot a contour plot of the fit statistic (<span class="math inline">\(\chi^2\)</span>) for a pair of fit parameters. The fits are however not currently accurate enough to determine the functionality of this plot, thus this remains to be used.</p>
-</section>
-<section id="current-issues-20260703" class="level2" data-number="6.6">
-<h2 data-number="6.6" class="anchored" data-anchor-id="current-issues-20260703"><span class="header-section-number">6.6</span> Current Issues 2026/07/03</h2>
-<p>The table model currently does not contain the full set of spectra for negative values of the deformation parameters. For high spin parameters, the code will sometimes fail to compute the line profile citing either one of two errors:</p>
-<pre><code>ErrorException("No boundaries for minimization could be determined. It is likely this configuration does not have an ISCO solution.")</code></pre>
-<p>or</p>
-<pre><code>DomainError([VALUE], "sqrt was called with a negative real argument but will only return a complex result if called with a complex argument. Try sqrt(Complex(x)).")</code></pre>
-<p>This occurs when attempting to use negative values below <span class="math inline">\(\sim-0.4\)</span> for either, or both, of the deformation parameters. This is likely either a bug, or an artefact of the Johannsen metric. The only currently known constraints on allowed values of <span class="math inline">\(\alpha_{13}\)</span> and <span class="math inline">\(\epsilon_{3}\)</span> are those stated in Equations <a href="5_FittingData.html#eq-Epsilon3Constraint" class="quarto-xref">Equation&nbsp;<span>5.1</span></a> and <a href="5_FittingData.html#eq-Alpha13Constraint" class="quarto-xref">Equation&nbsp;<span>5.2</span></a>, which all values used satisfy. The current working theory is thus that this may be a bug with <code>Gradus.jl</code> however this requires further research.</p>
-<p>There also exists the restriction that <span class="math inline">\(|a|&lt;1\)</span> to avoid a naked singularity <span class="citation" data-cites="ConstrainingAlpha13">&nbsp;[<a href="references.html#ref-ConstrainingAlpha13" role="doc-biblioref">3</a>]</span>, however this is once again satisfied by the used values.</p>
-<p>The table model is currently capable of extrapolating, which provides reasonable estimates of the line profile for negative values (see <a href="#fig-GradusTableCompare" class="quarto-xref">Figure&nbsp;<span>6.1</span></a>) however it would not be preferable to rely on extrapolation to constrain the parameters.</p>
-<div id="fig-GradusTableCompare" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-GradusTableCompare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="images/GradusTableCompare.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;6.1: "><img src="images/GradusTableCompare.png" id="fig-GradusTableCompare" class="img-fluid figure-img"></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-GradusTableCompare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.1
-</figcaption>
-</figure>
-</div>
 
 
-<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
-<div id="ref-XSPECModelSpecification" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">K. A. Arnaud, <em><a href="https://heasarc.gsfc.nasa.gov/docs/heasarc/caldb/docs/memos/ogip_92_009/ogip_92_009.pdf">The File Format for XSPEC Table Models</a></em> (NASA, 2021).</div>
-</div>
-<div id="ref-SpectralFitting" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[2] </div><div class="csl-right-inline"><a href="https://doi.org/10.5281/zenodo.17390971">F. Baker and A. Young, Zenodo (2025)</a>.</div>
-</div>
-<div id="ref-ConstrainingAlpha13" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[3] </div><div class="csl-right-inline"><a href="https://doi.org/10.1103/PhysRevD.99.083001">A. Tripathi <em>et al.</em>, Phys. Rev. D <strong>99</strong>, 083001 (2019)</a>.</div>
-</div>
-</div>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1010,49 +939,17 @@ Figure&nbsp;6.1
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./5_FittingData.html" class="pagination-link" aria-label="Fitting to Data">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Fitting to Data</span></span>
+      <a href="./9_DeformProperties.html" class="pagination-link" aria-label="Properties of the Deformation Parameters">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Properties of the Deformation Parameters</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./7_XRISMReduction.html" class="pagination-link" aria-label="XRISM Data Reduction">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">XRISM Data Reduction</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
-(function() {
-  let previousOnload = window.onload;
-  window.onload = () => {
-    if (previousOnload) {
-      previousOnload();
-    }
-    lightboxQuarto.on('slide_before_load', (data) => {
-      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-      const href = trigger.getAttribute('href');
-      if (href !== null) {
-        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
-        if (imgEl !== null) {
-          const srcAttr = imgEl.getAttribute("src");
-          if (srcAttr && srcAttr.startsWith("data:")) {
-            slideConfig.href = srcAttr;
-          }
-        }
-      } 
-    });
-  
-    lightboxQuarto.on('slide_after_load', (data) => {
-      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(slideNode);
-      }
-    });
-  
-  };
-  
-})();
-          </script>
 
 
 

@@ -2,9 +2,9 @@ using CSV, DataFrames, Interpolations, Gradus
 
 const DeformationBoundsTable = DataFrame(CSV.File("Code/utils/DeformationBounds.csv"))
 
-# ====================================================================================
+# ==========================================================================================
 # Lines
-# ====================================================================================
+# ==========================================================================================
 
 """
     Gradient(coord1, coord2)
@@ -108,9 +108,9 @@ function GetLines(a::Real, df::DataFrame=DeformationBoundsTable)
     returns
 end
 
-# ====================================================================================
+# ==========================================================================================
 # Validity
-# ====================================================================================
+# ==========================================================================================
 
 """
     ValidityCheckISCO(m)
@@ -252,9 +252,9 @@ function IsValidFit(fit)::Bool
     IsValid(u[7], u[6], u[3])
 end
 
-# ====================================================================================
+# ==========================================================================================
 # Corrections
-# ====================================================================================
+# ==========================================================================================
 
 """
     FindNearestSafePoint(point, a; maxIter=1000)
@@ -340,7 +340,8 @@ Find the closest point from a point to a line in 2D.
 """
 function GetNewPoint(point::AbstractArray, line::BoundLine)::AbstractArray
 
-    # Finding the gradient and intercept of the perpendicular line from the point to the boundary
+    # Finding the gradient and intercept of the perpendicular line from the point to the 
+    # boundary
     perpGrad = -1/line.m
     perpIntercept = -perpGrad * point[1] + point[2]
 

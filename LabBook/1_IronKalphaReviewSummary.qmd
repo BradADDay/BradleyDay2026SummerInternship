@@ -1,15 +1,15 @@
 # Reading
 ___
 
-## Summary of "Broad Iron Lines in Active Galactic Nuclei" [@BroadIronLines]
+## Summary of "Broad Iron Lines in Active Galactic Nuclei" [@fabian_broad_2000]
 
 Fluorescent iron line, Fe-K$\alpha$, in the X-ray band at $6.4-6.9$ keV is the strongest narrow line emitted by an accretion disk around a black hole. Inverse Compton scattering of the soft photons (lower energy than the reactant particles) in a hot corona is the most likely candidate for the production of these X-rays. The emitted line is broadened and skewed due to the Doppler effect and gravitational redshift, and is often called the broad iron line due to being broadened to a FWHM of $5\times 10^4$ km s$^{-1}$.
 
-![The profile of the broad iron line, image credit to Fabian (2000)[@BroadIronLines].](images/ShapeOfIronLine.jpg)
+![The profile of the broad iron line, image credit to Fabian (2000)[@fabian_broad_2000].](images/ShapeOfIronLine.jpg)
 
 Soft Comptonisation (multiple inverse Compton scattering by hot thermal electrons) occurs giving a power law X-ray spectrum. Flares from active or flaring regions irradiate the accretion disk forming a "reflection" component in the spectrum.
 
-![Reflection spectrum from a Monte Carlo simulation of an illuminated slab. The dashed line is the incident continuum and the solid line shows the reflected spectrum. Image credit Reynolds (1996)[@BroadIronLines]](images/ReflectionSpectrum.jpg){width=10cm}
+![Reflection spectrum from a Monte Carlo simulation of an illuminated slab. The dashed line is the incident continuum and the solid line shows the reflected spectrum. Image credit Reynolds (1996)[@fabian_broad_2000]](images/ReflectionSpectrum.jpg){width=10cm}
 
 The iron line is produced when one of the two K-shell electrons is ejected following absorption of an X-ray, the threshold for neutral iron is 7.1 keV. The resultant state can decay through the dropping of an L-shell electron into the K-shell, releasing 6.4 keV as either an emission line photon (34%) or an Auger electron (66%). Ionised iron has a photoelectric threshold and the K$\alpha$ of higher energy. The strength of the iron line is measured in terms of its equivalent width.
 

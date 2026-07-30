@@ -48,7 +48,7 @@ The vertices can then be used to define bounded exclusion regions, within which 
 
 ## Allowed Values of the Deformation Parameters for Varying Spin
 
-As another investigative route, Figure 6 from @JohannsenMetric was reproduced as below. It was found that the results held consistent between Gradus, and Johannsen's original calculations. The $\alpha_{13}$ parameter space showed an additional region (shown in red) where a naked singularity is present. This was not considered previously, however removes a significant region from the parameter space and will thus be considered here.
+As another investigative route, Figure 6 from @johannsen_regular_2013 was reproduced as below. It was found that the results held consistent between Gradus, and Johannsen's original calculations. The $\alpha_{13}$ parameter space showed an additional region (shown in red) where a naked singularity is present. This was not considered previously, however removes a significant region from the parameter space and will thus be considered here.
 
 ![The valid values for $\epsilon_{3}$ to take for a range of spin values. The black hatched region marks the constraints placed by @eq-Alpha13Constraint. Contours of constant ISCO are marked in red. The shaded red region marks where a naked singularity occurs.](images/alpha13Allowed.png)
 

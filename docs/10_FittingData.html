@@ -49,6 +49,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/bootstrap/bootstrap-382dad073c37032be9e988f92f56c479.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/bootstrap/bootstrap-dark-bd29a33bb155b7791116d1c9ba40c699.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <link href="site_libs/bootstrap/bootstrap-382dad073c37032be9e988f92f56c479.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -430,10 +433,10 @@ window.Quarto = {
 <p>where <code>PhotoelectricAbsorption</code>, <code>PowerLaw</code>, and <code>XillverD5</code> were implemented through <code>SpectralFitting.jl</code>. <code>ConvolutionLineProfile</code> is the table model defined here using the Johannsen metric, and convolving over the reflection spectrum to apply the relativistic properties to the emission lines. The parameters of the model are shown below. Note that the photon index appears in both the spectrum and the power law, and the inclination appears in both the spectrum and the line profile. These two pairs of parameters were bound together for fitting.</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 17%">
-<col style="width: 43%">
-<col style="width: 19%">
-<col style="width: 19%">
+<col style="width: 16%">
+<col style="width: 46%">
+<col style="width: 18%">
+<col style="width: 18%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -506,9 +509,19 @@ window.Quarto = {
 </tr>
 <tr class="odd">
 <td></td>
-<td>Inclination (<span class="math inline">\(\theta4)           | 15            | (5, 85)       |
-| Absorption   | Equiv H column density (\)</span><span class="math inline">\(H) | 10            | (0, 30)       |
-| Power Law    | Normalisation (\)</span>K$)</td>
+<td>Inclination (<span class="math inline">\(\theta\)</span>)</td>
+<td>15</td>
+<td>(5, 85)</td>
+</tr>
+<tr class="even">
+<td>Absorption</td>
+<td>Equivalent H column density (<span class="math inline">\(\eta\)</span>H)</td>
+<td>10</td>
+<td>(0, 30)</td>
+</tr>
+<tr class="odd">
+<td>Power Law</td>
+<td>Normalisation (<span class="math inline">\(K\)</span>)</td>
 <td>40,000</td>
 <td>(0, <span class="math inline">\(\infty\)</span>)</td>
 </tr>
@@ -520,6 +533,139 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
+<p>To fit the model the data was first rebinned from 4096 channels to 1024 to reduce the complexity of the data. Rebinning was completed with <code>grppha</code>. This configuration resulted in the fit below, using 10,000 iterations.</p>
+<div id="fig-FirstFit" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-FirstFit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/FitResult_NGC4151_2026-07-31T01:39:46.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;10.1: The resultant fit from the first set of initial parameters for the new model."><img src="images/FitResult_NGC4151_2026-07-31T01:39:46.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-FirstFit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10.1: The resultant fit from the first set of initial parameters for the new model.
+</figcaption>
+</figure>
+</div>
+<p>The fit modelled the underlying distribution well, however failed to capture the Fe K<span class="math inline">\(\alpha\)</span> line. Following this, the fitted parameters were input as initial parameters for a testing model, and the spectrum viewed through <code>SpectralFitting.invokemodel</code>. This allowed for manual tuning of the parameters to give the model a best first estimate of the model. The major modifications were made to the iron abundance, corona height and inclination. The profile of the iron line for this dataset is relatively narrow thus it was found that a low inclination and high corona height yielded the closest shape. The line profile table model is currently limited to only 19 <span class="math inline">\(R_G\)</span>, thus the model will need to be expanded slightly. Another modification made was to the energy of the line profile. For now, the model was extrapolated to test this theory. It was noticed that the model iron line peaked slightly leftward of the data, thus increasing the energy slightly was able to shift it rightward.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 46%">
+<col style="width: 18%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Component</th>
+<th>Parameter</th>
+<th>Initial Value</th>
+<th>Bounds</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Line Profile</td>
+<td>Spin (<span class="math inline">\(a\)</span>)</td>
+<td>0.998</td>
+<td>(0, 0.998)</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Corona Height (<span class="math inline">\(h\)</span>)</td>
+<td>41.145</td>
+<td>(3, 19)</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Inclination (<span class="math inline">\(\theta\)</span>)</td>
+<td>5</td>
+<td>(5, 85)</td>
+</tr>
+<tr class="even">
+<td></td>
+<td><span class="math inline">\(\alpha_{13}\)</span></td>
+<td>0</td>
+<td>(-6, 10)</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><span class="math inline">\(\epsilon_{3}\)</span></td>
+<td>0</td>
+<td>(-8, 10)</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Energy (<span class="math inline">\(E\)</span>)</td>
+<td>1.02</td>
+<td>(1, 1.05)</td>
+</tr>
+<tr class="odd">
+<td><code>XILLVER</code></td>
+<td>Normalisation (<span class="math inline">\(K\)</span>)</td>
+<td>1.15e-7</td>
+<td>(0, <span class="math inline">\(\infty\)</span>)</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Photon Index (<span class="math inline">\(\Gamma\)</span>)</td>
+<td>3.48</td>
+<td>(1, 5)</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Iron Abundance (<span class="math inline">\(A_{\rm Fe}\)</span>)</td>
+<td>0.963</td>
+<td>(0, 2)</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Ionisation (<span class="math inline">\(\log\xi\)</span>)</td>
+<td>0.467</td>
+<td>(0, 4)</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Density</td>
+<td>19.9</td>
+<td>(1, 30)</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Inclination (<span class="math inline">\(\theta\)</span>)</td>
+<td>5</td>
+<td>(5, 85)</td>
+</tr>
+<tr class="odd">
+<td>Absorption</td>
+<td>Equivalent H column density (<span class="math inline">\(\eta\)</span>H)</td>
+<td>9.5425</td>
+<td>(0, 30)</td>
+</tr>
+<tr class="even">
+<td>Power Law</td>
+<td>Normalisation (<span class="math inline">\(K\)</span>)</td>
+<td>0.27368</td>
+<td>(0, <span class="math inline">\(\infty\)</span>)</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Photon Index (<span class="math inline">\(\Gamma\)</span>)</td>
+<td>3.48</td>
+<td>(1, 5)</td>
+</tr>
+</tbody>
+</table>
+<p>Many of these parameters were guided by the fit shown in <a href="#fig-FirstFit" class="quarto-xref">Figure&nbsp;<span>10.1</span></a>. These changes allowed the fit to converge much better as shown below.</p>
+<div id="fig-SecondFit" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-SecondFit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/FitResult_NGC4151_2026-07-31T12:54:49.601.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;10.2: The fit result after further refining the initial parameters."><img src="images/FitResult_NGC4151_2026-07-31T12:54:49.601.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-SecondFit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10.2: The fit result after further refining the initial parameters.
+</figcaption>
+</figure>
+</div>
+<p>The fit again modelled the underlying distribution very well, and now began to model the iron line reasonably well. The main issues that stand are that the fitted iron line is both too broad and too short. From the previously completed investigations of the parameter space, the corona height, <span class="math inline">\(h\)</span> is the most likely contender to decrease the width of the line, and the iron abundance can be increased to increase the height of the line.</p>
+<p>The next steps are thus to increase the scope of the table model allowing for corona heights of up to 100 <span class="math inline">\(R_G\)</span>, and potentially higher.</p>
 
 
 
@@ -950,6 +1096,38 @@ window.Quarto = {
   </div>
 </nav>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

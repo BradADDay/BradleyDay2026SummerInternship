@@ -65,7 +65,7 @@ PL = PowerLaw(
 
 # Setting the line profile as a convolution model
 ConvModel = AsConvolution(LP) 
-#PL + 
+
 # Defining the model
 model = AB * (PL + ConvModel(SP))
 
@@ -80,7 +80,7 @@ result = SpectralFitting.fit(
 )
 
 display(result)
-    
+
 plt = PlotResult(data, result[1])
 display(plt)
 savefig(plt, "output/FitResult_$(data.user_data.object)_$(now()).png")

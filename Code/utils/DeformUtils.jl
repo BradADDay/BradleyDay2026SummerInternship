@@ -13,10 +13,15 @@ using BSON: @save, @load
 # Boundary Finding
 # ==========================================================================================
 
+"""
+    FindTopVertices(regions, ϵs, αs)
+
+Find the vertices of the top triangle in the parameter space plot. 
+
+See also [`FindBottomVertices`](@ref), [`FindWedgeVertices`](@ref), and 
+[`FindVertices`](@ref)
+"""
 function FindTopVertices(regions, ϵs, αs)
-    """
-    Find the vertices of the top triangle in the parameter space plot
-    """
 
     # The size of the grid
     len=length(regions[1,:])
@@ -83,11 +88,15 @@ function FindTopVertices(regions, ϵs, αs)
 
 end
 
-function FindBottomVertices(regions, ϵs, αs)
-    """
-    Find the vertices of the bottom triangle in the parameter space plot
-    """
+"""
+    FindBottomVertices(regions, ϵs, αs)
 
+Find the vertices of the top triangle in the parameter space plot. 
+
+See also [`FindTopVertices`](@ref), [`FindWedgeVertices`](@ref), and 
+[`FindVertices`](@ref)
+"""
+function FindBottomVertices(regions, ϵs, αs)
     vertices = Array{Any}(undef, 3, 2)
 
     # Finding the first corner (top left)
@@ -142,11 +151,15 @@ function FindBottomVertices(regions, ϵs, αs)
 
 end
 
-function FindWedgeVertices(regions, ϵs, αs)
-    """
-    Find the vertices of the bottom right wedge shape
-    """
+"""
+    FindWedgeVertices(regions, ϵs, αs)
 
+Find the vertices of the bottom wedge in the parameter space plot. 
+
+See also [`FindBottomVertices`](@ref), [`FindTopVertices`](@ref), and 
+[`FindVertices`](@ref)
+"""
+function FindWedgeVertices(regions, ϵs, αs)
     # Checking if the bottom right pixel is invalid
     if regions[1, end] == -1
 
@@ -176,11 +189,15 @@ function FindWedgeVertices(regions, ϵs, αs)
     end
 end
 
-function FindVertices(regions, ϵs, αs; verbose=false)
-    """
-    Find all vertices for invalid regions
-    """
+"""
+    FindVertices(regions, ϵs, αs)
 
+Find the vertices of the three invalid regions in the parameter space plot. 
+
+See also [`FindBottomVertices`](@ref), [`FindWedgeVertices`](@ref), and 
+[`FindTopVertices`](@ref)
+"""
+function FindVertices(regions, ϵs, αs; verbose=false)
     top = FindTopVertices(regions, ϵs, αs)
 
     bottom = FindBottomVertices(regions, ϵs, αs)

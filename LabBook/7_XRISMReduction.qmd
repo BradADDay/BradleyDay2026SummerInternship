@@ -1,7 +1,7 @@
 
 # XRISM Data Reduction
 
-These notes are significantly condensed and adapted from the XRISM Quick Start Guide @XRISMQSG. All key steps for the reduction are on this page, however some details and steps to deal with specific issues have been omitted for brevity. I have noted where applicable where to go for more information.
+These notes are significantly condensed and adapted from the XRISM Quick Start Guide @xrism_science_data_center_xrism_2025. All key steps for the reduction are on this page, however some details and steps to deal with specific issues have been omitted for brevity. I have noted where applicable where to go for more information.
 
 :::{.callout-important title="Notes"}
 - All commands below assume that HEASOFT and CalDB are installed and instantiated, and that the CalDB installation has the [necessary files](https://heasarc.gsfc.nasa.gov/docs/xrism/calib/index.html) for XRISM data. 
@@ -169,7 +169,7 @@ The QSG includes a section here on the `xaspecratios` tool which is not availabl
 
 ## Extract Broadband Images and Establish Source Center Coordinates
 
-- Check the value of the EXPOSURE keyword in the cleaned event files, if the exposure time is unexpectedly low then consult section 9 of the QSG @XRISMQSG.
+- Check the value of the EXPOSURE keyword in the cleaned event files, if the exposure time is unexpectedly low then consult section 9 of the QSG @xrism_science_data_center_xrism_2025.
 - You should now have the following files
     - `xa000125000rsl_p0px1000_cl2.evt` (Resolve) and
     - `xa000125000xtd_p031100010_cl.evt` or `xa000125000xtd_p031100010_xpc_clnevt.fits` (Xtend)

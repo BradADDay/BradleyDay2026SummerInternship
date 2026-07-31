@@ -123,7 +123,7 @@ After implementing this it was found that some parameter combinations still fail
 4. Using the `BinningMethod` dispatch to calculate the line profile.
 5. Running the code on a different operating system (Windows 11).
 
-None of these fixed the issue, however it was later noticed that the parameter combinations with negative spin were more prone to these errors. In the interest of progressing with the investigations, it was thus decided to only consider positive spin, i.e. Prograde motion of the accretion disk @ISCOSpin.
+None of these fixed the issue, however it was later noticed that the parameter combinations with negative spin were more prone to these errors. In the interest of progressing with the investigations, it was thus decided to only consider positive spin, i.e. Prograde motion of the accretion disk @liu_measurement_2021.
 
 ### 2026/07/22
 

@@ -464,7 +464,7 @@ window.Quarto = {
 <section id="introduction" class="level2" data-number="6.1">
 <h2 data-number="6.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">6.1</span> Introduction</h2>
 <p>Due to having to render the line profile through Gradus upon every iteration of the fit, the model took a significant amount of time to fit to the data. Thus other methods were looked into and it was decided to develop a table model, allowing for the pre-computation of the line profiles. The computed profiles could then be interpolated between for a given set of parameters, significantly speeding up computation. This would of course decrease the accuracy of the model, however the increased efficiency would likely be worth that loss.</p>
-<p>The structure for XSPEC table models is well documented at <a href="https://heasarc.gsfc.nasa.gov/FTP/caldb/docs/memos/ogip_92_009/ogip_92_009.pdf">XSPEC Table Models</a> <span class="citation" data-cites="XSPECModelSpecification">&nbsp;[<a href="references.html#ref-XSPECModelSpecification" role="doc-biblioref">1</a>]</span>, thus the model was constructed using this specification. <code>SpectralFitting.jl</code> also has compatibility with this model format, which made integration more viable (see <a href="https://github.com/JuliaAstro/SpectralFitting.jl/blob/main/src/meta-models/table-models.jl">here</a> for more <span class="citation" data-cites="SpectralFitting">&nbsp;[<a href="references.html#ref-SpectralFitting" role="doc-biblioref">2</a>]</span>).</p>
+<p>The structure for XSPEC table models is well documented at <a href="https://heasarc.gsfc.nasa.gov/FTP/caldb/docs/memos/ogip_92_009/ogip_92_009.pdf">XSPEC Table Models</a> <span class="citation" data-cites="arnaud_file_2021">&nbsp;[<a href="references.html#ref-arnaud_file_2021" role="doc-biblioref">1</a>]</span>, thus the model was constructed using this specification. <code>SpectralFitting.jl</code> also has compatibility with this model format, which made integration more viable (see <a href="https://github.com/JuliaAstro/SpectralFitting.jl/blob/main/src/meta-models/table-models.jl">here</a> for more <span class="citation" data-cites="baker_spectralfittingjl_2025">&nbsp;[<a href="references.html#ref-baker_spectralfittingjl_2025" role="doc-biblioref">2</a>]</span>).</p>
 </section>
 <section id="data-generation" class="level2" data-number="6.2">
 <h2 data-number="6.2" class="anchored" data-anchor-id="data-generation"><span class="header-section-number">6.2</span> Data Generation</h2>
@@ -516,7 +516,7 @@ window.Quarto = {
 </section>
 <section id="loading-into-fits-format" class="level2" data-number="6.3">
 <h2 data-number="6.3" class="anchored" data-anchor-id="loading-into-fits-format"><span class="header-section-number">6.3</span> Loading into FITS Format</h2>
-<p>This data was then loaded into a FITS file following the XSPEC model format using the python wrapper for the <code>heasp</code> C library, <code>heasoftpy</code> (see the <a href="https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/headas/heasp/node2.html">documentation</a> for more information). The model specification requires that the grid be rectilinear <span class="citation" data-cites="XSPECModelSpecification">&nbsp;[<a href="references.html#ref-XSPECModelSpecification" role="doc-biblioref">1</a>]</span>, thus it was not possible to simply disregard the failed runs, and the spectra for these combinations was set to be zeroed out. This was determined to be acceptable as the majority of the failed runs had large <span class="math inline">\(\alpha_{13}\)</span> or <span class="math inline">\(\epsilon_3\)</span>, which from earlier testing was noted to be unlikely during fitting, thus the failed combinations would be unlikely to be used for interpolation.</p>
+<p>This data was then loaded into a FITS file following the XSPEC model format using the python wrapper for the <code>heasp</code> C library, <code>heasoftpy</code> (see the <a href="https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/headas/heasp/node2.html">documentation</a> for more information). The model specification requires that the grid be rectilinear <span class="citation" data-cites="arnaud_file_2021">&nbsp;[<a href="references.html#ref-arnaud_file_2021" role="doc-biblioref">1</a>]</span>, thus it was not possible to simply disregard the failed runs, and the spectra for these combinations was set to be zeroed out. This was determined to be acceptable as the majority of the failed runs had large <span class="math inline">\(\alpha_{13}\)</span> or <span class="math inline">\(\epsilon_3\)</span>, which from earlier testing was noted to be unlikely during fitting, thus the failed combinations would be unlikely to be used for interpolation.</p>
 </section>
 <section id="the-model" class="level2" data-number="6.4">
 <h2 data-number="6.4" class="anchored" data-anchor-id="the-model"><span class="header-section-number">6.4</span> The Model</h2>
@@ -567,7 +567,7 @@ window.Quarto = {
 <p>or</p>
 <pre><code>DomainError([VALUE], "sqrt was called with a negative real argument but will only return a complex result if called with a complex argument. Try sqrt(Complex(x)).")</code></pre>
 <p>This occurs when attempting to use negative values below <span class="math inline">\(\sim-0.4\)</span> for either, or both, of the deformation parameters. This is likely either a bug, or an artefact of the Johannsen metric. The only currently known constraints on allowed values of <span class="math inline">\(\alpha_{13}\)</span> and <span class="math inline">\(\epsilon_{3}\)</span> are those stated in Equations <a href="5_FittingData.html#eq-Epsilon3Constraint" class="quarto-xref">Equation&nbsp;<span>5.1</span></a> and <a href="5_FittingData.html#eq-Alpha13Constraint" class="quarto-xref">Equation&nbsp;<span>5.2</span></a>, which all values used satisfy. The current working theory is thus that this may be a bug with <code>Gradus.jl</code> however this requires further research.</p>
-<p>There also exists the restriction that <span class="math inline">\(|a|&lt;1\)</span> to avoid a naked singularity <span class="citation" data-cites="ConstrainingAlpha13">&nbsp;[<a href="references.html#ref-ConstrainingAlpha13" role="doc-biblioref">3</a>]</span>, however this is once again satisfied by the used values.</p>
+<p>There also exists the restriction that <span class="math inline">\(|a|&lt;1\)</span> to avoid a naked singularity <span class="citation" data-cites="tripathi_constraining_2019">&nbsp;[<a href="references.html#ref-tripathi_constraining_2019" role="doc-biblioref">3</a>]</span>, however this is once again satisfied by the used values.</p>
 <p>The table model is currently capable of extrapolating, which provides reasonable estimates of the line profile for negative values (see <a href="#fig-GradusTableCompare" class="quarto-xref">Figure&nbsp;<span>6.1</span></a>) however it would not be preferable to rely on extrapolation to constrain the parameters.</p>
 <div id="fig-GradusTableCompare" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -582,14 +582,14 @@ Figure&nbsp;6.1
 
 
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
-<div id="ref-XSPECModelSpecification" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">K. A. Arnaud, <em><a href="https://heasarc.gsfc.nasa.gov/docs/heasarc/caldb/docs/memos/ogip_92_009/ogip_92_009.pdf">The File Format for XSPEC Table Models</a></em> (NASA, 2021).</div>
+<div id="ref-arnaud_file_2021" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline"><a href="https://heasarc.gsfc.nasa.gov/docs/heasarc/caldb/docs/memos/ogip_92_009/ogip_92_009.pdf">K. A. Arnaud, (2021)</a>.</div>
 </div>
-<div id="ref-SpectralFitting" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[2] </div><div class="csl-right-inline"><a href="https://doi.org/10.5281/zenodo.17390971">F. Baker and A. Young, Zenodo (2025)</a>.</div>
+<div id="ref-baker_spectralfittingjl_2025" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline"><a href="https://doi.org/10.5281/ZENODO.17390971">F. Baker and A. Young, (2025)</a>.</div>
 </div>
-<div id="ref-ConstrainingAlpha13" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[3] </div><div class="csl-right-inline"><a href="https://doi.org/10.1103/PhysRevD.99.083001">A. Tripathi <em>et al.</em>, Phys. Rev. D <strong>99</strong>, 083001 (2019)</a>.</div>
+<div id="ref-tripathi_constraining_2019" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline"><a href="https://doi.org/10.1103/PhysRevD.99.083001">A. Tripathi <em>et al.</em>, Physical Review D <strong>99</strong>, 083001 (2019)</a>.</div>
 </div>
 </div>
 </section>

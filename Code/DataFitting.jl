@@ -1,5 +1,6 @@
 using BSON: @save, @load
 using BenchmarkTools
+using Dates
 
 # Loading in files
 include("utils/FittingUtils.jl")
@@ -27,17 +28,15 @@ data = LoadData(
     dataRange=(3,10)
 )
 
-# TODO: Maybe try changing the bin widths if this doesnt work?
-
 # Lamp post line profile model
-# TODO: Add R_OUT as a parameter and increase range of possible corona heights?
-Γ = 3.5
-θ = 15.
+# TODO: Increase range of possible corona heights?
+Γ = 3.4767
+θ = 6.
 
 LP = XS_LampPostJohannsen(;
-    E = FitParam(1., lower_limit=1., upper_limit=10, frozen=true),
+    E = FitParam(1.0255, lower_limit=1., upper_limit=1.05, frozen=false),
     a = FitParam(0.998, lower_limit=0, upper_limit=0.998, frozen=false),
-    h = FitParam(19., lower_limit=3., upper_limit=19., frozen=false),
+    h = FitParam(61.145, lower_limit=3., upper_limit=100., frozen=false),
     θ = FitParam(θ, lower_limit=5., upper_limit=85., frozen=false),
     α13 = FitParam(0., lower_limit=-6., upper_limit=10., frozen=true),
     ϵ3 = FitParam(0., lower_limit=-8., upper_limit=10., frozen=true)
@@ -45,22 +44,22 @@ LP = XS_LampPostJohannsen(;
 
 # Spectrum model, XILLVER
 SP = XillverD5(
-    K = FitParam(0.01, lower_limit = 0., upper_limit=Inf, frozen=false),
+    K = FitParam(1.1493e-7, lower_limit = 0., upper_limit=1, frozen=false),
     Γ = FitParam(Γ, lower_limit = 1., upper_limit = 5., frozen = false),
-    A_Fe = FitParam(1., lower_limit = 0., upper_limit = 2., frozen = true),
-    logXi = FitParam(0.5, lower_limit= 0., upper_limit = 4.,frozen = false),
-    density = FitParam(30., lower_limit=1., upper_limit=30., frozen = true), 
+    A_Fe = FitParam(0.96318, lower_limit = 0., upper_limit = 20., frozen = false),
+    logXi = FitParam(0.46734, lower_limit= 0., upper_limit = 4.,frozen = false),
+    density = FitParam(19.928, lower_limit=1., upper_limit=30., frozen = false), 
     inclination = FitParam(θ, lower_limit=5., upper_limit=85., frozen = false)
 )
 
 # Photoelectric absorption model
 AB = PhotoelectricAbsorption(
-    ηH = FitParam(10., lower_limit=0.0, upper_limit=30.0, frozen=false)
+    ηH = FitParam(9.5425, lower_limit=5.0, upper_limit=13.0, frozen=false)
 )
 
 # Power law model for source emission
 PL = PowerLaw(
-    K = FitParam(4e4, lower_limit=0.0, upper_limit=Inf, frozen=false),
+    K = FitParam(0.27368, lower_limit=0.0, upper_limit=Inf, frozen=false),
     a = FitParam(Γ, lower_limit=0., upper_limit=5., frozen=false)
 )
 
@@ -77,51 +76,29 @@ bind!(prob, (1, :c1, :θ) => (1, :a2, :inclination))
 
 # Fitting
 result = SpectralFitting.fit(
-    prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, maxIter=Int(1e3)
+    prob, LevenbergMarquadt(); autodiff = :finite, verbose=true, maxIter=Int(1000)
 )
 
 display(result)
     
 plt = PlotResult(data, result[1])
 display(plt)
+savefig(plt, "output/FitResult_$(data.user_data.object)_$(now()).png")
 
 close("all")
 
-@save "output/FirstFullResult.bson" result
-
-## =========================================================================================
-# NUStar
-# ==========================================================================================
-
-# List of available datasets
-files = [
-    "nu80402315002", 
-    "nu80402315004", 
-    "nu80402315006", 
-    "nu80402315008", 
-    "nu80402315010", 
-    "nu80402315012", 
-    "nu80502304002", 
-    "nu80502304004", 
-    "nu80502304006"
-]
-
-_, johannsenResult = FitNUStar(files[1]; kerr=false)
-
-@save "output/testfit2.bson" johannsenResult
-
-close("all")
+@save "output/FitResult_$(data.user_data.object)_$(now()).bson" result
 
 ##
 # Testing
 
-Γ = 3.5
-θ = 15.
+Γ = 3.463
+θ = 5.
 
 LP = XS_LampPostJohannsen(;
-    E = FitParam(1., lower_limit=1., upper_limit=10, frozen=true),
+    E = FitParam(1.02, lower_limit=1., upper_limit=1.02, frozen=true),
     a = FitParam(0.998, lower_limit=0, upper_limit=0.998, frozen=false),
-    h = FitParam(19., lower_limit=3., upper_limit=19., frozen=false),
+    h = FitParam(40., lower_limit=3., upper_limit=40., frozen=false),
     θ = FitParam(θ, lower_limit=5., upper_limit=85., frozen=false),
     α13 = FitParam(0., lower_limit=-6., upper_limit=10., frozen=true),
     ϵ3 = FitParam(0., lower_limit=-8., upper_limit=10., frozen=true)
@@ -129,22 +106,22 @@ LP = XS_LampPostJohannsen(;
 
 # Spectrum model, XILLVER
 SP = XillverD5(
-    K = FitParam(0.01, lower_limit = 0., upper_limit=Inf, frozen=false),
+    K = FitParam(1.3664e-7, lower_limit = 0., upper_limit=1, frozen=false),
     Γ = FitParam(Γ, lower_limit = 1., upper_limit = 5., frozen = false),
-    A_Fe = FitParam(1., lower_limit = 0., upper_limit = 2., frozen = true),
-    logXi = FitParam(0.5, lower_limit= 0., upper_limit = 4.,frozen = false),
-    density = FitParam(30., lower_limit=1., upper_limit=30., frozen = true), 
+    A_Fe = FitParam(5., lower_limit = 0., upper_limit = 20., frozen = false),
+    logXi = FitParam(.5, lower_limit= 0., upper_limit = 4.,frozen = false),
+    density = FitParam(20., lower_limit=1., upper_limit=30., frozen = false), 
     inclination = FitParam(θ, lower_limit=5., upper_limit=85., frozen = false)
 )
 
 # Photoelectric absorption model
 AB = PhotoelectricAbsorption(
-    ηH = FitParam(10., lower_limit=0.0, upper_limit=3.0, frozen=true)
+    ηH = FitParam(10.545, lower_limit=5.0, upper_limit=13.0, frozen=false)
 )
 
 # Power law model for source emission
 PL = PowerLaw(
-    K = FitParam(4e4, lower_limit=0.0, upper_limit=Inf, frozen=false),
+    K = FitParam(0.20956, lower_limit=0.0, upper_limit=Inf, frozen=false),
     a = FitParam(Γ, lower_limit=0., upper_limit=2., frozen=false)
 )
 
@@ -156,15 +133,13 @@ model = AB * (PL + ConvModel(SP))
 
 bins = 3:0.01:10
 
-ConvSPFlux = invokemodel(bins, ConvModel(SP))
-SPFlux = invokemodel(bins, SP)
+SPFlux = invokemodel(bins, ConvModel(SP))
 ABFlux = invokemodel(bins, AB)
 PLFlux = invokemodel(bins, PL)
 
-flux = ABFlux .* (SPFlux .+ PLFlux)
-convflux = ABFlux .* (ConvSPFlux .+ PLFlux)
+flux = 50000 * ABFlux .* (SPFlux .+ PLFlux)
 
-plot(bins, flux)
-plot!(bins, convflux)
+plot(data)
+plot!(bins, flux)
 
 

@@ -126,10 +126,12 @@ Plot the residuals between a fit and data.
 function PlotResiduals(data::SpectralData, fit; dataRange::Tuple{Real, Real}=(3, 10))
     # Getting and plotting the residuals
     residuals = Residuals(fit, SpectralFitting.plotting_domain(data); dataRange=dataRange)
+
+    lim = ceil(maximum(abs.(residuals.codomain)))
     resPlot = scatter(
         residuals; markershape=:circle, markersize=1.5, c=:black, msw=0, 
         xlabel="Energy (keV)", label=nothing, ylabel="Residuals", 
-        xticks=append!(collect(3.:10.), 6.4)
+        xticks=append!(collect(3.:10.), 6.4), ylims=(-lim, lim), yticks=[-lim, 0., lim]
     )
 
     # Plotting a horizontal line at 0 and a line for the Fe Kα line
@@ -150,7 +152,7 @@ function PlotResult(data::SpectralData, fit; dataRange::Tuple{Real, Real}=(3,10)
 
     # Combining the two plots
     layout = @layout [a{0.85h}; b{0.15h}]
-    plot(fitPlot, resPlot; layout = layout)
+    plot(fitPlot, resPlot; layout = layout, margin=0mm)
 end
 
 function FitPowerLawLineProfile(data::SpectralData; maxIter::Int, kwargs...)

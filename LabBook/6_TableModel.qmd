@@ -4,7 +4,7 @@
 
 Due to having to render the line profile through Gradus upon every iteration of the fit, the model took a significant amount of time to fit to the data. Thus other methods were looked into and it was decided to develop a table model, allowing for the pre-computation of the line profiles. The computed profiles could then be interpolated between for a given set of parameters, significantly speeding up computation. This would of course decrease the accuracy of the model, however the increased efficiency would likely be worth that loss.
 
-The structure for XSPEC table models is well documented at [XSPEC Table Models](https://heasarc.gsfc.nasa.gov/FTP/caldb/docs/memos/ogip_92_009/ogip_92_009.pdf) @XSPECModelSpecification, thus the model was constructed using this specification. `SpectralFitting.jl` also has compatibility with this model format, which made integration more viable (see [here](https://github.com/JuliaAstro/SpectralFitting.jl/blob/main/src/meta-models/table-models.jl) for more @SpectralFitting).
+The structure for XSPEC table models is well documented at [XSPEC Table Models](https://heasarc.gsfc.nasa.gov/FTP/caldb/docs/memos/ogip_92_009/ogip_92_009.pdf) @arnaud_file_2021, thus the model was constructed using this specification. `SpectralFitting.jl` also has compatibility with this model format, which made integration more viable (see [here](https://github.com/JuliaAstro/SpectralFitting.jl/blob/main/src/meta-models/table-models.jl) for more @baker_spectralfittingjl_2025).
 
 ## Data Generation
 
@@ -24,7 +24,7 @@ Certain parameter combinations would fail to compute, and therefore a log file w
 
 ## Loading into FITS Format
 
-This data was then loaded into a FITS file following the XSPEC model format using the python wrapper for the `heasp` C library, `heasoftpy` (see the [documentation](https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/headas/heasp/node2.html) for more information). The model specification requires that the grid be rectilinear @XSPECModelSpecification, thus it was not possible to simply disregard the failed runs, and the spectra for these combinations was set to be zeroed out. This was determined to be acceptable as the majority of the failed runs had large $\alpha_{13}$ or $\epsilon_3$, which from earlier testing was noted to be unlikely during fitting, thus the failed combinations would be unlikely to be used for interpolation. 
+This data was then loaded into a FITS file following the XSPEC model format using the python wrapper for the `heasp` C library, `heasoftpy` (see the [documentation](https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/headas/heasp/node2.html) for more information). The model specification requires that the grid be rectilinear @arnaud_file_2021, thus it was not possible to simply disregard the failed runs, and the spectra for these combinations was set to be zeroed out. This was determined to be acceptable as the majority of the failed runs had large $\alpha_{13}$ or $\epsilon_3$, which from earlier testing was noted to be unlikely during fitting, thus the failed combinations would be unlikely to be used for interpolation. 
 
 ## The Model
 
@@ -75,7 +75,7 @@ DomainError([VALUE], "sqrt was called with a negative real argument but will onl
 
 This occurs when attempting to use negative values below $\sim-0.4$ for either, or both, of the deformation parameters. This is likely either a bug, or an artefact of the Johannsen metric. The only currently known constraints on allowed values of $\alpha_{13}$ and $\epsilon_{3}$ are those stated in Equations @eq-Epsilon3Constraint and @eq-Alpha13Constraint, which all values used satisfy. The current working theory is thus that this may be a bug with `Gradus.jl` however this requires further research. 
 
-There also exists the restriction that $|a|<1$ to avoid a naked singularity @ConstrainingAlpha13, however this is once again satisfied by the used values.
+There also exists the restriction that $|a|<1$ to avoid a naked singularity @tripathi_constraining_2019, however this is once again satisfied by the used values.
 
 The table model is currently capable of extrapolating, which provides reasonable estimates of the line profile for negative values (see @fig-GradusTableCompare) however it would not be preferable to rely on extrapolation to constrain the parameters.
 

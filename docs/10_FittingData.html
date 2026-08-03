@@ -401,8 +401,14 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#section" id="toc-section" class="nav-link active" data-scroll-target="#section"><span class="header-section-number">10.1</span> 2026/08/03</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -666,8 +672,15 @@ Figure&nbsp;10.2: The fit result after further refining the initial parameters.
 </div>
 <p>The fit again modelled the underlying distribution very well, and now began to model the iron line reasonably well. The main issues that stand are that the fitted iron line is both too broad and too short. From the previously completed investigations of the parameter space, the corona height, <span class="math inline">\(h\)</span> is the most likely contender to decrease the width of the line, and the iron abundance can be increased to increase the height of the line.</p>
 <p>The next steps are thus to increase the scope of the table model allowing for corona heights of up to 100 <span class="math inline">\(R_G\)</span>, and potentially higher.</p>
+<section id="section" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="section"><span class="header-section-number">10.1</span> 2026/08/03</h2>
+<p>While the new table data was generating, another model was tested:</p>
+<pre><code>PhotoelectricAbsorption * (PowerLaw + ConvolutionLineProfile(XillverD5) + LineProfile)</code></pre>
+<p>Where all is the same as the previous model, but the iron abundance in XILLVER was set to zero, and the Iron K<span class="math inline">\(\alpha\)</span> line was fit independently of the rest of the spectrum using the defined <code>XS_LamppostJohannsen</code> table model. This was attempted as a high degree of blurring was evidently necessary to fit the underlying reflection continuum, however this affected the convolution of the iron line profile. It was thus decided to separate the two and fit them independently. The parameters of the convolution model and line profile were all bound to one another, except the energy (which was <span class="math inline">\(\sim 1\)</span> for the convolution and <span class="math inline">\(\sim 6.4\)</span> for the line profile) and the normalisation.</p>
+<p>This model was expectedly more complex, but the additional freedom may allow for a better fit to the data.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

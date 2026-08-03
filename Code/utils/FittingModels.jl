@@ -91,11 +91,13 @@ function SpectralFitting.invoke!(output, input, model::XS_LampPostJohannsen)
         )
         flux = interp.(domain)
 
+        flux[flux.<0] .= 0
+
         output .= flux[1:end-1]
     end
 end
 
-# function SpectralFitting.invokemodel!(input, model::XS_LampPostJohannsen)
+# function SpectralFitting.invokemodel(input, model::XS_LampPostJohannsen)
 
 #     output = zeros(length(input)-1)
 

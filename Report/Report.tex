@@ -81,7 +81,7 @@ $^{1}$HH Wills Physics Laboratory, University of Bristol, Tyndall Avenue, Bristo
 }
 
 % These dates will be filled out by the publisher
-\date{\today}
+%\date{\today}
 
 % Prints the current year, for the copyright statements etc. To achieve a fixed year, replace the expression with a number. 
 \pubyear{\the\year{}}
@@ -91,11 +91,6 @@ $^{1}$HH Wills Physics Laboratory, University of Bristol, Tyndall Avenue, Bristo
 \label{firstpage}
 \pagerange{\pageref{firstpage}--\pageref{lastpage}}
 \maketitle
-
-% Abstract of the paper
-\begin{abstract}
-\blindtext
-\end{abstract}
 
 % Select between one and six entries from the list of approved keywords.
 % Don't make up new ones.
@@ -109,15 +104,40 @@ $^{1}$HH Wills Physics Laboratory, University of Bristol, Tyndall Avenue, Bristo
 
 \section{Introduction}
 
-
+The Johannsen metric \cite{johannsen_regular_2013} allows for deviations from the standard Kerr hypothesis describing a rotating black hole. The deviations are permitted by the deformation parameters $\alpha_{13},\;\epsilon_{3},\;\alpha_{22},\;{\rm and}\; \alpha_{52}$. $\alpha_{13}$ and $\epsilon_{3}$ have both independently been used to conduct strong field tests of general relativity through fitting to the Fe K$\alpha$ emission line from active galactic nuclei \cite{bambi_testing_2017, cao_testing_2018, tripathi_constraining_2019, tripathi_testing_2026}, however they have not been tested simultaneously, which was the goal of this project. 
 
 \section{The Parameter Space of the Johannsen Metric.}
 
+To define a fitting model from the Johannsen metric it was necessary to first understand the parameter space. The relativistic raytracing code \verb|Gradus.jl| \cite{baker_gradusjl_2025} was used to explore the metric by computing the observed emission line profile, which is significantly broadened by general relativistic effects \cite{fabian_broad_2000}. Gradus was also used to render images of an accretion disk around the black hole to observe the redshift. The key findings from this were:
+\begin{enumerate}
+\item The radius of the ISCO increases for increasing $\alpha_{13}$ and decreases for increasing $\epsilon_{3}$.
+\item The orbital frequency for a test particle increases for increasing $\alpha_{13}$ leading to an increase in the degree of observed redshifting \cite{johannsen_regular_2013}. The opposite effect occurs for $\epsilon_{3}$.
+\item For $\alpha_{13}\lesssim 5.7$ the behaviour of the ISCO becomes chaotic due to the presence of two minima in the potential. This led to unpredictable behaviour in this region.
+\item For $\alpha_{13}\lesssim 6.2$ the energy and orbital frequency of an orbiting particle become imaginary leading to further unpredictable behaviour \cite{johannsen_regular_2013}.
+\end{enumerate}
 
+Johannsen defined a lower limit for both of these parameters as
+\begin{equation}
+\alpha_{13},\;\epsilon_{3} > -\frac{(M + \sqrt{M^2 - a^2})^3}{M^3},
+\end{equation}
+
+for a black hole with mass $M$ and spin parameter $a$. This boundary ensures that the exterior region of the black hole has no singularities or time-like curves \cite{johannsen_regular_2013}. It was found that there exists four additional unphysical regions of the Johannsen parameter space that exist only when $\alpha_{13}$ and $\epsilon_{3}$ are varied simultaneously. Two of these regions yield naked singularities. The other two yield a metric with no valid ISCO (as calculated by \verb|Gradus.jl|. This is likely due to the presence of two local minima in the potential of an orbiting particle. 
+
+These regions were not as easily parameterised, however three of them were found to take triangular shapes in the 2D plane created by the two deformation parameters. These regions could thus be bounded by linear equations with slopes and intercepts dependent on the spin parameter, $a$, and these equations used to define exclusion regions for the model. 
 
 \section{Fitting to Observations}
 
+A five-dimensional data table was constructed using \verb|Gradus.jl| by varying the parameters $a,\;h,\;\theta,\;\alpha_{13},\;{\rm and}\;\epsilon_{3}$, being the spin, corona height, inclination, and two deformation parameters, respectively. The grid size along each dimension was 10, ?, 9, 9, 10, respectively. For parameter combinations in the defined exclusion regions, an algorithm was defined to find the nearest "safe" combination in parameter space, and the line profile was calculated for this combination in place of the invalid one.
 
+Data was used from the XRISM observatory \cite{xrism_science_team_science_2020}. [ENTER DETAILS HERE].
+
+Fitting was completed using \verb|SpectralFitting.jl|  \cite{baker_spectralfittingjl_2025}, the fit model was defined as
+\begin{verbatim}
+Norm * Abs * (PowerLaw + Conv(XILLVER))
+\end{verbatim}
+where \verb|Norm| is a normalisation constant, \verb|Abs| models photoelectric absorption, \verb|PowerLaw| describes the underlying power law continuum, and \verb|XILLVER| models the reflection spectrum from the accretion disk \cite{garcia_x-ray_2010,garcia_x-ray_2013,garcia_improved_2014}. The reflection spectrum was convolved by the table model defined above to give the relativistic spectrum.
+
+- Fitting results
 
 \section{Conclusions}
 
@@ -130,14 +150,14 @@ This project was supported by the Royal Astronomical Society and the University 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Data Availability}
 
-The inclusion of a Data Availability Statement is a requirement for articles published in MNRAS. Data Availability Statements provide a standardised format for readers to understand the availability of data underlying the research results described in the article. The statement may refer to original data generated in the course of the study or to third-party data analysed in the article. The statement should describe and provide means of access, where possible, by linking to the data or providing the required accession numbers for the relevant databases or DOIs.
+
 
 %%%%%%%%%%%%%%%%%%%% REFERENCES %%%%%%%%%%%%%%%%%%
 
 % The best way to enter references is to use BibTeX:
 
 \bibliographystyle{mnras}
-\bibliography{references} % if your bibtex file is called example.bib
+\bibliography{/home/brad/Documents/SummerInternship/Report/references.bib} % if your bibtex file is called example.bib
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

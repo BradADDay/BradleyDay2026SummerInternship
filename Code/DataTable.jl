@@ -3,7 +3,7 @@ using ProgressBars
 using JSON3
 using Gradus: integrate_lineprofile
 
-include("../utils/Deformations.jl")
+include("utils/Deformations.jl")
 
 println("$(Threads.nthreads()) threads in use")
 
@@ -181,13 +181,13 @@ end
 
 # Setting up the parameter space to compute for
 as   = range(0, 0.998, 10)
-hs   = [50.]
+hs   = [60.]
 θs   = range(5., 85., 9)
 α13s = reverse(range(-6., 10., 9))
 ϵ3s  = reverse(range(-8., 10., 10))
 
 # Output directory
-OUTDIR = "tabledataExtendedH/"
+OUTDIR = "tabledataExtendedH2/"
 
 try
     mkdir(OUTDIR)

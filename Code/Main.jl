@@ -347,14 +347,15 @@ open("ModelPerformance.csv", "a") do io
 	write(io, "K, E, a, h, θ, α13, ϵ3, r2\n")
 end
 
-for i in 1:100
+for i in 1:10
 
 	try
 		K = 1.
 		E = 6.4
 		a = rand(0:0.001:0.998)
-		h = rand(3.:0.1:19.)
-		θ = rand(5.:0.1:85.)
+		# h = rand(3.:0.1:19.)
+		h=80.
+		θ = 5.
 		α13 = rand(-6.:0.1:10.)
 		ϵ3 = rand(-8.:0.1:10.)
 
@@ -364,7 +365,7 @@ for i in 1:100
 
 			model = XS_LampPostJohannsen(;K=K, E=E, a=a, h=h, θ=θ, α13=α13, ϵ3=ϵ3)
 
-			modelFlux = invokemodel!(bins, model)
+			modelFlux = invokemodel(bins, model)
 			modelFlux = modelFlux/maximum(modelFlux)
 
 			trueFlux = JohannsenLineProfile(
@@ -379,8 +380,9 @@ for i in 1:100
 				write(io, "$K, $E, $a, $h, $θ, $α13, $ϵ3, $(r2(trueFlux[1:end-1], modelFlux))\n")
 			end
 
-			# plt = plot(bins[1:end-1], modelFlux, label="Model")
-			# plot!(plt, bins, trueFlux, label="True")
+			plt = plot(bins[1:end-1], modelFlux, label="Model")
+			plot!(plt, bins, trueFlux, label="True")
+			display(plt)
 		end
 	catch
 		println("Combination Failed!")

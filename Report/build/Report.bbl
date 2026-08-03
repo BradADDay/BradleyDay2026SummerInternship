@@ -1,0 +1,82 @@
+\begin{thebibliography}{}
+\makeatletter
+\relax
+\def\mn@urlcharsother{\let\do\@makeother \do\$\do\&\do\#\do\^\do\_\do\%\do\~}
+\def\mn@doi{\begingroup\mn@urlcharsother \@ifnextchar [ {\mn@doi@}
+  {\mn@doi@[]}}
+\def\mn@doi@[#1]#2{\def\@tempa{#1}\ifx\@tempa\@empty \href
+  {http://dx.doi.org/#2} {doi:#2}\else \href {http://dx.doi.org/#2} {#1}\fi
+  \endgroup}
+\def\mn@eprint#1#2{\mn@eprint@#1:#2::\@nil}
+\def\mn@eprint@arXiv#1{\href {http://arxiv.org/abs/#1} {{\tt arXiv:#1}}}
+\def\mn@eprint@dblp#1{\href {http://dblp.uni-trier.de/rec/bibtex/#1.xml}
+  {dblp:#1}}
+\def\mn@eprint@#1:#2:#3:#4\@nil{\def\@tempa {#1}\def\@tempb {#2}\def\@tempc
+  {#3}\ifx \@tempc \@empty \let \@tempc \@tempb \let \@tempb \@tempa \fi \ifx
+  \@tempb \@empty \def\@tempb {arXiv}\fi \@ifundefined
+  {mn@eprint@\@tempb}{\@tempb:\@tempc}{\expandafter \expandafter \csname
+  mn@eprint@\@tempb\endcsname \expandafter{\@tempc}}}
+
+\bibitem[\protect\citeauthoryear{Baker \& Young}{Baker \&
+  Young}{2025a}]{baker_spectralfittingjl_2025}
+Baker F.,  Young A.,  2025a, {SpectralFitting}.jl,
+  \mn@doi{10.5281/ZENODO.17390971}, \url
+  {https://zenodo.org/doi/10.5281/zenodo.17390971}
+
+\bibitem[\protect\citeauthoryear{Baker \& Young}{Baker \&
+  Young}{2025b}]{baker_gradusjl_2025}
+Baker F. J.~E.,  Young A.~J.,  2025b, \mn@doi [MNRAS] {10.1093/mnras/staf1770},
+  545, staf1770
+
+\bibitem[\protect\citeauthoryear{Bambi, Cardenas-Avendano, Dauser, Garcia  \&
+  Nampalliwar}{Bambi et~al.}{2017}]{bambi_testing_2017}
+Bambi C.,  Cardenas-Avendano A.,  Dauser T.,  Garcia J.~A.,   Nampalliwar S.,
+  2017, \mn@doi [ApJ] {10.3847/1538-4357/aa74c0}, 842, 76
+
+\bibitem[\protect\citeauthoryear{Cao, Nampalliwar, Bambi, Dauser  \&
+  Garcia}{Cao et~al.}{2018}]{cao_testing_2018}
+Cao Z.,  Nampalliwar S.,  Bambi C.,  Dauser T.,   Garcia J.~A.,  2018, \mn@doi
+  [Phys. Rev. Lett.] {10.1103/PhysRevLett.120.051101}, 120, 051101
+
+\bibitem[\protect\citeauthoryear{Fabian, Iwasawa, Reynolds  \& Young}{Fabian
+  et~al.}{2000}]{fabian_broad_2000}
+Fabian A.~C.,  Iwasawa K.,  Reynolds C.~S.,   Young A.~J.,  2000, \mn@doi
+  [PASP] {10.1086/316610}, 112, 1145
+
+\bibitem[\protect\citeauthoryear{García \& Kallman}{García \&
+  Kallman}{2010}]{garcia_x-ray_2010}
+García J.,  Kallman T.~R.,  2010, \mn@doi [ApJ] {10.1088/0004-637X/718/2/695},
+  718, 695
+
+\bibitem[\protect\citeauthoryear{García, Dauser, Reynolds, Kallman,
+  McClintock, Wilms  \& Eikmann}{García et~al.}{2013}]{garcia_x-ray_2013}
+García J.,  Dauser T.,  Reynolds C.~S.,  Kallman T.~R.,  McClintock J.~E.,
+  Wilms J.,   Eikmann W.,  2013, \mn@doi [ApJ] {10.1088/0004-637X/768/2/146},
+  768, 146
+
+\bibitem[\protect\citeauthoryear{García et~al.,}{García
+  et~al.}{2014}]{garcia_improved_2014}
+García J.,  et~al., 2014, \mn@doi [ApJ] {10.1088/0004-637X/782/2/76}, 782, 76
+
+\bibitem[\protect\citeauthoryear{Johannsen}{Johannsen}{2013}]{johannsen_regular_2013}
+Johannsen T.,  2013, \mn@doi [Phys. Rev. D] {10.1103/PhysRevD.88.044002}, 88,
+  044002
+
+\bibitem[\protect\citeauthoryear{Tripathi, Abdikamalov, Ayzenberg, Bambi  \&
+  Nampalliwar}{Tripathi et~al.}{2019}]{tripathi_constraining_2019}
+Tripathi A.,  Abdikamalov A.~B.,  Ayzenberg D.,  Bambi C.,   Nampalliwar S.,
+  2019, \mn@doi [Phys. Rev. D] {10.1103/PhysRevD.99.083001}, 99, 083001
+
+\bibitem[\protect\citeauthoryear{Tripathi, Shashank, Mall  \&
+  Abdikamalov}{Tripathi et~al.}{2026}]{tripathi_testing_2026}
+Tripathi A.,  Shashank S.,  Mall G.,   Abdikamalov A.~B.,  2026, \mn@doi [PASJ]
+  {10.1093/pasj/psaf155}, 78, 468
+
+\bibitem[\protect\citeauthoryear{{XRISM Science Team}}{{XRISM Science
+  Team}}{2020}]{xrism_science_team_science_2020}
+{XRISM Science Team} 2020, Science with the {X}-ray {Imaging} and
+  {Spectroscopy} {Mission} ({XRISM}), \mn@doi{10.48550/arXiv.2003.04962}, \url
+  {http://arxiv.org/abs/2003.04962}
+
+\makeatother
+\end{thebibliography}

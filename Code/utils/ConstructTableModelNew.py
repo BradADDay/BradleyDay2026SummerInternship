@@ -52,14 +52,14 @@ def addTableParameter(table, name: str, default: float, delta: float, values: li
 # These must be in ascending order for the table model to be assembled correctly
 spins, heights, inclinations, alphas, epsilons = [
     [0.0, 0.11088888888888888, 0.22177777777777777, 0.33266666666666667, 0.44355555555555554, 0.5544444444444444, 0.6653333333333333, 0.7762222222222223, 0.8871111111111111, 0.998],
-    [3.0, 5.0, 7.0, 9.0, 11.0, 13.0, 15.0, 17.0, 19.0],
+    [3.0, 5.0, 7.0, 9.0, 11.0, 13.0, 15.0, 17.0, 19.0, 20.0, 40.0, 60.0, 80.0, 100.0],
     [5.0, 15.0, 25.0, 35.0, 45.0, 55.0, 65.0, 75.0, 85.0],
     [-6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0],
     [-8.0, -6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0]
 ]
 
 # The directory containing the data
-DIR = "tabledataFinal5Merged/"
+DIR = "finaltabledata/"
 
 # Instantiating the table
 tbl = table()

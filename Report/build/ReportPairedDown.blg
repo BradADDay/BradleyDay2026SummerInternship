@@ -1,0 +1,50 @@
+This is BibTeX, Version 0.99e
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: build/ReportPairedDown.aux
+Reallocating 'name_of_file' (item size: 1) to 6 items.
+The style file: mnras.bst
+Reallocating 'name_of_file' (item size: 1) to 60 items.
+Database file #1: /home/brad/Documents/SummerInternship/Report/references.bib
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+You've used 12 entries,
+            2881 wiz_defined-function locations,
+            814 strings with 9207 characters,
+and the built_in function-call counts, 5947 in all, are:
+= -- 484
+> -- 456
+< -- 32
++ -- 191
+- -- 76
+* -- 716
+:= -- 965
+add.period$ -- 0
+call.type$ -- 12
+change.case$ -- 24
+chr.to.int$ -- 11
+cite$ -- 12
+duplicate$ -- 272
+empty$ -- 267
+format.name$ -- 114
+if$ -- 1019
+int.to.chr$ -- 2
+int.to.str$ -- 0
+missing$ -- 10
+newline$ -- 49
+num.names$ -- 88
+pop$ -- 50
+preamble$ -- 1
+purify$ -- 48
+quote$ -- 0
+skip$ -- 166
+stack$ -- 0
+substring$ -- 360
+swap$ -- 142
+text.length$ -- 48
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 108
+warning$ -- 0
+while$ -- 90
+width$ -- 0
+write$ -- 134

@@ -18,7 +18,7 @@ include("./Deformations.jl")
 const ModelNumParams = 5
 
 # The path to the model
-MODELDATAFILE = "/home/brad/Documents/SummerInternship/Code/models/TestModel.FITS"
+MODELDATAFILE = "/home/brad/Documents/SummerInternship/Code/models/hExtendedModel.FITS"
 
 # Reading in the table model and setting it up as an interpolation object
 data = TableModelData(Val(ModelNumParams), MODELDATAFILE)

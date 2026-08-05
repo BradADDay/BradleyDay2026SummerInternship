@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.7.24)  5 AUG 2026 14:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.7.24)  5 AUG 2026 16:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**./Report.tex
-(Report.tex
+**./ReportPairedDown.tex
+(ReportPairedDown.tex
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-06-18>
 (/home/brad/.miktex/texmfs/install/tex/latex/mnras/mnras.cls
@@ -540,8 +540,8 @@ File: t1ntxtlf.fd 2021/05/24 v1.1 font definition file for T1/ntx/tlf
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 9.0pt on input line 98.
 
-(/home/brad/Documents/SummerInternship/Report/build/Report.aux)
-\openout1 = `Report.aux'.
+(/home/brad/Documents/SummerInternship/Report/build/ReportPairedDown.aux)
+\openout1 = `ReportPairedDown.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 98.
 LaTeX Font Info:    Trying to load font information for OML+ntxmi on input line
@@ -625,10 +625,10 @@ LaTeX Font Info:    ... okay on input line 98.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 Package hyperref Info: Link coloring ON on input line 98.
-(/home/brad/Documents/SummerInternship/Report/build/Report.out)
-(/home/brad/Documents/SummerInternship/Report/build/Report.out)
+(/home/brad/Documents/SummerInternship/Report/build/ReportPairedDown.out)
+(/home/brad/Documents/SummerInternship/Report/build/ReportPairedDown.out)
 \@outlinefile=\write3
-\openout3 = `Report.out'.
+\openout3 = `ReportPairedDown.out'.
 
 
 (/usr/local/share/miktex-texmf/tex/context/base/mkii/supp-pdf.mkii
@@ -916,41 +916,41 @@ LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
 (Font)              scaled to size 6.0pt on input line 101.
 LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
 (Font)              scaled to size 5.5pt on input line 101.
-LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 9.0pt on input line 115.
-LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
-(Font)              scaled to size 9.0pt on input line 117.
-LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 9.0pt on input line 117.
-LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 9.0pt on input line 117.
-LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 9.0pt on input line 117.
-LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 9.0pt on input line 117.
-LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 9.0pt on input line 117.
-LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 9.0pt on input line 117.
-LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 9.0pt on input line 117.
-LaTeX Font Info:    Font shape `OT1/minntx/b/n' will be
-(Font)              scaled to size 9.0pt on input line 117.
-LaTeX Font Info:    Font shape `OML/ntxmi/b/it' will be
-(Font)              scaled to size 9.0pt on input line 117.
-LaTeX Font Info:    Font shape `LMS/ntxsy/b/n' will be
-(Font)              scaled to size 9.0pt on input line 117.
-LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
-(Font)              scaled to size 9.0pt on input line 117.
 LaTeX Font Info:    Trying to load font information for T1+ntxtt on input line 
-122.
+116.
 (/home/brad/.miktex/texmfs/install/tex/latex/newtx/t1ntxtt.fd
 File: t1ntxtt.fd 2012/04/20 v3.1
 )
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 9.0pt on input line 122.
+(Font)              scaled to size 9.0pt on input line 116.
+LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
+(Font)              scaled to size 9.0pt on input line 119.
+LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
+(Font)              scaled to size 9.0pt on input line 121.
+LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
+(Font)              scaled to size 9.0pt on input line 121.
+LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
+(Font)              scaled to size 9.0pt on input line 121.
+LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
+(Font)              scaled to size 9.0pt on input line 121.
+LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
+(Font)              scaled to size 9.0pt on input line 121.
+LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
+(Font)              scaled to size 9.0pt on input line 121.
+LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
+(Font)              scaled to size 9.0pt on input line 121.
+LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
+(Font)              scaled to size 9.0pt on input line 121.
+LaTeX Font Info:    Font shape `OT1/minntx/b/n' will be
+(Font)              scaled to size 9.0pt on input line 121.
+LaTeX Font Info:    Font shape `OML/ntxmi/b/it' will be
+(Font)              scaled to size 9.0pt on input line 121.
+LaTeX Font Info:    Font shape `LMS/ntxsy/b/n' will be
+(Font)              scaled to size 9.0pt on input line 121.
+LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
+(Font)              scaled to size 9.0pt on input line 121.
 
-(/home/brad/Documents/SummerInternship/Report/build/Report.bbl
+(/home/brad/Documents/SummerInternship/Report/build/ReportPairedDown.bbl
 LaTeX Info: Redefining \VAN on input line 1.
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
 (Font)              scaled to size 8.0pt on input line 24.
@@ -965,29 +965,30 @@ Underfull \hbox (badness 10000) in paragraph at lines 22--25
 s : / / zenodo . org / doi /
  []
 
-LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 8.0pt on input line 76.
+)
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 6.0pt on input line 76.
+(Font)              scaled to size 6.0pt on input line 174.
+LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
+(Font)              scaled to size 8.0pt on input line 176.
 LaTeX Font Info:    Trying to load font information for TS1+ntxtlf on input lin
-e 76.
-(/home/brad/.miktex/texmfs/install/tex/latex/newtx/ts1ntxtlf.fd
+e 176.
+ (/home/brad/.miktex/texmfs/install/tex/latex/newtx/ts1ntxtlf.fd
 File: ts1ntxtlf.fd 2015/01/18 v1.0 fd file for TS1/ntxtlf
 )
 LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.0pt on input line 76.
+(Font)              scaled to size 8.0pt on input line 176.
  [1{/home/brad/.miktex/texmfs/data/fonts/map/pdftex/pdftex.map}{/home/brad/.mik
 tex/texmfs/install/fonts/enc/dvips/newtx/ntx-ec-tlf.enc}{/home/brad/.miktex/tex
 mfs/install/fonts/enc/dvips/newtx/ntx-ot1-tlf.enc}
 
 
-{/home/brad/.miktex/texmfs/install/fonts/enc/dvips/tex-gyre/q-ts1.enc}])
+{/home/brad/.miktex/texmfs/install/fonts/enc/dvips/tex-gyre/q-ts1.enc}]
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
-(Font)              scaled to size 12.0pt on input line 181.
+(Font)              scaled to size 12.0pt on input line 176.
  [2
 
 ]
-(/home/brad/Documents/SummerInternship/Report/build/Report.aux)
+(/home/brad/Documents/SummerInternship/Report/build/ReportPairedDown.aux)
  ***********
 LaTeX2e <2026-06-01>
 L3 programming layer <2020/03/25>
@@ -997,17 +998,17 @@ L3 programming layer <2020/03/25>
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.28pt have occurred.
 
-Package rerunfilecheck Info: File `Report.out' has not changed.
-(rerunfilecheck)             Checksum: 29C95414CD597BE5A6C4BE9DEBEE29B2;646.
+Package rerunfilecheck Info: File `ReportPairedDown.out' has not changed.
+(rerunfilecheck)             Checksum: DDE706E626FD8BAD0FB5C89F10192990;636.
  ) 
 Here is how much of TeX's memory you used:
- 15309 strings out of 467511
- 225585 string characters out of 5416103
- 663636 words of memory out of 5000000
- 44271 multiletter control sequences out of 15000+600000
+ 15300 strings out of 467511
+ 225679 string characters out of 5416103
+ 662476 words of memory out of 5000000
+ 44267 multiletter control sequences out of 15000+600000
  732800 words of font info for 197 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 89i,10n,93p,710b,532s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 89i,10n,93p,907b,444s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </home/brad/.miktex/texmfs/install/fonts/type1/public/newtx/NewTXBMI.pfb></ho
 me/brad/.miktex/texmfs/install/fonts/type1/public/newtx/NewTXMI.pfb></home/brad
 /.miktex/texmfs/install/fonts/type1/public/tex-gyre/qtmr.pfb></home/brad/.mikte
@@ -1017,10 +1018,10 @@ s/install/fonts/type1/public/newtx/txsym.pfb></home/brad/.miktex/texmfs/install
 pe1/public/newtx/ztmb.pfb></home/brad/.miktex/texmfs/install/fonts/type1/public
 /newtx/ztmr.pfb></home/brad/.miktex/texmfs/install/fonts/type1/public/newtx/ztm
 ri.pfb>
-Output written on /home/brad/Documents/SummerInternship/Report/build/Report.pdf
- (2 pages, 195521 bytes).
+Output written on /home/brad/Documents/SummerInternship/Report/build/ReportPair
+edDown.pdf (2 pages, 190936 bytes).
 PDF statistics:
- 156 PDF objects out of 1000 (max. 8388607)
- 24 named destinations out of 1000 (max. 500000)
+ 154 PDF objects out of 1000 (max. 8388607)
+ 19 named destinations out of 1000 (max. 500000)
  33 words of extra memory for PDF output out of 10000 (max. 10000000)
 

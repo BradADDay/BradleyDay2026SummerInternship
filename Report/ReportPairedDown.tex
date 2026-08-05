@@ -112,42 +112,37 @@ $^{1}$HH Wills Physics Laboratory, University of Bristol, Tyndall Avenue, Bristo
 
 %%%%%%%%%%%%%%%%% BODY OF PAPER %%%%%%%%%%%%%%%%%%
 
-\section{Introduction}
-
-The Johannsen metric \cite{johannsen_regular_2013} allows for deviations from the standard Kerr hypothesis describing a rotating black hole. The deviations are permitted by the deformation parameters $\alpha_{13},\;\epsilon_{3},\;\alpha_{22},\;{\rm and}\; \alpha_{52}$. $\alpha_{13}$ and $\epsilon_{3}$ have both independently been used to conduct strong field tests of general relativity through fitting to the Fe K$\alpha$ emission line from active galactic nuclei \cite{bambi_testing_2017, cao_testing_2018, tripathi_constraining_2019, tripathi_testing_2026}, however they have not been tested simultaneously, which was the goal of this project. 
+\noindent
+This project investigated the the validity of the Kerr hypothesis and no hair theorem through deviations from the standard description of the spacetime around a black hole. The investigation was conducted using the Johannsen metric \cite{johannsen_regular_2013} via a table model of emission line profiles generated using the relativistic raytracing code \verb|Gradus.jl| \cite{baker_gradusjl_2025}.
 
 \vspace{-2em}
+\section{Background}
+
+Emission line fitting is a useful tool in the study of compact objects due to the relativistic broadening of emission lines. The Fe K$\alpha$ line, caused by the illumination of infalling matter by a hot corona above a black hole (BH), is a prominent feature of the spectra of BHs \cite{fabian_broad_2000}. 
+
+The Johannsen metric  allows for deviations from the standard Kerr description of a rotating black hole via the deformation parameters $\alpha_{13}$ and $\epsilon_{3}$. These parameters have both independently been used to conduct strong field tests of general relativity through emission line fitting \cite{bambi_testing_2017, cao_testing_2018, tripathi_constraining_2019, tripathi_testing_2026}, however they have not been simultaneously constrained, which was the goal of this project. 
+
+\vspace{-2.5em}
 \section{The Parameter Space of the Johannsen Metric.}
 
-To define a fitting model from the Johannsen metric it was necessary to first understand the parameter space. The relativistic raytracing code \verb|Gradus.jl| \cite{baker_gradusjl_2025} was used to explore the metric by computing the observed emission line profile, which is significantly broadened by general relativistic effects \cite{fabian_broad_2000}. Gradus was also used to render images of an accretion disk around the black hole to observe the redshift. The key findings from this were:
-\begin{enumerate}
-\item The radius of the ISCO increases for increasing $\alpha_{13}$ and decreases for increasing $\epsilon_{3}$.
-\item The orbital frequency for a test particle increases for increasing $\alpha_{13}$ leading to an increase in the degree of observed redshifting \cite{johannsen_regular_2013}. The opposite effect occurs for $\epsilon_{3}$.
-\item For $\alpha_{13}\lesssim 5.7$ the behaviour of the ISCO becomes chaotic due to the presence of two minima in the potential. This led to unpredictable behaviour in this region.
-\item For $\alpha_{13}\lesssim 6.2$ the energy and orbital frequency of an orbiting particle become imaginary leading to further unpredictable behaviour \cite{johannsen_regular_2013}.
-\end{enumerate}
+\verb|Gradus.jl| \cite{baker_gradusjl_2025} was used to explore the parameter space of the Johannsen metric by computing the observed emission line profile, and rendering images of the accretion disk to observe the redshift. It was found that the radius of the innermost stable circular orbit (ISCO) increases for increasing $\alpha_{13}$ and decreases for increasing $\epsilon_{3}$. The orbital frequency for a test particle increases for increasing $\alpha_{13}$ leading to an increase in the degree of observed redshifting \cite{johannsen_regular_2013}. The opposite occurs for $\epsilon_{3}$. For $\alpha_{13}\lesssim 5.7$ the behaviour of the metric becomes unpredictable due to the presence of two local minima in the potential of an orbiting particle, and the energy and orbital frequency becoming imaginary \cite{johannsen_regular_2013}.
 
-Johannsen defined a lower limit for both of these parameters as
-\begin{equation}
-\alpha_{13},\;\epsilon_{3} > -\frac{(M + \sqrt{M^2 - a^2})^3}{M^3},
-\end{equation}
+Johannsen defined a lower limit for both of these parameters in equations 75,77 of \cite{johannsen_regular_2013}. Below this limit there exist singularities or time-like curves in the exterior region of the black hole. Experimentation showed four additional unphysical regions of the Johannsen parameter space that exist only when $\alpha_{13}$ and $\epsilon_{3}$ are varied simultaneously. These regions yielded either naked singularities or no solution for the ISCO.
 
-for a black hole with mass $M$ and spin parameter $a$. This boundary ensures that the exterior region of the black hole has no singularities or time-like curves \cite{johannsen_regular_2013}. It was found that there exists four additional unphysical regions of the Johannsen parameter space that exist only when $\alpha_{13}$ and $\epsilon_{3}$ are varied simultaneously. Two of these regions yield naked singularities. The other two yield a metric with no valid ISCO (as calculated by \verb|Gradus.jl|. This is likely due to the presence of two local minima in the potential of an orbiting particle. 
-
-These regions were not as easily parameterised, however three of them were found to take triangular shapes in the 2D plane created by the two deformation parameters. These regions could thus be bounded by linear equations with slopes and intercepts dependent on the spin parameter, $a$, and these equations used to define exclusion regions for the model. 
+These regions were found to take triangular shapes in the 2D plane created by the two deformation parameters, and could thus be bounded by linear equations. The shape of these regions varies with the spin parameter, $a_*$, thus a table was created of slopes and intercepts as a function of $a_*$ to define exclusion regions in the parameter space. 
 
 \vspace{-2em}
 \section{Fitting to Observations}
 
-A five-dimensional data table was constructed using \verb|Gradus.jl| by varying the parameters $a,\;h,\;\theta,\;\alpha_{13},\;{\rm and}\;\epsilon_{3}$, being the spin, corona height, inclination, and two deformation parameters, respectively. The grid size along each dimension was 10, ?, 9, 9, 10, respectively. For parameter combinations in the defined exclusion regions, an algorithm was defined to find the nearest "safe" combination in parameter space, and the line profile was calculated for this combination in place of the invalid one.
+A five-dimensional data table was constructed using \verb|Gradus.jl| by varying the parameters $a_*,\;h,\;\theta,\;\alpha_{13},\;{\rm and}\;\epsilon_{3}$, being the spin, corona height, inclination, and two deformation parameters, respectively. The grid size along each dimension was 10, ?, 9, 9, 10, respectively. For parameter combinations in the defined exclusion regions, an algorithm was defined to find the nearest "safe" combination in parameter space, and the line profile was calculated for this combination in place of the invalid one.
 
 Data was used from the XRISM observatory \cite{xrism_science_team_science_2020}. [ENTER DETAILS HERE].
 
 Fitting was completed using \verb|SpectralFitting.jl|  \cite{baker_spectralfittingjl_2025}, the fit model was defined as
 \begin{verbatim}
-Norm * Abs * (PowerLaw + Conv(XILLVERD5))
+Abs * (PowerLaw + Conv(XILLVERD5))
 \end{verbatim}
-where \verb|Norm| is a normalisation constant, \verb|Abs| models photoelectric absorption, \verb|PowerLaw| describes the underlying power law continuum, and \verb|XILLVER| models the reflection spectrum from the accretion disk \cite{garcia_x-ray_2010,garcia_x-ray_2013,garcia_improved_2014}. The reflection spectrum was convolved by the table model defined above to give the relativistic spectrum.
+where \verb|Abs| models photoelectric absorption, \verb|PowerLaw| describes the underlying power law continuum, and \verb|XILLVER| models the reflection spectrum from the accretion disk \cite{garcia_x-ray_2010,garcia_x-ray_2013,garcia_improved_2014}. The reflection spectrum was convolved by the table model defined above to give the relativistic spectrum.
 
 - Fitting results
 

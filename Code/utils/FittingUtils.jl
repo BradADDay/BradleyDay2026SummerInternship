@@ -144,9 +144,10 @@ end
 
 Plot the result of a fit including the data, fit and residuals.
 """
-function PlotResult(data::SpectralData, fit; dataRange::Tuple{Real, Real}=(3,10))
+function PlotResult(data::SpectralData, fit; dataRange::Tuple{Real, Real}=(3,10), ylim=[0,2])
     # Plotting the spectrum and fit
     fitPlot = PlotSpectrum(data, fit; ylabel=L"Flux (counts s$^{-1}$ keV$^{-1}$)")
+    ylims!(ylim...)
 
     resPlot = PlotResiduals(data, fit; dataRange)
 

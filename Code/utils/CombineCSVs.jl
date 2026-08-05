@@ -14,7 +14,8 @@ for a in as
         df1 = DataFrame(CSV.File("$inpath1$a.csv"))
         df2 = DataFrame(CSV.File("$inpath2$a.csv"))
         df3 = hcat(df1, df2)
-        println(join([size(df1), size(df2), size(df3)], " "))
+        CSV.write(joinpath(outpath, "$a.csv"), df3)
+        println(join([a, size(df1), size(df2), size(df3)], " "))
     catch
     end
 end

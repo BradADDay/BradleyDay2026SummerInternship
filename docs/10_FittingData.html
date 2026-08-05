@@ -23,7 +23,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -407,6 +427,7 @@ window.Quarto = {
    
   <ul>
   <li><a href="#section" id="toc-section" class="nav-link active" data-scroll-target="#section"><span class="header-section-number">10.1</span> 2026/08/03</a></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"><span class="header-section-number">10.2</span> 2026/08/03</a></li>
   </ul>
 </nav>
     </div>
@@ -678,8 +699,37 @@ Figure&nbsp;10.2: The fit result after further refining the initial parameters.
 <pre><code>PhotoelectricAbsorption * (PowerLaw + ConvolutionLineProfile(XillverD5) + LineProfile)</code></pre>
 <p>Where all is the same as the previous model, but the iron abundance in XILLVER was set to zero, and the Iron K<span class="math inline">\(\alpha\)</span> line was fit independently of the rest of the spectrum using the defined <code>XS_LamppostJohannsen</code> table model. This was attempted as a high degree of blurring was evidently necessary to fit the underlying reflection continuum, however this affected the convolution of the iron line profile. It was thus decided to separate the two and fit them independently. The parameters of the convolution model and line profile were all bound to one another, except the energy (which was <span class="math inline">\(\sim 1\)</span> for the convolution and <span class="math inline">\(\sim 6.4\)</span> for the line profile) and the normalisation.</p>
 <p>This model was expectedly more complex, but the additional freedom may allow for a better fit to the data.</p>
+<p>Literature values were found for the spin and inclination of NGC4151. The black hole has been found to be maximally spinning (<span class="math inline">\(a=0.998\)</span>) <span class="citation" data-cites="nandi_spectral_2019">&nbsp;[<a href="references.html#ref-nandi_spectral_2019" role="doc-biblioref">1</a>]</span> and is at an inclination of 45<span class="math inline">\(\degree\)</span> <span class="citation" data-cites="fischer_determining_2013">&nbsp;[<a href="references.html#ref-fischer_determining_2013" role="doc-biblioref">2</a>]</span>. These parameters were thus fixed at these values in the fitting code to reduce the size of the parameter space.</p>
+<p>The method of setting the iron abundance to zero and adding an iron line manually may work, however initial results did not show promise, as shown below. This may be due to the fixing of parameters.</p>
+<div id="fig-ZeroIronFit" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ZeroIronFit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/FitResult_NGC4151_2026-08-04T13:02:20.017.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;10.3: The best fit obtained using the second fitting method."><img src="images/FitResult_NGC4151_2026-08-04T13:02:20.017.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ZeroIronFit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10.3: The best fit obtained using the second fitting method.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="section-1" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="section-1"><span class="header-section-number">10.2</span> 2026/08/03</h2>
+<p>Following more trial and error in refining the fitting parameters, it was decided to try a different dataset, for which XRISM observation 201014010 was used. This observation looked at the object SS433 which is an X-ray binary. This dataset was selected as it had a broader iron line than the previous one, which may allow the fit to converge better.</p>
+<p>The new dataset showed much more promising results, as shown below</p>
+<p><a href="images/FitResult_SS433_2026-08-05T11:54:49.492.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="images/FitResult_SS433_2026-08-05T11:54:49.492.png" class="img-fluid"></a></p>
+<p>The area where the fit failed the most is an unknown hump around 7.5keV. This has no effect on the iron line and was thus disregarded by fitting a Gaussian to it, as shown below.</p>
+<p><a href="images/FitResult_SS433_2026-08-05T15:06:33.468.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="images/FitResult_SS433_2026-08-05T15:06:33.468.png" class="img-fluid"></a></p>
+<p>This fit still remains far from perfect, however the iron line is fit well which will allow for small-scale tests on the effect of the deformation parameters. The next step is to fit this data with the spin and deformation parameters free, and to observe how much the fit is improved, and what values the deformation parameters take.</p>
 
 
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-nandi_spectral_2019" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline"><a href="https://doi.org/10.3847/1538-4357/ab1d62">P. Nandi, S. K. Chakrabarti, and S. Mondal, ApJ <strong>877</strong>, 65 (2019)</a>.</div>
+</div>
+<div id="ref-fischer_determining_2013" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline"><a href="https://doi.org/10.1088/0067-0049/209/1/1">T. C. Fischer <em>et al.</em>, ApJS <strong>209</strong>, 1 (2013)</a>.</div>
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->

@@ -68,4 +68,24 @@ PhotoelectricAbsorption * (PowerLaw + ConvolutionLineProfile(XillverD5) + LinePr
 
 Where all is the same as the previous model, but the iron abundance in XILLVER was set to zero, and the Iron K$\alpha$ line was fit independently of the rest of the spectrum using the defined `XS_LamppostJohannsen` table model. This was attempted as a high degree of blurring was evidently necessary to fit the underlying reflection continuum, however this affected the convolution of the iron line profile. It was thus decided to separate the two and fit them independently. The parameters of the convolution model and line profile were all bound to one another, except the energy (which was $\sim 1$ for the convolution and $\sim 6.4$ for the line profile) and the normalisation.
 
-This model was expectedly more complex, but the additional freedom may allow for a better fit to the data.
+This model was expectedly more complex, but the additional freedom may allow for a better fit to the data. 
+
+Literature values were found for the spin and inclination of NGC4151. The black hole has been found to be maximally spinning ($a=0.998$) @nandi_spectral_2019 and is at an inclination of 45$\degree$ @fischer_determining_2013. These parameters were thus fixed at these values in the fitting code to reduce the size of the parameter space. 
+
+The method of setting the iron abundance to zero and adding an iron line manually may work, however initial results did not show promise, as shown below. This may be due to the fixing of parameters.
+
+![The best fit obtained using the second fitting method.](images/FitResult_NGC4151_2026-08-04T13:02:20.017.png){fig-align="center" width=80% #fig-ZeroIronFit}
+
+## 2026/08/03
+
+Following more trial and error in refining the fitting parameters, it was decided to try a different dataset, for which XRISM observation 201014010 was used. This observation looked at the object SS433 which is an X-ray binary. This dataset was selected as it had a broader iron line than the previous one, which may allow the fit to converge better.
+
+The new dataset showed much more promising results, as shown below
+
+![](images/FitResult_SS433_2026-08-05T11:54:49.492.png)
+
+The area where the fit failed the most is an unknown hump around 7.5keV. This has no effect on the iron line and was thus disregarded by fitting a Gaussian to it, as shown below.
+
+![](images/FitResult_SS433_2026-08-05T15:06:33.468.png)
+
+This fit still remains far from perfect, however the iron line is fit well which will allow for small-scale tests on the effect of the deformation parameters. The next step is to fit this data with the spin and deformation parameters free, and to observe how much the fit is improved, and what values the deformation parameters take.
